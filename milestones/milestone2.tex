@@ -1,0 +1,167 @@
+\pdfpageheight=11in
+\pdfpagewidth=8.5in
+\raggedbottom
+\frenchspacing
+\parindent=0pt
+\parskip=10pt
+\def\br{\hfill\break}
+
+Predicting Loan Outcomes using Machine Learning --- CS109a Project Milestone 2\br
+David Modjeska and Andrew Greene\br
+Fall 2016
+
+\vskip\parskip
+\hrule
+
+Serrano-Cinca, Guti\'errez-Nieto, L\'opez-Palacios (2015) {\bf
+Determinants of Default in P2P Lending.} 
+\br{\it PLoS ONE} 
+10(10):e0139427.\br{\tt doi:10.1371/journal.pone.0139427.}
+
+This paper examines P2P lending in a Lending Club data set from 2008
+to 2014 ({\it i.e.}, our project dataset). In addition to providing an
+introduction to the P2P lending domain, the paper pursues two goals:
+explanation of factors underlying past defaults, and prediction of
+future defaults.
+
+To explain factors underlying defaults, the authors examined a range
+of variables, using Chi-squared tests to determine significance for the
+categorical variables and t-tests for the continuous variables. The
+most important factor for explaining default rates was the loan grade
+assigned by the Lending Club: the lower the grade, the more likely a
+borrower is to default. (Loan grading uses a proprietary algorithm,
+which in turn uses a proprietary borrower credit score.) Loan purpose
+was another useful factor. For example, wedding loans tend to be
+repaid more often than small-business loans. Highly dependent on loan
+grade, interest rate was a relevant variable for explaining loan
+defaults: the higher the interest rate, the more likely default. So
+were certain borrower characteristics, such as annual income, current
+housing situation, credit history, and borrower indebtedness. (Loan
+amount and length of employment were not found to be useful.)
+
+For prediction, the authors used logistic regression for defaults, as
+well as Cox regression for loan survival ({\it i.e.}, when default may
+occur). From a business perspective, survival analysis enriches the
+information available to a lender, since substantial partial repayment
+may differ dramatically from either full repayment or very early
+default. Survival analysis confirmed the importance of loan purpose,
+while quantifying related risk. For predicting binary outcomes, the
+authors' optimal logistic regression model again found loan grade to
+be the most useful factor, along with indebtedness variables. This
+model achieved a useful prediction accuracy (on a testing set) of
+approximately 81\%. 
+
+For the sake of our course project, this paper is useful in several
+ways. First, it introduces the business domain and suggests the most
+useful related variables from the Lending Club dataset. Second, the
+paper establishes a baseline for explanation and prediction by
+statistical methods, upon which more machine-learning approaches might
+be built. One such approach is using NLP to extract information from
+the free-form text portions of a loan application. Third, the paper
+emphasizes the importance of non-binary considerations in predicting
+loan outcomes, such as expectations around partial repayment. Fourth,
+the paper documented possible risks during prediction/analysis, such
+as multicollinearity, evolving data dictionaries, and lack of
+intertemporal validation. Finally, the authors' thorough methodology
+provides a solid foundation for subsequent analysis and/or prediction.
+
+\vfill\break
+Predicting Loan Outcomes using Machine Learning --- CS109a Project Milestone 2\br
+David Modjeska and Andrew Greene\br
+Fall 2016
+
+\vskip\parskip
+\hrule
+
+\noindent Malekipirbazari, Milad; Aksakalli, Vural.
+{\bf Risk assessment in social lending via random forests.} 
+\br {\it Expert Systems with Applications}, Volume 42, Issue 10, 
+15~June 2015, pp.~4621--4631 \br{\tt
+http://dx.doi.org/10.1016/j.eswa.2015.02.001}
+
+
+This paper considers the use of random forests for classifying loans
+as ``good'' or ``bad''; that is, whether they are likely to be repaid
+in full. As with our project, the authors are using the data from
+Lending Club, restricting their data set to loans originated between
+January~2012 and September~2014.
+
+In particular, the authors compare the performance of four common
+approaches to classification: random forests (RF), support vector
+machines (SVM), logistic regression (LR), and $k$-nearest neighbor
+(KNN).
+
+Another interesting aspect of their study is that they exclude both
+the FICO score and the Lending Club grade in their set of candidate
+predictors. These scores have two problems: because they are
+proprietary, we cannot tell to what degree they already incorporate
+other predictors; also, we have no reason to believe that the
+composition of these scores has stayed the same over the time period
+under consideration, nor between that time and now.
+
+There is an additional benefit that comes from the decision to exclude
+the FICO and LC scores from consideration as predictors. The authors
+are then able to compare the results of their four machine-learning
+techniques to the predictions returned by the proprietary algorithms.
+
+The paper has three main sections.
+
+The paper gives a brief overview of how the authors winnowed the
+avaiable data, both by restricting rows to loans that were either paid
+in full or delinquent, and by limiting columns to fifteen variables that
+had enough information to produce a reasonable predictor.
+
+The authors then describe each of the four approaches in turn. These
+summaries are general, although the illustrations are using the
+Lending Club data, and for random forests they go into some detail on
+how they selected the parameters for this data set.
+
+Finally, the authors use 5-fold cross-validation to compare the
+results for each of the four techniques. The random forest, with their
+optimized parameters, has the highest accuracy and area-under-curve,
+and the lowest MSE. For the area of interest, the RF model also
+outperforms the FICO and LC scores. When the number of loans to be
+approved is forced to be higher, the LC scores start to outperform the
+RF models.
+
+This paper is a good starting point for our project for two reasons.
+First, the authors clearly explain their methodology. Second, despite the
+title of the paper singling out random forests, they actually
+implement and discuss four of the major families of classifiers and
+their application to the Lending Club data set.
+
+\vfill\break
+Predicting Loan Outcomes using Machine Learning --- CS109a Project Milestone 2\br
+David Modjeska and Andrew Greene\br
+Fall 2016
+
+\vskip\parskip
+\hrule
+
+{\bf Additional Bibliography}
+
+Emekter, Riza; Tu, Yanbin; Jirasakuldech, Benjamas; Lu, Min. 
+{\bf Evaluating credit risk and loan performance in online Peer-to-Peer (P2P) lending.}
+{\it Applied Economics}, 47:1 (13 Oct 2014), pp.~54--70.
+---
+A sophisticated analysis (cited by Malekipirbazari and Aksakalli) that identifies a source of selection bias in the population of loan applicants, and concludes that Lending Club does not increase interest rates commensurate with risk.
+
+Guo, Yanhong; Zhou, Wenjun; Luo, Chunyu; Liu, Chuanren; Xiongc, Hui.
+{\bf Instance-based credit risk assessment for investment decisions in P2P lending.}
+{\it European Journal of Operational Research} (29 May 2015)
+---
+A straightforward analysis of the Lending Club data using a Gaussian kernel to weight all neighbors.
+
+Jin, Yu; Zhu, Yudan.
+{\bf A data-driven approach to predict default risk of loan for online Peer-to-Peer (P2P) lending.}
+{\it 2015 Fifth international Conference on Communication Systems and Network Technologies}
+---
+A short paper that focuses on identifying which predictors in the Lending Club data have the greatest relevance.
+
+Dorfleitner, Gregor; Priberny, Christopher; Schuster, Stephanie; Stoiber, Johannes; Weber,  Martina; de Castro, Ivan; Kammlear, Julia.
+{\bf Description-text related soft information in peer-to-peer lending – Evidence from two leading European platforms.}
+{\it Journal of Banking \& Finance} (15 Dec.~2015)
+---
+This paper focuses on two aspects of the free-text portion of data from two European P2P sites: the number of misspelled words (based on the GNU Aspell database) and the length of the text. Without actually doing semantic NLP, they are able to extract significant predictors from this channel.
+
+\bye

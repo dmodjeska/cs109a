@@ -94,3 +94,7 @@ ENV/
 
 # Data directory
 data/
+
+# Output
+milestones/*.pdf
+*.png

@@ -1,0 +1,208 @@
+% otftotfm -a -e ec -fkern FRAMDCN.TTF FGothicCond
+\input eplain
+\pdfpageheight=11in
+\pdfpagewidth=8.5in
+\frenchspacing
+\def\sp#1{^{(#1)}}
+\parskip=0pt
+\parindent=2em
+\overfullrule=0pt
+\def\prepic{\vskip-\baselineskip}
+\def\prepicsm{\vskip-8pt\relax}
+\def\prepiclg{\vskip-15pt\relax}
+\def\pic#1#2{\pdfximage width #1 {#2}\pdfrefximage\pdflastximage}
+\def\picbox#1#2{\hbox{\pic{#1}{#2}}}
+\def\pics#1#2{\hbox{\hskip -.15in \pic{1.7in}{#1stdev1#2.png}\pic{1.7in}{#1stdev2#2.png}\pic{1.7in}{#1stdev4#2.png}\pic{1.7in}{#1nonsep#2.png}}}
+\def\caption#1#2{\vtop{\noindent\ss{\ssbf #1} -- #2\hfil}}
+\def\todo#1{{\bf TODO: #1}}
+\def\hr{\vskip 2pt \hrule \vskip 2pt}
+\def\tag#1{\noindent\vtop to 0pt{\llap{\sl (#1)\quad}\vss}\ignorespaces}
+\def\hbarchart#1#2{\hbox{\relax
+\hbox to 1cm{\hss\vrule height 8pt width #2cm}\relax
+\vrule width .2pt height 10pt depth 2pt \relax
+\hbox to 1cm{\vrule height 8pt width #1cm\hss}}}
+\def\valbar#1{#1&\hbarchart{#1}{-#1}}
+\font\ss=FranklinGothicBook at 10pt
+\font\ssbf=FranklinGothicDemi at 10pt
+\def\assignment#1{{\noindent \it #1\par}}
+\def\sec#1{\vskip10pt\noindent{\bf #1}\par\penalty10000\vskip4pt\penalty10000\noindent\ignorespaces}
+\def\*{\par\noindent\hangindent=2em\hangafter=1\hbox to 1em{\hfil}\hbox to 1em{$\bullet$\hfil}\ignorespaces}
+
+\def\term#1{{\tt #1}}
+
+\hbox to \hsize{\hfil\bf Predicting Loan Outcomes using Machine Learning --- CS109a Project Milestone 3\hfil}
+\hbox to \hsize{\hfil David Modjeska and Andrew Greene\hfil}
+
+\doublecolumns
+
+\sec{Scope of this Milestone}
+
+In this paper, we explore the ``Lending Club'' dataset. In particular,
+we will be considering which features (both inherent and derived) are
+the most promising for building classifiers to identify loans that
+will default.
+
+\sec{Initial review of columns}
+
+We load the data and enumerate the available columns. They can be immediately divided into the following categories:
+
+{\tt\raggedright\hyphenchar\font=-1\tolerance=10000
+{\bf Metadata:}
+ id,
+ url,
+ member\_id,
+ issue\_d,
+ policy\_code
+
+{\bf Properties of the loan application:}
+ loan\_amnt,
+ term,
+ desc,
+ purpose,
+ title,
+ initial\_list\_status,
+ application\_type
+
+{\bf Properties of the borrower:}
+ emp\_title,
+ emp\_length,
+ home\_ownership,
+ annual\_inc,
+ verification\_status,
+ zip\_code,
+ addr\_state,
+ dti,
+ delinq\_2yrs,
+ earliest\_cr\_line,
+ inq\_last\_6mths,
+ mths\_since\_last\_delinq,
+ mths\_since\_last\_record,
+ open\_acc,
+ pub\_rec,
+ revol\_bal,
+ revol\_util,
+ total\_acc,
+ mths\_since\_last\_major\_derog,
+ collections\_12\_mths\_ex\_med,
+ annual\_inc\_joint,
+ dti\_joint,
+ verification\_status\_joint,
+ open\_acc\_6m,
+ open\_il\_6m,
+ open\_il\_12m,
+ open\_il\_24m,
+ mths\_since\_rcnt\_il,
+ total\_bal\_il,
+ il\_util,
+ open\_rv\_12m,
+ open\_rv\_24m,
+ max\_bal\_bc,
+ all\_util,
+ total\_rev\_hi\_lim,
+ inq\_fi,
+ total\_cu\_tl,
+ inq\_last\_12m
+
+{\bf Properties of the loan if it gets approved (not in control of borrower):}
+ int\_rate,
+ funded\_amnt,
+ funded\_amnt\_inv,
+ installment
+
+
+{\bf Proprietary judgements:}
+ grade,  sub\_grade
+
+
+{\bf Outcomes:}
+ loan\_status,
+ pymnt\_plan,
+ out\_prncp,
+ out\_prncp\_inv,
+ total\_pymnt,
+ total\_pymnt\_inv,
+ total\_rec\_prncp,
+ total\_rec\_int,
+ total\_rec\_late\_fee,
+ recoveries,
+ collection\_recovery\_fee,
+ last\_pymnt\_d,
+ last\_pymnt\_amnt,
+ next\_pymnt\_d,
+ last\_credit\_pull\_d,
+ acc\_now\_delinq,
+ tot\_coll\_amt,
+ tot\_cur\_bal
+
+}
+
+\sec{Data Cleansing}
+
+In exploring the Lending Club data, we were able to leverage
+recommendations from the sources in our literature review. These
+recommendations primarily concerned data selection, filtering,
+synthesis, censoring, recoding, and text processing. In addition, we
+found it necessary to clean certain variables, and remove minor nulls.
+
+\* Selection: focus in fields reported in the literature, but begin exploration with all fields
+\* Filtering: filter data to loans initiated as of January 1, 2012, and either fully paid or defaulted
+\* Synthesis: synthesize fields reported in the literature, including income-to-payment ratio and revolving-to-income ratio
+\* Censoring: right-censor delinquencies (2+ years), inquiries (3+ months), and employment length (10+ years)
+\* Recoding: loan status (True = fully paid, False = default), loan subgrade (A1-E7 = 1-35)
+\* Text processing: vectorize loan description field as trigrams; calculate term-frequency/\penalty 0 inverse-document-frequency; and import US English language dictionary.
+\* Cleaning: prune extra characters in employment length, loan term, and description
+\* Nulls: filter out rows with nulls in a column where nulls compose less than 1\% of that column
+
+\sec{Feature Selection}
+
+As we consider features, we use certain recurring visualization techniques (see appendix) to help us identify whether the feature is likely to be meaningful in determining the probability of a particular loan defaulting. Before we enumerate certain features of interest, let us explain them.
+
+For categorical features, we have a pair of visualizations. To the left is a stacked column chart shows the relative number of observations in each category, divided by whether or not they defaulted. The columns are sorted by frequency; if there are more than 20 categories, all after the first 19 are combined into ``Others''. To the right, we show the default rate for each category, along with a 95\% confidence interval, computed as $\pm 1.96$ times the binomial standard error $\sqrt{p(1-p)/n}$; these are sorted by increasing default rate (and so ``Others'' will often fall in the middle of this chart).
+
+For quantitative features, we again use a pair of visualizations. On the left, separate column charts show the distribution of the predictor for the ``good'' and ``bad'' loans. If the feature makes a good predictor, we expect these distributions to differ. On the right, a qq-plot compares the $n$th quantile of ``good'' loans against the $n$th quantile of ``bad'' loans, along with a black diagonal line showing equal distribution for comparison. ``Beads'' are displayed every decile. If the qq-plot diverges above (below) from the null line, the histograms should display right (left) skew relative to one another; this indicates that the feature is likely to be a good predictor.
+
+On to the candidate features. The first obvious place to look is the loan amount. In this case, since the qq-plot falls above the black diagonal line, we deduce that the distribution of loan amounts for bad loans is skewed more to the right than the distribution of loan amounts for good loans. This indicates that it is likely to be a successful indicator. Another fine example of the qq-plot showing an indicator of interest is \term{mths\_since\_last\_record}, the ``number of months since the last public record.''
+
+This is even more dramatic in the case of interest rates. It is hardly surprising that loans carrying higher interest rates are more likely to default, although we reject this as an indicator because the interest rate is set by Lending Club based on their risk assessment of the loan. Thus (a) its causality is suspect, and (b) as Lending Club is presumably constantly updating their algorithms, the way in which this figure is computed may have changed in the past and may change without notice in the future.
+
+\term{Emp\_title} vs.\ \term{emp\_length} -- The employment title shows a nice variation in the default rate; while each entry has a confidence interval that largely overlaps its immediate neighbors, those at the extremes are far enough away from each other to be promising. Employment length, on the other hand, looks to be insignificant, except for the “N/A” factor
+
+\term{Home\_ownership} While two of the values have very small counts and hence large error bars, the factors MORTGAGE, RENT, and OWN have significantly different default rates and are likely to be good predictors. \term{Verification\_status} similarly has nicely separate confidence intervals
+
+\term{Purpose} and \term{Title} contain much of the same information, and have some values that are definitely significant.
+
+We reject \term{Grade} and \term{subgrade} as predictors. First, they are computed using proprietary scoring algorithms, and for all we know Learning Club is constantly tinkering with the algorithm to improve its result. We cannot be sure that the meaning of these variables is consistent across our sample period nor that it will remain so in the future.
+
+\sec{Derived features}
+
+DISCUSSION OF \term{Desc} GOES HERE
+
+We are also considering a different representation of whether a loan
+has defaulted. Since \term{issue\_d}, the month in which the loan was
+issued, is always going to be showing us new values, and since for
+historical data it stands as a proxy for "economic conditions
+affecting loans issued in the given month", we want to compensate for
+it in our models. Therefore, instead of simply assigning a 0 to loans
+that are paid in full and a 1 to those that default, one might
+subtract off the mean of the raw score for each month. What we would
+be measuring, in effect, is the probability (all else being equal)
+that a loan in the ``current'' economic conditions will default. If we
+adopt this approach, our model would be predicting the {\it residual}
+probability that each {\it particular} loan will do better or worse
+than average.
+
+\vfill\eject
+\singlecolumn
+\sec{Image Gallery}
+
+\picbox{6in}{../img_loan_amnt.png}
+\picbox{6in}{../img_mths_since_last_record.png}
+\picbox{6in}{../img_int_rate.png}
+\picbox{6in}{../img_emp_title.png}
+\picbox{6in}{../img_emp_length.png}
+\picbox{6in}{../img_home_ownership.png}
+\picbox{6in}{../img_verification_status.png}
+\picbox{6in}{../img_Purpose.png}
+\picbox{6in}{../img_title.png}
+
+\bye

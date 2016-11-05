@@ -36,14 +36,12 @@
 \doublecolumns
 
 \sec{Scope of this Milestone}
-
-In this paper, we explore the ``Lending Club'' dataset. In particular,
+In this paper, we explore the ``Lending Club'' (LC) dataset. In particular,
 we will be considering which features (both inherent and derived) are
 the most promising for building classifiers to identify loans that
 will default.
 
 \sec{Initial review of columns}
-
 We load the data and enumerate the available columns. They can be immediately divided into the following categories:
 
 {\tt\raggedright\hyphenchar\font=-1\tolerance=10000
@@ -137,24 +135,22 @@ We load the data and enumerate the available columns. They can be immediately di
 }
 
 \sec{Data Cleansing}
-
 In exploring the Lending Club data, we were able to leverage
 recommendations from the sources in our literature review. These
 recommendations primarily concerned data selection, filtering,
 synthesis, censoring, recoding, and text processing. In addition, we
 found it necessary to clean certain variables, and remove minor nulls.
 
-\* Selection: focus in fields reported in the literature, but begin exploration with all fields
-\* Filtering: filter data to loans initiated as of January 1, 2012, and either fully paid or defaulted
+\* Selection: focus on fields reported in the literature, but begin exploration with all fields
+\* Filtering: filter data to loans initiated as of January 1, 2018, and either fully paid or defaulted
 \* Synthesis: synthesize fields reported in the literature, including income-to-payment ratio and revolving-to-income ratio
 \* Censoring: right-censor delinquencies (2+ years), inquiries (3+ months), and employment length (10+ years)
-\* Recoding: loan status (True = fully paid, False = default), loan subgrade (A1-E7 = 1-35)
+\* Recoding: loan status ({\tt True} = defaulted, {\tt False} = fully paid), loan subgrade (A1-E7 = {\tt 1}--{\tt 35})
 \* Text processing: vectorize loan description field as trigrams; calculate term-frequency/\penalty 0 inverse-document-frequency; and import US English language dictionary.
 \* Cleaning: prune extra characters in employment length, loan term, and description
 \* Nulls: filter out rows with nulls in a column where nulls compose less than 1\% of that column
 
 \sec{Feature Selection}
-
 As we consider features, we use certain recurring visualization techniques (see appendix) to help us identify whether the feature is likely to be meaningful in determining the probability of a particular loan defaulting. Before we enumerate certain features of interest, let us explain them.
 
 For categorical features, we have a pair of visualizations. To the left is a stacked column chart shows the relative number of observations in each category, divided by whether or not they defaulted. The columns are sorted by frequency; if there are more than 20 categories, all after the first 19 are combined into ``Others''. To the right, we show the default rate for each category, along with a 95\% confidence interval, computed as $\pm 1.96$ times the binomial standard error $\sqrt{p(1-p)/n}$; these are sorted by increasing default rate (and so ``Others'' will often fall in the middle of this chart).
@@ -173,23 +169,46 @@ This is even more dramatic in the case of interest rates. It is hardly surprisin
 
 We reject \term{Grade} and \term{subgrade} as predictors. First, they are computed using proprietary scoring algorithms, and for all we know Learning Club is constantly tinkering with the algorithm to improve its result. We cannot be sure that the meaning of these variables is consistent across our sample period nor that it will remain so in the future.
 
-\sec{Derived features}
+\sec{Derived Features}
+The free-text description field has been explored relatively less in
+the research literature, so it is of interest for our data
+exploration. Approximately 35\% of loan applications during our period
+of interest include description text.
 
-DISCUSSION OF \term{Desc} GOES HERE
+Several derived description features are of interest for potential
+predictive power: description length (in characters), description
+length (in words), normalized per-description vocabulary size,
+normalized misspelling count\footnote{*}{See Dorfleitner {\it et al}
+(2015); {\tt http://dx.doi.org/10.1016/j.jbankfin.2015.11.009}}, and
+most frequent terms specific to a loan outcome. Histograms for the
+quantitative derived features above exhibit regular patterning, which
+should be useful in modeling.
 
 We are also considering a different representation of whether a loan
 has defaulted. Since \term{issue\_d}, the month in which the loan was
-issued, is always going to be showing us new values, and since for
-historical data it stands as a proxy for "economic conditions
-affecting loans issued in the given month", we want to compensate for
-it in our models. Therefore, instead of simply assigning a 0 to loans
-that are paid in full and a 1 to those that default, one might
-subtract off the mean of the raw score for each month. What we would
-be measuring, in effect, is the probability (all else being equal)
-that a loan in the ``current'' economic conditions will default. If we
-adopt this approach, our model would be predicting the {\it residual}
-probability that each {\it particular} loan will do better or worse
-than average.
+issued, will never again have the values that appear in our training
+set, and since for historical data it stands as a proxy for "economic
+conditions affecting loans issued in the given month", we want to
+compensate for it in our models. Therefore, instead of simply
+assigning a {\tt 0} to loans that are paid in full and a {\tt 1} to
+those that default, one might subtract off the mean of the raw score
+for each month. What we would be measuring, in effect, is the
+probability (all else being equal) that a loan in the ``current''
+economic conditions will default. If we adopt this approach, our model
+would be predicting the {\it residual} probability that each {\it
+particular} loan will do better or worse than average.
+
+\sec{Data Modeling}
+In modeling the LC data, we expect to combine the two broad feature
+sets identified above. First, we will model the features where our
+exploration has already identified strong differentiation between loan
+outcomes. Second, we will model variables for which we have speculated
+strong differentiation. One of these speculations concerns different
+representations of loan default outcomes. The second speculation
+concerns the utility of the free-text description field for signaling
+expected loan outcomes. In this way, our modeling should be a mix of
+reproducing aspects of prior studies and extending this work to
+potential new features.
 
 \vfill\eject
 \singlecolumn

@@ -142,10 +142,10 @@ synthesis, censoring, recoding, and text processing. In addition, we
 found it necessary to clean certain variables, and remove minor nulls.
 
 \* Selection: focus on fields reported in the literature, but begin exploration with all fields
-\* Filtering: filter data to loans initiated as of January 1, 2018, and either fully paid or defaulted
+\* Filtering: filter data to loans initiated as of January 1, 2008, and either fully paid or defaulted
 \* Synthesis: synthesize fields reported in the literature, including income-to-payment ratio and revolving-to-income ratio
 \* Censoring: right-censor delinquencies (2+ years), inquiries (3+ months), and employment length (10+ years)
-\* Recoding: loan status ({\tt True} = defaulted, {\tt False} = fully paid), loan subgrade (A1-E7 = {\tt 1}--{\tt 35})
+\* Recoding: loan status ({\tt True} = defaulted, {\tt False} = fully paid), loan subgrade (A1--E7 = {\tt 1}--{\tt 35})
 \* Text processing: vectorize loan description field as trigrams; calculate term-frequency/\penalty 0 inverse-document-frequency; and import US English language dictionary.
 \* Cleaning: prune extra characters in employment length, loan term, and description
 \* Nulls: filter out rows with nulls in a column where nulls compose less than 1\% of that column
@@ -157,6 +157,9 @@ For categorical features, we have a pair of visualizations. To the left is a sta
 
 For quantitative features, we again use a pair of visualizations. On the left, separate column charts show the distribution of the predictor for the ``good'' and ``bad'' loans. If the feature makes a good predictor, we expect these distributions to differ. On the right, a qq-plot compares the $n$th quantile of ``good'' loans against the $n$th quantile of ``bad'' loans, along with a black diagonal line showing equal distribution for comparison. ``Beads'' are displayed every decile. If the qq-plot diverges above (below) from the null line, the histograms should display right (left) skew relative to one another; this indicates that the feature is likely to be a good predictor.
 
+Summary statistics are provided with the visualizations.
+
+\headline{Predicting Loan Outcomes --- Milestone \#3 \hfill David~Modjeska and Andrew~Greene}
 On to the candidate features. The first obvious place to look is the loan amount. In this case, since the qq-plot falls above the black diagonal line, we deduce that the distribution of loan amounts for bad loans is skewed more to the right than the distribution of loan amounts for good loans. This indicates that it is likely to be a successful indicator. Another fine example of the qq-plot showing an indicator of interest is \term{mths\_since\_last\_record}, the ``number of months since the last public record.''
 
 This is even more dramatic in the case of interest rates. It is hardly surprising that loans carrying higher interest rates are more likely to default, although we reject this as an indicator because the interest rate is set by Lending Club based on their risk assessment of the loan. Thus (a) its causality is suspect, and (b) as Lending Club is presumably constantly updating their algorithms, the way in which this figure is computed may have changed in the past and may change without notice in the future.
@@ -175,11 +178,11 @@ the research literature, so it is of interest for our data
 exploration. Approximately 35\% of loan applications during our period
 of interest include description text.
 
-Several derived description features are of interest for potential
+Several derived description features are of interest for their potential
 predictive power: description length (in characters), description
 length (in words), normalized per-description vocabulary size,
-normalized misspelling count\footnote{*}{See Dorfleitner {\it et al}
-(2015); {\tt http://dx.doi.org/10.1016/j.jbankfin.2015.11.009}}, and
+normalized misspelling count,\footnote{$^1$}{See Dorfleitner {\it et al}
+(2015); {\tt http://dx.doi.org/10.1016/j.jbankfin.2015.11.009}} and
 most frequent terms specific to a loan outcome. Histograms for the
 quantitative derived features above exhibit regular patterning, which
 should be useful in modeling.
@@ -187,8 +190,8 @@ should be useful in modeling.
 We are also considering a different representation of whether a loan
 has defaulted. Since \term{issue\_d}, the month in which the loan was
 issued, will never again have the values that appear in our training
-set, and since for historical data it stands as a proxy for "economic
-conditions affecting loans issued in the given month", we want to
+set, and since for historical data it stands as a proxy for ``economic
+conditions affecting loans issued in the given month,'' we want to
 compensate for it in our models. Therefore, instead of simply
 assigning a {\tt 0} to loans that are paid in full and a {\tt 1} to
 those that default, one might subtract off the mean of the raw score
@@ -210,18 +213,48 @@ expected loan outcomes. In this way, our modeling should be a mix of
 reproducing aspects of prior studies and extending this work to
 potential new features.
 
-\vfill\eject
 \singlecolumn
-\sec{Image Gallery}
+\vfill\eject
+\hbox{\bf Appendix: Image Gallery}
+
+\sec{Feature Selection}
+
+\def\amgverbatim{\parindent=0pt\obeylines\obeyspaces\tt\catcode`\%=12}
 
 \picbox{6in}{../img_loan_amnt.png}
+\vbox{\amgverbatim{}
+Outcome     Min        2.5%         25%         50%         75%       97.5%         Max
+GOOD     500.00     2225.00     7200.00    12000.00    18000.00    35000.00    35000.00
+BAD     1000.00     2500.00     8000.00    12675.00    20000.00    35000.00    35000.00
+}
+\vskip 4pt\hrule\vskip 8pt
+
 \picbox{6in}{../img_mths_since_last_record.png}
+\vbox{\amgverbatim{}
+Outcome     Min        2.5%         25%         50%         75%       97.5%         Max
+GOOD       0.00       12.00       51.00       69.00       91.00      117.00      121.00
+BAD        0.00        8.00       58.00       86.00      103.00      117.00      129.00
+}
+\vskip 4pt\hrule\vskip 8pt
+
 \picbox{6in}{../img_int_rate.png}
+\vbox{\amgverbatim{}
+Outcome     Min        2.5%         25%         50%         75%       97.5%         Max
+GOOD       5.32        6.03       10.16       13.11       15.88       22.95       28.99
+BAD        5.42        7.88       13.05       15.80       18.92       24.83       28.99}
+\vskip 4pt\hrule\vskip 8pt
+
 \picbox{6in}{../img_emp_title.png}
 \picbox{6in}{../img_emp_length.png}
 \picbox{6in}{../img_home_ownership.png}
 \picbox{6in}{../img_verification_status.png}
 \picbox{6in}{../img_Purpose.png}
 \picbox{6in}{../img_title.png}
+
+\vfill\eject
+\sec{Derived Features}
+
+\hbox{\picbox{3in}{../images/img_1.png}\picbox{3in}{../images/img_4.png}}
+\hbox{\picbox{3in}{../images/img_8.png}\picbox{3in}{../images/img_12.png}}
 
 \bye

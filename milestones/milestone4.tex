@@ -1,0 +1,36 @@
+% otftotfm -a -e ec -fkern FRAMDCN.TTF FGothicCond
+\input eplain
+\pdfpageheight=11in
+\pdfpagewidth=8.5in
+\frenchspacing
+\def\sp#1{^{(#1)}}
+\parskip=0pt
+\parindent=2em
+\overfullrule=0pt
+\def\prepic{\vskip-\baselineskip}
+\def\prepicsm{\vskip-8pt\relax}
+\def\prepiclg{\vskip-15pt\relax}
+\def\pic#1#2{\pdfximage width #1 {#2}\pdfrefximage\pdflastximage}
+\def\picbox#1#2{\hbox{\pic{#1}{#2}}}
+\def\pics#1#2{\hbox{\hskip -.15in \pic{1.7in}{#1stdev1#2.png}\pic{1.7in}{#1stdev2#2.png}\pic{1.7in}{#1stdev4#2.png}\pic{1.7in}{#1nonsep#2.png}}}
+\def\caption#1#2{\vtop{\noindent\ss{\ssbf #1} -- #2\hfil}}
+\def\todo#1{{\bf TODO: #1}}
+\def\hr{\vskip 2pt \hrule \vskip 2pt}
+\def\tag#1{\noindent\vtop to 0pt{\llap{\sl (#1)\quad}\vss}\ignorespaces}
+\def\hbarchart#1#2{\hbox{\relax
+\hbox to 1cm{\hss\vrule height 8pt width #2cm}\relax
+\vrule width .2pt height 10pt depth 2pt \relax
+\hbox to 1cm{\vrule height 8pt width #1cm\hss}}}
+\def\valbar#1{#1&\hbarchart{#1}{-#1}}
+\font\ss=FranklinGothicBook at 10pt
+\font\ssbf=FranklinGothicDemi at 10pt
+\def\assignment#1{{\noindent \it #1\par}}
+\def\sec#1{\vskip10pt\noindent{\bf #1}\par\penalty10000\vskip4pt\penalty10000\noindent\ignorespaces}
+\def\*{\par\noindent\hangindent=2em\hangafter=1\hbox to 1em{\hfil}\hbox to 1em{$\bullet$\hfil}\ignorespaces}
+
+\def\term#1{{\tt #1}}
+
+\hbox to \hsize{\hfil\bf Predicting Loan Outcomes using Machine Learning --- CS109a Project Milestone 4\hfil}
+\hbox to \hsize{\hfil David Modjeska and Andrew Greene\hfil}
+
+\doublecolumns

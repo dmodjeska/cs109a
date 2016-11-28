@@ -2,6 +2,7 @@
 \input eplain
 \pdfpageheight=11in
 \pdfpagewidth=8.5in
+\bottommargin=0.8in
 \frenchspacing
 \def\sp#1{^{(#1)}}
 \parskip=0pt
@@ -25,7 +26,7 @@
 \font\ss=FranklinGothicBook at 10pt
 \font\ssbf=FranklinGothicDemi at 10pt
 \def\assignment#1{{\noindent \it #1\par}}
-\def\sec#1{\vskip10pt\noindent{\bf #1}\par\penalty10000\vskip4pt\penalty10000\noindent\ignorespaces}
+\def\sec#1{\vskip8pt\noindent{\bf #1}\par\penalty10000\vskip2pt\penalty10000\noindent\ignorespaces}
 \def\*{\par\noindent\hangindent=2em\hangafter=1\hbox to 1em{\hfil}\hbox to 1em{$\bullet$\hfil}\ignorespaces}
 
 \def\term#1{{\tt #1}}
@@ -34,3 +35,154 @@
 \hbox to \hsize{\hfil David Modjeska and Andrew Greene\hfil}
 
 \doublecolumns
+
+\sec{Abstract}
+In this milestone report, we build baseline models on the Lending Club (LC) dataset. We build on our work in the previous milestone, in which we evaluated the available columns.
+
+\sec{Curating our data}
+We begin by focusing on loans issued in the years 2011, 2012, and 2013. There are far fewer loans issued prior to 2011, and (possibly because of economic conditions at the time), they have a higher overall default rate. For loans issued in 2014 and later, there is a censoring effect because not all loans have had enough time to mature. We also exclude loans with a 60-month term for the same reason.
+
+Next, we choose the predictor columns which we will use. They are listed in Fig.~1.
+
+A few notes on these: months\_since\_earliest\_credit is the number of months between the issue\_date and the earliest\_credit. This is to correct for the fact that loans are issued at different times. The continuous economic predictors are data imported from the Federal Reserve's ``FRED'' database for the month identified as issue\_date. Since future loan predictions will not be able to use values of issue\_date found in our dataset, we assume that the relevant information latent in the issue\_date column can be represented by significant economic indicators at that time. 
+
+Our preliminary exploration showed that employ\_length had a surprising property: it is presented as a categorical predictor, and although one could convert it to a continuous predictor, it was actually only the ``missing'' value that had a statistically significantly different mean default rate -- and since in our models continuous predictors use their median to impute missing values, if we were to convert this to a continuous predictor we would lose the one value that makes this predictor worth keeping!
+
+As a quick sanity-check, we create a Random Forest and see what predictors it considers important. (See Fig.~2) Topping the list is annual\_income, which is reassuring, although the state-specific one-hot-encoded predictors follow, which is interesting. 
+
+By comparison, a simple (balanced) Logistic Regression model gives the values in Fig.~3 as the coefficients with the largest and smallest (aboslute) values. These put far more emphasis on the (one-hot-encoded) employment title (which, we observe, contains a mix of (a) title-cased values, (b) lower-case values, and (c) company names). Strangely, ``Manager'' has a +0.92 coefficient, indicating a low risk of default, while ``manager'' has a -0.71 coefficient, indicating a high risk.
+
+\sec{Baseline models}
+The plausibility of the coefficients from the Logistic Regression model gives us confidence to go ahead with this data set and construct one exemplar of each family of models.
+
+In the following table, we treat ``Paid in full'' as a positive (1) outcome; this lets us focus on the precision rather than the overall classification accuracy (CA). For the individual member of the Lending Club, there are sufficient loans available for funding that there is virtually no opportunity cost to passing up a loan that will be paid. It is much more important to avoid non-performing loans. (In Milestone 5 we discuss this in more depth.) Scores in the following table are on the test data.
+
+\vskip 4pt
+\halign{#\hfil\ &\hfil#\hfil\ &\hfil #\hfil\ &\hfil#\hfil\cr
+\bf Model                  &\bf CA    &\bf Precision   &\bf F1\cr
+\noalign{\vskip2pt \hrule\vskip -1pt}\cr
+Always 1               &0.848    &0.848    &0.053 \cr
+Unbalanced LogReg      &0.848    &0.849    &0.052 \cr
+Balanced LogReg        &0.622    &0.902    &0.031 \cr
+QDA                    &0.165    &0.863    &0.006 \cr
+Random Forest          &0.848    &0.848    &0.053 \cr
+Random Forest w/bias   &0.433    &0.901    &0.031 \cr
+Balanced SVC           &0.848    &0.849    &0.053 \cr
+}
+\vskip 4pt
+
+Because the classes are imbalanced, the methods that do not compensate for this are unable to detect those loans that are likely to default, yielding both precision and overall classification accuracy of the 85\% of loans that are paid in full. Those other models that {\it do} compensate are more likely to identify loans as risky: both correctly and incorrectly. For those models, the overall classification accuracy (and F1 scores) drop, but the {\it precision} increases, which is what we want to see. (Fig.~4)
+
+We do not consider KNN because of both the cardinality and the dimensionality of the data.
+
+\sec{Next Steps}
+Given these baselines, we will be able to compare the performance of the models we continue to develop. Our plans for the remainder of this project are discussed in Milestone 5.
+
+\sec{Code}
+The code for this project can be found on GitHub at {\tt https://github.com/amgreene/cs109a} It is a private repository but we are happy to share access to it.
+
+\singlecolumn\vfill\eject
+\headline{\rm Predicting Loan Outcomes --- Milestone \#4 \hfill David~Modjeska and Andrew~Greene}
+
+\sec{Fig. 1: List of Predictors}
+{\obeylines{\bf Continuous Predictors}\catcode`\_=12
+{\tt annual_income
+delinq_2_yrs 
+desc_len
+inquiry_6_mos
+installment
+loan_amount 
+loan_term
+months_since_earliest_credit
+months_since_last_record
+open_accounts
+revol_util
+total_accounts
+unemploy}
+\par\noindent{\bf Categorical Predictors}
+{\tt address_state
+employ_length
+employ_title
+home_owner
+initial_list_status
+loan_purpose }
+\par\noindent{\bf Continuous Economic Predictors}
+{\tt cpi 
+dti 
+gdp 
+ipr 
+rir}
+}
+
+\sec{Fig. 2: Importance in Random Forest}
+\picbox{6in}{ms3-rf-importance.png}
+
+\sec{Fig. 3: Coefficients in Logistic Regression}
+{\obeylines\obeyspaces\tt\parindent=0pt\catcode`\_=12%
+employ_title__Sales                 -1.481170
+employ_title__Engineer              +1.453079
+loan_amount                         -1.150217
+installment                         +1.080646
+employ_title__Paralegal             -1.048912
+employ_title__Software_Engineer     +0.993126
+employ_title__Kaiser_Permanente     +0.970401
+employ_title__Branch_Manager        +0.949948
+employ_title__Assistant_Manager     +0.934904
+employ_title__Manager               +0.927453
+employ_title__Attorney              +0.910822
+address_state__IA                   -0.880930
+employ_title__President             +0.834595
+employ_title__truck_driver          -0.827184
+employ_title__Wells_Fargo_Bank      +0.804132
+employ_title__manager               -0.714929
+employ_title__supervisor            -0.712204
+employ_title__Walmart               -0.649203
+employ_title__Executive_Assistant   +0.647786
+employ_title__Operations_Manager    +0.647447
+loan_purpose__small_business        -0.615268
+employ_title__sales                 -0.594256
+loan_purpose__credit_card           +0.547049
+home_owner__OTHER                   -0.512765
+employ_title__Sales_Manager         -0.498320
+address_state__DC                   +0.494797
+address_state__WY                   +0.484090
+employ_title__Truck_Driver          +0.476451
+employ_title__RN                    -0.474911
+home_owner__NONE                    +0.458328
+                                       ...   
+desc_len                            +0.055595
+employ_length__4                    +0.054544
+address_state__NC                   +0.051968
+employ_title__Program_Manager       +0.051700
+address_state__MI                   -0.046741
+initial_list_status__w              -0.045878
+employ_title__IBM                   +0.037288
+employ_length__3                    +0.034592
+employ_length__5                    +0.034294
+address_state__OK                   -0.032820
+months_since_last_record            -0.031870
+address_state__NM                   +0.030634
+address_state__IL                   +0.029021
+address_state__WI                   -0.027886
+address_state__CA                   -0.027058
+address_state__AK                   +0.026770
+employ_length__10                   -0.025127
+address_state__SC                   -0.025030
+months_since_earliest_credit        +0.024779
+home_owner__OWN                     -0.023421
+employ_length__7                    -0.021551
+address_state__AR                   -0.017962
+employ_length__0                    -0.016399
+address_state__OH                   -0.009843
+address_state__CT                   -0.007454
+address_state__KS                   -0.004893
+address_state__GA                   +0.001055
+address_state__ND                   -0.000000
+address_state__MS                   -0.000000
+loan_purpose__educational           -0.000000}
+
+\sec{Fig. 4: Comparison of Results}
+\picbox{6in}{ms4-results.png}
+
+
+\bye

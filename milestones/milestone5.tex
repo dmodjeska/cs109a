@@ -40,17 +40,20 @@ In this paper, we continue our discussion of ``Lending Club'' (LC) dataset. In p
 we will discuss our plans for the remainder of the project, {\it i.e.} the Poster and Website deliverables.
 
 \sec{Proposal for Future Work}
-Our final presentations will devote a module to each step in the data pipeline.
+Our final presentations will devote a module to each step in the data science pipeline.
+
+\sec{Initial Context}
+Before we begin the formal steps of the data science pipeline, we will set out the problem posed by the Lending Club data. We will summarize key points raised in the literature review that we conducted for milestone 2.
 
 \sec{Data Collection}
 This module will discuss some issues with the raw data provided by LC, as well as the need to acquire additional data for context.
 
-The data in the Lending Club dataset covers the years 2008--2015, which includes the global ``Great Recession'' of 2007Q4--2009Q2.\footnote{$^*$}{Federal Reserve of St.~Louis, {\tt https://fred.stlouisfed.org/series/JHDUSRGDPBR}} In order to account for the variation in economic conditions, we felt it necessary to collect additional data reflecting economic conditions, and join that with the LC data. We used the Federal Reserve ``FRED'' database, and in our presentation we will discuss this process.
+The data in the Lending Club dataset covers the period 2008--2015, which includes the global\break ``Great Recession'' of 2007{\sc Q}4--2009{\sc Q}2.\footnote{$^*$}{Federal Reserve of St.~Louis, {\tt https://fred.stlouisfed.org/series/JHDUSRGDPBR}} In order to account for the variation in economic conditions, we felt it necessary to collect additional data reflecting economic conditions, and join that with the LC data. We used the Federal Reserve ``FRED'' database, and in our presentation we will discuss this process.
 
 We will also discuss the role that selection bias plays in the raw LC data. In particular, the provided dataset only includes loans that were {\it approved} by Lending Club members.
 
 \sec{Data Exploration}
-In this module, we will revisit the highlights of Milestone 3. We will idenitify which columns are response variables (such as ``recoveries''), which are tainted predictors (such as ``interest rate''), and which are candidate predictors (such as ``annual income'').
+In this module, we will revisit the highlights of Milestone 3. We will idenitify which of the available columns are response variables (such as ``recoveries''), which ones are tainted predictors (such as ``interest rate''), and which are candidate predictors (such as ``annual income'').
 
 We will spend some time here discussing ways of using NLP and NLP-like methods to extract useful predictors from the free-text ``description'' field. Examples include the number of words, the richness of the vocabulary, and the rate of spelling errors.
 
@@ -76,5 +79,6 @@ We will also explore how different participants in the Lending Club have differe
 \sec{Visualization and Presentation of Results}
 Throughout the remaining deliverables, high-quality visualizations and clarity in presentation will be a constant requirement. These are not a separate module; although they are given as the final step in the Data Science pipeline, the entirety of both the poster and website deliverables will be the manifestations of this step.
 
+\singlecolumn
 \bye
 

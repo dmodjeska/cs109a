@@ -53,6 +53,9 @@ def calc_expected_profit(profit_data_test, test_y_hat):
 def ROC_plot(model, X, Y, model_name):
     # Plot the ROC curve for the given model
     roc_data = []
+    prev_false_positive = 0
+    prev_true_positive = 0
+    auc = 0  # rough integral
     for p in np.arange(0, 1, 0.01):
         yhat = model.predict_proba(X)[:,0] <= p
         false_positive_rate = ((yhat == 1) & (Y == 0)).sum() * 1.0 / ((Y == 0).sum())
@@ -61,6 +64,10 @@ def ROC_plot(model, X, Y, model_name):
         # mark the key thresholds that we might use
         if p in (0.5, 0.6, 0.85):
             plt.scatter(false_positive_rate, true_positive_rate)  
+        # Use midpoint rectangle method to approximate AUC
+        auc += (true_positive_rate + prev_true_positive) / 2.0 * (false_positive_rate - prev_false_positive)
+        prev_false_positive = false_positive_rate
+        prev_true_positive = true_positive_rate
 
     plt.plot([roc[0] for roc in roc_data],
              [roc[1] for roc in roc_data],
@@ -70,7 +77,12 @@ def ROC_plot(model, X, Y, model_name):
     plt.title("ROC Curve for " + model_name)
     plt.xlabel("False Positive Rate")
     plt.ylabel("True Positive Rate")
+    plt.gca().text(0.99, 0.1, "AUC = %.3f" % (auc,),
+                   ha = 'right', va = 'bottom'
+    )
     plt.show()
+
+    return auc
 
 # In[2]:
 
@@ -137,7 +149,7 @@ def eval_model_all_years(model_factory,
     # expected profit
     profit_mm = calc_expected_profit(profit_data_test, test_y_hat)
 
-    ROC_plot(model, x_local_test, y_test, model_name)
+    area_under_curve = ROC_plot(model, x_local_test, y_test, model_name)
 
     print "all   score: %.3f  baseline: %.3f   1-prec: %.3f   f1: %.3f  | test score %.3f  1-prec %.3f f1 %.3f  GP %dMM" % (
         score, 1-y.mean(), 1-weighted_score, f1_accum, test_score, test_precision, test_f1, profit_mm)
@@ -151,6 +163,7 @@ def eval_model_all_years(model_factory,
         'test_prec': test_precision,
         'test_f1': test_f1,
         'test_profit': profit_mm,
+        'auc': area_under_curve,
     }
 
 

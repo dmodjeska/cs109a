@@ -129,11 +129,34 @@ data_filtered_x = data_filtered_x.drop('recoveries', axis = 1)
 
 # In[38]:
 
+# Certain columns in the raw data should not be in our model
+columns_not_to_expand = [
+    'description',     # free-text, so don't one-hot encode (NLP is separate)
+    'verif_status',    # not sure why this is here...
+    'loan_subgrade',   # tainted predictor
+    'id',              # unique to each row
+    'interest_rate',   # tainted predictor
+    'index',           # unique to each row
+    'issue_date',      # not useful in future, using economic indicators instead
+    'earliest_credit', # has been converted to months_since_earliest_credit
+]
+
+# Given an input matrix X and the equivalent matrix X from the training set,
+#
+# (1) impute missing values (as "MISSING" for categorical, since the fact that 
+# the value is missing may itself be significant; and using the median value
+# for continuous predictors)
+#
+# (2) expand categorical predictors into a set of one-hot-encoded columns 
+# (using 0 and 1, and limiting ourselves to the 50 most common values in the
+# training set)
+#
+# (3) standardize continuous predictors using the mean and stdev of the
+# training set
 def expand_x(x, x_orig):
     x_expanded = pd.DataFrame()
     for colname in x_orig.columns:
-        if colname in ('description', 'verif_status', 'loan_subgrade', 'id', 'interest_rate'
-                       'index', 'issue_date', 'earliest_credit'):
+        if colname in columns_not_to_expand:
             continue
         print colname, x_orig[colname].dtype
         if x_orig[colname].dtype == 'object':
@@ -291,9 +314,10 @@ pca_cum_var_expl = np.cumsum(np.round(tsvd.explained_variance_ratio_, 4) * 100)
 
 
 # In[54]:
-
-print "PCA: first and last columns where % variance explained >= 85:",             np.where(pca_cum_var_expl >= 85)[0][[0, -1]]
-
+try:
+    print "PCA: first and last columns where % variance explained >= 85:",             np.where(pca_cum_var_expl >= 85)[0][[0, -1]]
+except:
+    print "Exception!"
 
 # In[55]:
 

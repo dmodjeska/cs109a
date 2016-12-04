@@ -53,9 +53,20 @@ def calc_expected_profit(profit_data_test, test_y_hat):
 
 # In[2]:
 
-def eval_model_all_years(model_factory, columns = None, poly_degree = None, prob_threshold = 0.5, 
-                         x = x_expanded, x_test = x_test_expanded, y = y, y_test = y_test,
-                        years = years, years_test = years_test, profit_data_test = profit_data_test):
+model_performance = {}
+
+def eval_model_all_years(model_factory, 
+                         columns = None, 
+                         poly_degree = None, 
+                         prob_threshold = 0.5, 
+                         x = x_expanded, 
+                         x_test = x_test_expanded, 
+                         y = y, 
+                         y_test = y_test,
+                         years = years, 
+                         years_test = years_test, 
+                         profit_data_test = profit_data_test,
+                         model_name = None):
     k = 5
     np.random.seed(1729)
     
@@ -98,6 +109,9 @@ def eval_model_all_years(model_factory, columns = None, poly_degree = None, prob
             weighted_score += (y.iloc[test_indexes][y_hat_weighted]).mean() / k
             cm_accum += confusion_matrix(y.iloc[test_indexes], y_hat[test_indexes])
             f1_accum += f1_score(y.iloc[test_indexes], y_hat[test_indexes], pos_label = 1) / k
+
+            if model_name is None:
+                model_name = type(model).__name__
         
         # but also test against the x_test
         test_y_hat = (model.predict_proba(x_local_test)[:,0] > prob_threshold)
@@ -108,20 +122,31 @@ def eval_model_all_years(model_factory, columns = None, poly_degree = None, prob
         # expected profit
         profit_mm = calc_expected_profit(profit_data_test, test_y_hat)
         
-        print "%d  score: %.3f  baseline: %.3f   wscore: %.3f   f1: %.3f  | test score %.3f  1-prec %.3f f1 %.3f  GP %dMM"         % (0, score, 1-y.mean(), 1-weighted_score, f1_accum, test_score, test_precision, test_f1, profit_mm)
+        print "all   score: %.3f  baseline: %.3f   1-prec: %.3f   f1: %.3f  | test score %.3f  1-prec %.3f f1 %.3f  GP %dMM" % (
+            score, 1-y.mean(), 1-weighted_score, f1_accum, test_score, test_precision, test_f1, profit_mm)
+
+        model_performance[model_name] = {
+            'score': score,
+            'baseline' : 1-y.mean(),
+            'prec' : 1-weighted_score,
+            'f1': f1_accum,
+            'test_score': test_score,
+            'test_prec': test_precision,
+            'test_f1': test_f1,
+            'test_profit': profit_mm,
+        }
 
 # TODO: Confusion matrix (right now, we're not doing well enough to worry about that)
-# TODO: Pretty-print
-# TODO: Store results to allow side-by-side
 
 
 # In[194]:
 
 def eval_model_by_year(model_factory, columns = None, prob_threshold = 0.5,
-                        x = x_expanded, x_test = x_test_expanded, y = y, y_test = y_test,
-                        years = years, years_test = years_test, profit_data_test = profit_data_test):
+                       x = x_expanded, x_test = x_test_expanded, y = y, y_test = y_test,
+                       years = years, years_test = years_test, profit_data_test = profit_data_test,
+                       model_name = None):
     eval_model_all_years(model_factory, columns, None, prob_threshold, x, x_test, y, y_test, years, years_test,
-                        profit_data_test)
+                         profit_data_test, model_name = model_name)
     k = 5
     np.random.seed(1729)
     

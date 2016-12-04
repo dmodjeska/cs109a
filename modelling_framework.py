@@ -80,6 +80,9 @@ def ROC_plot(model, X, Y, model_name):
     plt.gca().text(0.99, 0.1, "AUC = %.3f" % (auc,),
                    ha = 'right', va = 'bottom'
     )
+    plt.savefig('docs/images/roc_' + model_name + '.png',
+                bbox_inches='tight'
+    )
     plt.show()
 
     return auc

@@ -11,11 +11,35 @@
 <h1>Predicting Loan Outcomes using Machine Learning</h1>
 <div class='ournames'>David Modjeska and Andrew Greene<br />
 Harvard University, Autumn 2016, CS109a</div>
+
+<ul>
+<li><a href='01-Context.html'>1: Context</a></li>
+<li><a href='02-Collection.html'>2: Collection</a></li>
+<li><a href='03-Exploration.html'>3: Exploration</a></li>
+<li><a href='04-Modeling.html'>4: Modeling</a></li>
+<li><a href='05-Analysis.html'>5: Analysis</a></li>
+</ul>
+
 <h2>Part 3: Data Exploration</h2>
+<h3>Abstract</h3>
 <p>In this module, we will revisit the highlights of Milestone 3. We will idenitify which of the available columns are response variables (such as ``recoveries''), which ones are tainted predictors (such as ``interest rate''), and which are candidate predictors (such as ``annual income'').</p>
 
 <p>We will spend some time here discussing ways of using NLP and NLP-like methods to extract useful predictors from the free-text ``description'' field. Examples include the number of words, the richness of the vocabulary, and the rate of spelling errors.</p>
 
 <p>We will also consider in more depth the importance of ``issue date'', which cannot serve directly as a future predictor but whose impact is clearly felt in the data. We will assess several methodolgies for compensating for this effect.</p>
- 
+
+<h3>Predictors</h3> 
+
+<p>*** TO DO</p>
+
+<h3>Extracting Predictors using NLP</h3> 
+
+<p>*** TO DO</p>
+
+<h3>Issue Date</h3> 
+
+<p>We have already discussed, in section 2, the use of Federal Reserve data to account for much of the impact of the &ldquo;issue date&rdquo; on our model. Another point where it has an impact is in the interpretation of other fields that contain dates, such as &ldquo;earliest credit report&rdquo;. We subtract the latter from the former, generating a new predictor &ldquo;months since earliest credit report&rdquo;, which is independent of the issue date of the loan. We then disregard the absolute date of &ldquo;earliest credit report&rdquo;</p>
+
+
+
 </body>

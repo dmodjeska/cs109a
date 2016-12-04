@@ -2,29 +2,34 @@
 # coding: utf-8
 
 # # Data Loading
+# David Modjeska and Andrew Greene
 
-# In[25]:
+# This notebook isolates the code we use to load the data and do some last-minute pre-processing on it.
 
+# In[3]:
+
+# Deal with our necessary importds
+
+import datetime
 import itertools as it
 import numpy as np
 import os.path as op
 import pandas as pd
 import scipy as sp
 import sklearn.preprocessing as Preprocessing
-import datetime
 
 from itertools import combinations
+from scipy.io import mmread
 from sklearn.decomposition import TruncatedSVD as tSVD
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
-from scipy.io import mmread
 
 from IPython.display import display, HTML
 
 
-# In[26]:
+# In[4]:
 
-### specify processed data files to generate - full/partial, partial %, and train/test
+### Specify processed data files to generate - full/partial, partial %, and train/test
 ### Note: this cell is the same in both notebooks
 
 # load and clean full dataset?
@@ -58,12 +63,7 @@ term_freqs_file = dir_str + "term_freqs_" + mode_str + pct_str + ".mtx"
 diff_terms_file = dir_str + "diff_terms_" + mode_str + pct_str + ".json"
 
 
-# In[27]:
-
-processed_data_train_file
-
-
-# In[28]:
+# In[5]:
 
 ### load processed data
 data = pd.read_json(processed_data_train_file)
@@ -75,12 +75,14 @@ count_cols_df = pd.read_json(diff_terms_file)
 count_cols_bool = count_cols_df.values > 0.0
 
 
-# In[29]:
+# In[6]:
 
-print len(data)
+print len(data) # Confirm that the number looks reasonable
 
 
-# In[30]:
+# We want to do a little filtering here. As discussed in our writeup, we will limit ourselves to 36-month loans issued in the years 2011, 2012, and 2013
+
+# In[8]:
 
 model_loan_term = 36
 data_filtered = data[data.loan_term == model_loan_term]
@@ -88,18 +90,22 @@ data_filtered = data_filtered[pd.to_datetime(data_filtered.issue_date).dt.year.i
 print len(data_filtered)
 
 
-# In[31]:
+# In[9]:
 
+# Make sure we have a reasonable distribution of issue dates
 pd.to_datetime(data_filtered.issue_date).dt.year.value_counts()
 
 
-# In[32]:
+# A quick top-level sanity-check of the data, using Pandas `describe` method (and transposing it so it first on screen better)
 
-# del x['verif_status']
+# In[10]:
+
 data_filtered.describe().T
 
 
-# In[33]:
+# We need to make a couple of adjustments to columns
+
+# In[11]:
 
 # earliest_credit is not really a good indicator -- we want to know how long has elapsed since then
 # See http://stackoverflow.com/questions/17414130/pandas-datetime-calculate-number-of-weeks-between-dates-in-two-columns
@@ -108,13 +114,9 @@ data_filtered['months_since_earliest_credit'] = (
 ).round()
 
 
-# In[34]:
+# In[12]:
 
-data_filtered.columns
-
-
-# In[35]:
-
+# Separate the predictors (everything except "loan status") and the outcome
 data_filtered_x = data_filtered.drop('loan_status', axis = 1)
 data_filtered_y = data_filtered['loan_status']
 
@@ -127,12 +129,14 @@ recoveries_avg = profit_data.recoveries.sum() / float(np.count_nonzero(profit_da
 data_filtered_x = data_filtered_x.drop('recoveries', axis = 1)
 
 
-# In[38]:
+# Standardize the data. (See the comment below for a detailed explanation of what that means)
+
+# In[13]:
 
 # Certain columns in the raw data should not be in our model
 columns_not_to_expand = [
     'description',     # free-text, so don't one-hot encode (NLP is separate)
-    'verif_status',    # not sure why this is here...
+    'verif_status',    # not sure why this is posing a problem....
     'loan_subgrade',   # tainted predictor
     'id',              # unique to each row
     'interest_rate',   # tainted predictor
@@ -140,6 +144,9 @@ columns_not_to_expand = [
     'issue_date',      # not useful in future, using economic indicators instead
     'earliest_credit', # has been converted to months_since_earliest_credit
 ]
+
+
+# In[2]:
 
 # Given an input matrix X and the equivalent matrix X from the training set,
 #
@@ -153,6 +160,7 @@ columns_not_to_expand = [
 #
 # (3) standardize continuous predictors using the mean and stdev of the
 # training set
+
 def expand_x(x, x_orig):
     x_expanded = pd.DataFrame()
     for colname in x_orig.columns:
@@ -180,14 +188,11 @@ def expand_x(x, x_orig):
 data_filtered_expanded_x = expand_x(data_filtered_x, data_filtered_x)
 
 
+# Again, let's use `describe` to sanity-check what we have
+
 # In[40]:
 
 data_filtered_expanded_x.describe().T
-
-
-# In[41]:
-
-data_filtered_expanded_x.columns
 
 
 # ### Split Data
@@ -314,10 +319,12 @@ pca_cum_var_expl = np.cumsum(np.round(tsvd.explained_variance_ratio_, 4) * 100)
 
 
 # In[54]:
+
 try:
-    print "PCA: first and last columns where % variance explained >= 85:",             np.where(pca_cum_var_expl >= 85)[0][[0, -1]]
-except:
+    print "PCA: first and last columns where % variance explained >= 85:",                 np.where(pca_cum_var_expl >= 85)[0][[0, -1]]
+catch:
     print "Exception!"
+
 
 # In[55]:
 

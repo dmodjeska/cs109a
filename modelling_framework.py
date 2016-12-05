@@ -50,6 +50,9 @@ def calc_expected_profit(profit_data_test, test_y_hat):
     profit_mm = round(interest_revenue + recoveries - principal_losses) / float(10 ** 6)
     return profit_mm
 
+
+# In[4]:
+
 def ROC_plot(model, X, Y, model_name):
     # Plot the ROC curve for the given model
     roc_data = []
@@ -80,14 +83,15 @@ def ROC_plot(model, X, Y, model_name):
     plt.gca().text(0.99, 0.1, "AUC = %.3f" % (auc,),
                    ha = 'right', va = 'bottom'
     )
-    plt.savefig('docs/images/roc_' + model_name + '.png',
+    plt.savefig('docs/images/roc_' + model_name.replace('/', '_') + '.png',
                 bbox_inches='tight'
     )
     plt.show()
 
     return auc
 
-# In[2]:
+
+# In[3]:
 
 model_performance = {}
 
@@ -172,12 +176,21 @@ def eval_model_all_years(model_factory,
 
 # In[194]:
 
-def eval_model_by_year(model_factory, columns = None, prob_threshold = 0.5,
-                       x = x_expanded, x_test = x_test_expanded, y = y, y_test = y_test,
-                       years = years, years_test = years_test, profit_data_test = profit_data_test,
+def eval_model_by_year(model_factory, 
+                       columns = None, 
+                       prob_threshold = 0.5,
+                       x = x_expanded, 
+                       x_test = x_test_expanded, 
+                       y = y, 
+                       y_test = y_test,
+                       years = years, 
+                       years_test = years_test,
+                       profit_data_test = profit_data_test,
                        model_name = None):
-    eval_model_all_years(model_factory, columns, None, prob_threshold, x, x_test, y, y_test, years, years_test,
-                         profit_data_test, model_name = model_name)
+    eval_model_all_years(model_factory, columns, None, prob_threshold, 
+                         x, x_test, y, y_test, years, years_test,
+                         profit_data_test, 
+                         model_name = model_name)
     k = 5
     np.random.seed(1729)
     

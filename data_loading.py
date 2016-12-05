@@ -6,7 +6,7 @@
 
 # This notebook isolates the code we use to load the data and do some last-minute pre-processing on it.
 
-# In[3]:
+# In[15]:
 
 # Deal with our necessary importds
 
@@ -27,7 +27,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from IPython.display import display, HTML
 
 
-# In[4]:
+# In[16]:
 
 ### Specify processed data files to generate - full/partial, partial %, and train/test
 ### Note: this cell is the same in both notebooks
@@ -63,7 +63,7 @@ term_freqs_file = dir_str + "term_freqs_" + mode_str + pct_str + ".mtx"
 diff_terms_file = dir_str + "diff_terms_" + mode_str + pct_str + ".json"
 
 
-# In[5]:
+# In[17]:
 
 ### load processed data
 data = pd.read_json(processed_data_train_file)
@@ -75,14 +75,14 @@ count_cols_df = pd.read_json(diff_terms_file)
 count_cols_bool = count_cols_df.values > 0.0
 
 
-# In[6]:
+# In[18]:
 
 print len(data) # Confirm that the number looks reasonable
 
 
 # We want to do a little filtering here. As discussed in our writeup, we will limit ourselves to 36-month loans issued in the years 2011, 2012, and 2013
 
-# In[8]:
+# In[19]:
 
 model_loan_term = 36
 data_filtered = data[data.loan_term == model_loan_term]
@@ -90,7 +90,7 @@ data_filtered = data_filtered[pd.to_datetime(data_filtered.issue_date).dt.year.i
 print len(data_filtered)
 
 
-# In[9]:
+# In[20]:
 
 # Make sure we have a reasonable distribution of issue dates
 pd.to_datetime(data_filtered.issue_date).dt.year.value_counts()
@@ -98,14 +98,14 @@ pd.to_datetime(data_filtered.issue_date).dt.year.value_counts()
 
 # A quick top-level sanity-check of the data, using Pandas `describe` method (and transposing it so it first on screen better)
 
-# In[10]:
+# In[21]:
 
 data_filtered.describe().T
 
 
 # We need to make a couple of adjustments to columns
 
-# In[11]:
+# In[22]:
 
 # earliest_credit is not really a good indicator -- we want to know how long has elapsed since then
 # See http://stackoverflow.com/questions/17414130/pandas-datetime-calculate-number-of-weeks-between-dates-in-two-columns
@@ -114,14 +114,14 @@ data_filtered['months_since_earliest_credit'] = (
 ).round()
 
 
-# In[12]:
+# In[23]:
 
 # Separate the predictors (everything except "loan status") and the outcome
 data_filtered_x = data_filtered.drop('loan_status', axis = 1)
 data_filtered_y = data_filtered['loan_status']
 
 
-# In[36]:
+# In[24]:
 
 # copy unstandardized columns for later profit calculation
 profit_data = data_filtered_x[['installment', 'loan_amount', 'recoveries']]
@@ -131,7 +131,7 @@ data_filtered_x = data_filtered_x.drop('recoveries', axis = 1)
 
 # Standardize the data. (See the comment below for a detailed explanation of what that means)
 
-# In[13]:
+# In[25]:
 
 # Certain columns in the raw data should not be in our model
 columns_not_to_expand = [
@@ -146,7 +146,7 @@ columns_not_to_expand = [
 ]
 
 
-# In[2]:
+# In[26]:
 
 # Given an input matrix X and the equivalent matrix X from the training set,
 #
@@ -183,51 +183,40 @@ def expand_x(x, x_orig):
     return x_expanded
 
 
-# In[39]:
-
-data_filtered_expanded_x = expand_x(data_filtered_x, data_filtered_x)
-
-
-# Again, let's use `describe` to sanity-check what we have
-
-# In[40]:
-
-data_filtered_expanded_x.describe().T
-
-
 # ### Split Data
 
-# In[42]:
+# In[54]:
 
 # Get a more manageable sample
 np.random.seed(1729)
-sample_flags = np.random.random(len(data_filtered_expanded_x)) <= 0.25
+sample_flags = np.random.random(len(data_filtered)) <= 0.25
 print "Indexes computed" 
 
 # train set
-x_expanded = data_filtered_expanded_x.iloc[sample_flags, :]
-print len(x_expanded)
+x_train = data_filtered_x.iloc[sample_flags, :]
+x_expanded = expand_x(x_train, x_train)
+print "Training set has %d rows" % (len(x_expanded),)
 
 # test set
-x_test_expanded = data_filtered_expanded_x.iloc[~sample_flags, :]
-print len(x_test_expanded)
+x_test_expanded = expand_x(data_filtered_x.iloc[~sample_flags, :], x_train)
+print "Test set has %d rows" % (len(x_test_expanded),)
 
 
-# In[43]:
+# In[47]:
 
 # split response column
 y = data_filtered_y.iloc[sample_flags]
 y_test = data_filtered_y.iloc[~sample_flags]
 
 
-# In[44]:
+# In[48]:
 
 # split profit data
 profit_data_train = profit_data.iloc[sample_flags, :]
 profit_data_test = profit_data.iloc[~sample_flags, :]
 
 
-# In[45]:
+# In[49]:
 
 ### filter NLP data
 filter_flags = data_nlp.loan_term.values == model_loan_term
@@ -240,7 +229,7 @@ desc_matrix_filtered = desc_matrix[filter_flags]
 count_cols_bool_filtered = count_cols_bool[filter_flags]
 
 
-# In[46]:
+# In[50]:
 
 ### split NLP data into training and testing sets
 np.random.seed(1729)
@@ -262,7 +251,7 @@ years_nlp = pd.to_datetime(x_nlp_train.issue_date).dt.year
 years_nlp_test = pd.to_datetime(x_nlp_test.issue_date).dt.year
 
 
-# In[47]:
+# In[51]:
 
 ### match indexes
 
@@ -273,19 +262,19 @@ count_cols_bool_train.index = x_nlp_train.index
 count_cols_bool_test.index = x_nlp_test.index
 
 
-# In[48]:
+# In[52]:
 
 # inspect test proportion of good/bad loans
 y_test.value_counts()
 
 
-# In[49]:
+# In[53]:
 
 # verify size of train set
 np.count_nonzero(x_expanded.loan_amount)
 
 
-# In[50]:
+# In[37]:
 
 # be prepared to split stuff up by year of issue
 years = pd.to_datetime(data_filtered_x.issue_date.iloc[sample_flags]).dt.year
@@ -294,15 +283,16 @@ years_test = pd.to_datetime(data_filtered_x.issue_date.iloc[~sample_flags]).dt.y
 
 # ### Apply PCA to predictors
 
-# In[51]:
+# In[64]:
 
-tsvd = tSVD(n_components = 100)
-data_filtered_expanded_x_pca = pd.DataFrame(tsvd.fit_transform(data_filtered_expanded_x))
-data_filtered_expanded_x_pca.index = data_filtered_expanded_x.index
+tsvd = tSVD(n_components = 100, random_state=1729)
+tsvd.fit(x_expanded)
+data_filtered_expanded_x_pca = pd.DataFrame(tsvd.transform(expand_x(data_filtered_x, x_train)))
+data_filtered_expanded_x_pca.index = data_filtered_x.index
 pca_cum_var_expl = np.cumsum(np.round(tsvd.explained_variance_ratio_, 4) * 100)
 
 
-# In[52]:
+# In[65]:
 
 print "PCA: first and last columns where % variance explained >= 99:",             np.where(pca_cum_var_expl >= 99)[0][[0, -1]]
 
@@ -310,24 +300,27 @@ x_expanded_pca = data_filtered_expanded_x_pca.iloc[sample_flags, :73]
 x_test_expanded_pca = data_filtered_expanded_x_pca.iloc[~sample_flags, :73]
 
 
-# In[53]:
+# In[62]:
 
-tsvd = tSVD(n_components = 500)
+tsvd = tSVD(n_components = 500, random_state=1729)
 desc_matrix_filtered_pca = pd.DataFrame(tsvd.fit_transform(desc_matrix_filtered))
 desc_matrix_filtered_pca.index = x_nlp_filtered.index
 pca_cum_var_expl = np.cumsum(np.round(tsvd.explained_variance_ratio_, 4) * 100)
 
 
-# In[54]:
+# In[63]:
 
-try:
-    print "PCA: first and last columns where % variance explained >= 85:",                 np.where(pca_cum_var_expl >= 85)[0][[0, -1]]
-catch:
-    print "Exception!"
+print "max variance explained", pca_cum_var_expl.max()
+print "PCA: first and last columns where % variance explained >= 84:",             np.where(pca_cum_var_expl >= 84)[0][[0, -1]]
 
 
-# In[55]:
+# In[66]:
 
 desc_matrix_pca = desc_matrix_filtered_pca.iloc[train_flags, :]
 desc_matrix_test_pca = desc_matrix_filtered_pca.iloc[~train_flags, :]
+
+
+# In[ ]:
+
+
 

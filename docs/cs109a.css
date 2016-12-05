@@ -2,6 +2,8 @@
 body {
     background-color: white;
     font-family: 'Bitter', serif;
+    margin-left: .5in;
+    margin-right: .5in;
 }
 
 h1 {

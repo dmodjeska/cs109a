@@ -3,7 +3,7 @@
 
 # # Modelling Framework
 
-# In[161]:
+# In[1]:
 
 import itertools as it
 import matplotlib
@@ -28,6 +28,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LinearRegression as Lin_Reg
 from sklearn.linear_model import LogisticRegression as Log_Reg
+from sklearn.linear_model import LogisticRegressionCV as Log_Reg_CV
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import f1_score
 from sklearn.neighbors import KNeighborsClassifier as KNN
@@ -41,7 +42,7 @@ from IPython.display import display, HTML
 
 # # Start evaluating models
 
-# In[ ]:
+# In[2]:
 
 def calc_expected_profit(profit_data_test, test_y_hat):
     interest_revenue = model_loan_term * profit_data_test.installment[test_y_hat == True].sum()
@@ -51,7 +52,7 @@ def calc_expected_profit(profit_data_test, test_y_hat):
     return profit_mm
 
 
-# In[4]:
+# In[3]:
 
 def ROC_plot(model, X, Y, model_name):
     # Plot the ROC curve for the given model
@@ -91,7 +92,7 @@ def ROC_plot(model, X, Y, model_name):
     return auc
 
 
-# In[3]:
+# In[4]:
 
 model_performance = {}
 
@@ -128,7 +129,7 @@ def eval_model_all_years(model_factory,
     cm_accum = np.zeros((2, 2))
     f1_accum = 0
     score = 0
-    weighted_score = 0
+    precision = 0
 
     # k-fold cross-validation
     for i in range(k):
@@ -139,7 +140,7 @@ def eval_model_all_years(model_factory,
         y_hat = model.predict(x_local)
         score += model.score(x_local.iloc[test_indexes], y.iloc[test_indexes]) / k
         y_hat_weighted = (model.predict_proba(x_local)[:,0] > prob_threshold)[test_indexes]
-        weighted_score += (y.iloc[test_indexes][y_hat_weighted]).mean() / k
+        precision += (y.iloc[test_indexes][y_hat_weighted]).mean() / k
         cm_accum += confusion_matrix(y.iloc[test_indexes], y_hat[test_indexes])
         f1_accum += f1_score(y.iloc[test_indexes], y_hat[test_indexes], pos_label = 1) / k
 
@@ -150,7 +151,7 @@ def eval_model_all_years(model_factory,
     model = model_factory().fit(x_local, y)
     test_y_hat = (model.predict_proba(x_local_test)[:,0] > prob_threshold)
     test_score = (y_test == test_y_hat).mean()
-    test_precision = 1- y_test[test_y_hat].mean()
+    test_precision = y_test[test_y_hat].mean()
     test_f1 = f1_score(y_test, test_y_hat, pos_label = 1)
 
     # expected profit
@@ -158,13 +159,13 @@ def eval_model_all_years(model_factory,
 
     area_under_curve = ROC_plot(model, x_local_test, y_test, model_name)
 
-    print "all   score: %.3f  baseline: %.3f   1-prec: %.3f   f1: %.3f  | test score %.3f  1-prec %.3f f1 %.3f  GP %dMM" % (
-        score, 1-y.mean(), 1-weighted_score, f1_accum, test_score, test_precision, test_f1, profit_mm)
+    print "all   score: %.3f  baseline: %.3f   prec: %.3f   f1: %.3f  | test score %.3f  prec %.3f f1 %.3f  GP %dMM" % (
+        score, y.mean(), precision, f1_accum, test_score, test_precision, test_f1, profit_mm)
 
     model_performance[model_name] = {
         'score': score,
-        'baseline' : 1-y.mean(),
-        'prec' : 1-weighted_score,
+        'baseline' : y.mean(),
+        'prec' : precision,
         'f1': f1_accum,
         'test_score': test_score,
         'test_prec': test_precision,
@@ -174,7 +175,7 @@ def eval_model_all_years(model_factory,
     }
 
 
-# In[194]:
+# In[ ]:
 
 def eval_model_by_year(model_factory, 
                        columns = None, 
@@ -187,6 +188,8 @@ def eval_model_by_year(model_factory,
                        years_test = years_test,
                        profit_data_test = profit_data_test,
                        model_name = None):
+
+    # Start with an overview
     eval_model_all_years(model_factory, columns, None, prob_threshold, 
                          x, x_test, y, y_test, years, years_test,
                          profit_data_test, 
@@ -208,70 +211,26 @@ def eval_model_by_year(model_factory,
         cm_accum = np.zeros((2, 2))
         f1_accum = 0
         score = 0
-        weighted_score = 0
+        precision = 0
 
         # k-fold cross-validation
         for i in range(k):
             train_indexes = list(indexes[0:len(indexes)*i/k]) + list(indexes[len(indexes)*(i+1)/k:])
             test_indexes = indexes[len(indexes)*i/k:len(indexes)*(i+1)/k]
         
-            #print "TRAIN ", train_indexes
-            #print 'TEST', test_indexes
-            #print "Y", y.iloc[test_indexes]
-            
-            # model = model_factory().fit(x_expanded[years==yr], y[years==yr])
-            # score = model.score(x_expanded[years==yr], y[years==yr]) / k
             model = model_factory().fit(x_local.iloc[train_indexes,:], y.iloc[train_indexes])
             y_hat = model.predict(x_local)
             score += model.score(x_local.iloc[test_indexes], y.iloc[test_indexes]) / k
             y_hat_weighted = (model.predict_proba(x_local)[:,0] > prob_threshold)[test_indexes]
-            weighted_score += (y.iloc[test_indexes][y_hat_weighted]).mean() / k
+            precision += (y.iloc[test_indexes][y_hat_weighted]).mean() / k
             cm_accum += confusion_matrix(y.iloc[test_indexes], y_hat[test_indexes])
             f1_accum += f1_score(y.iloc[test_indexes], y_hat[test_indexes], pos_label = 1) / k
         
         # but also test against the x_test
         test_score = model.score(x_local_test[years_test == yr], y_test[years_test == yr])
         test_y_hat = (model.predict_proba(x_local_test[years_test == yr])[:,0] > prob_threshold)
-        test_precision = 1- y_test[years_test == yr][test_y_hat].mean()
+        test_precision = y_test[years_test == yr][test_y_hat].mean()
 
-        print "%d  score: %.3f  baseline: %.3f   wscore: %.3f   f1: %.3f  | test score %.3f  1-prec %.3f"  % (
-            yr, score, 1-y[years==yr].mean(), 1-weighted_score, f1_accum, test_score, test_precision)
-
-# TODO: Confusion matrix (right now, we're not doing well enough to worry about that)
-# TODO: Pretty-print
-# TODO: Store results to allow side-by-side
-
-
-# In[215]:
-
-def eval_model_with_threshold(model_factory, columns=None):
-    k = 5
-    np.random.seed(1729)
-    if columns is None:
-        x_local = x_expanded
-    else:
-        x_local = x_expanded[columns]
-
-    if True: # because old indent for loop
-        indexes = range(len(y))
-        np.random.shuffle(indexes)
-
-        probs = np.ones_like(y) * -1
-
-        for i in range(k):
-            train_indexes = list(indexes[0:len(indexes)*i/k]) + list(indexes[len(indexes)*(i+1)/k:])
-            test_indexes = indexes[len(indexes)*i/k:len(indexes)*(i+1)/k]
-        
-            model = model_factory().fit(x_local.iloc[train_indexes,:], y.iloc[train_indexes])
-            probs_test = (model.predict_proba(x_local)[:,0]) #[test_indexes]
-            probs = np.where([ii in test_indexes for ii in range(len(y))],  # slow but the only one I've found that works!
-                             probs_test, probs)
-            # print i, (probs == -1).sum(), (probs > 0).sum()
-            
-    thresholds = np.arange(0, 1, 0.05)
-    plt.plot(thresholds,
-             [1-y[probs > t].mean() for t in thresholds])
-    plt.show()
-
-    return probs
+        print "%d  score: %.3f  baseline: %.3f   prec: %.3f   f1: %.3f  | test score %.3f  prec %.3f"  % (
+            yr, score, y[years==yr].mean(), precision, f1_accum, test_score, test_precision)
 

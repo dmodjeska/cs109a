@@ -150,7 +150,7 @@ def eval_model_all_years(model_factory,
     # but also test against the x_test
     model = model_factory().fit(x_local, y)
     test_y_hat = (model.predict_proba(x_local_test)[:,0] > prob_threshold)
-    test_score = (y_test == test_y_hat).mean()
+    test_score = model.score(x_local_test, y_test)
     test_precision = y_test[test_y_hat].mean()
     test_f1 = f1_score(y_test, test_y_hat, pos_label = 1)
 

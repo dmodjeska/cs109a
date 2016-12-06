@@ -57,11 +57,16 @@ def calc_expected_profit(profit_data_test, test_y_hat):
 def ROC_plot(model, X, Y, model_name):
     # Plot the ROC curve for the given model
     roc_data = []
-    prev_false_positive = 0
-    prev_true_positive = 0
+    # Note that the values actually start in the upper right and move to the lower left as p increases
+    # so we need to initialize these at (1, 1) not at (0, 0) for the numeric intergation
+    prev_false_positive = 1
+    prev_true_positive = 1
     auc = 0  # rough integral
+    predicted_prob = model.predict_proba(X)[:,1]
+
+    # Draw ROC curve and use numeric integration to compute AUC
     for p in np.arange(0, 1, 0.01):
-        yhat = model.predict_proba(X)[:,0] <= p
+        yhat = predicted_prob >= p
         false_positive_rate = ((yhat == 1) & (Y == 0)).sum() * 1.0 / ((Y == 0).sum())
         true_positive_rate = ((yhat == 1) & (Y == 1)).sum() * 1.0 / ((Y == 1).sum())
         roc_data.append((false_positive_rate, true_positive_rate))
@@ -69,7 +74,7 @@ def ROC_plot(model, X, Y, model_name):
         if p in (0.5, 0.6, 0.85):
             plt.scatter(false_positive_rate, true_positive_rate)  
         # Use midpoint rectangle method to approximate AUC
-        auc += (true_positive_rate + prev_true_positive) / 2.0 * (false_positive_rate - prev_false_positive)
+        auc += (true_positive_rate + prev_true_positive) / 2.0 * (prev_false_positive - false_positive_rate)
         prev_false_positive = false_positive_rate
         prev_true_positive = true_positive_rate
 

@@ -120,6 +120,10 @@ def eval_model_all_years(model_factory,
         x_local = x
         x_local_test = x_test
     else:
+        # expand column names for factors
+        columns = [c for c in x.columns
+                   if (c in columns
+                       or c.split('__')[0] in columns)]
         x_local = x[columns]
         x_local_test = x_test[columns]
         

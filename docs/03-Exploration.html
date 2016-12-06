@@ -32,6 +32,17 @@ Harvard University, Autumn 2016, CS109a</div>
 
 <p>*** TO DO</p>
 
+<p>Originally, when we built our exploratory models, we thought: we
+are trying to predict whether a loan will default, so let's go with
+1="default" and 0="paid in full". But this turns out to be the wrong
+choice for two reasons: First, because it turns out that we want to
+focus on being more selective, and in order to describe that using
+precision we need the desired outcome to be 1. Second, we will also be
+looking at payments received as a fraction of payments expected, to
+turn this from a classification problem into a regression problem, and
+so "paid in full" means 100% (or 1) and "completely written off" means
+0% (or 0), with partial payment falling in the intermediate range.</p>
+
 <h3>Extracting Predictors using NLP</h3> 
 
 <p>*** TO DO</p>

@@ -165,6 +165,7 @@ columns_not_to_expand = [
     'employ_title',       # replaced by cleaned-up version
     'loan_subgrade',      # tainted predictor
     'id',                 # unique to each row
+    'installment',        # tainted predictor
     'interest_rate',      # tainted predictor
     'index',              # unique to each row
     'issue_date',         # not useful in future, using economic indicators instead
@@ -184,9 +185,9 @@ columns_not_to_expand = [
 # the value is missing may itself be significant; and using the median value
 # for continuous predictors)
 #
-# (2) expand categorical predictors into a set of one-hot-encoded columns 
-# (using 0 and 1, and limiting ourselves to the 50 most common values in the
-# training set)
+# (2) expand categorical predictors into a set of one-hot-encoded columns --
+# using 0 and 1, and limiting ourselves to the 50 most common values in the
+# training set, provided they have at least 10 instances (to prevent overfitting)
 #
 # (3) standardize continuous predictors using the mean and stdev of the
 # training set
@@ -199,7 +200,8 @@ def expand_x(x, x_orig):
         print colname, x_orig[colname].dtype
         if x_orig[colname].dtype == 'object':
             values = x[colname].fillna('MISSING')
-            value_columns = x_orig[colname].fillna('MISSING').value_counts().index
+            value_column_counts = x_orig[colname].fillna('MISSING').value_counts()
+            value_columns = value_column_counts[value_column_counts > 10].index
             if len(value_columns) > 50:
                 value_columns = value_columns[:50]
             for val in value_columns:

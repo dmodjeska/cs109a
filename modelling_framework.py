@@ -183,6 +183,7 @@ def eval_model_all_years(model_factory,
         'auc': area_under_curve,
     }
 
+    return model
 
 # In[ ]:
 
@@ -199,7 +200,8 @@ def eval_model_by_year(model_factory,
                        model_name = None):
 
     # Start with an overview
-    eval_model_all_years(model_factory, columns, None, prob_threshold, 
+    all_years_model = eval_model_all_years(
+                         model_factory, columns, None, prob_threshold, 
                          x, x_test, y, y_test, years, years_test,
                          profit_data_test, 
                          model_name = model_name)
@@ -243,3 +245,4 @@ def eval_model_by_year(model_factory,
         print "%d  score: %.3f  baseline: %.3f   prec: %.3f   f1: %.3f  | test score %.3f  prec %.3f"  % (
             yr, score, y[years==yr].mean(), precision, f1_accum, test_score, test_precision)
 
+    return all_years_model;

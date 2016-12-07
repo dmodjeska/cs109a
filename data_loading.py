@@ -104,6 +104,42 @@ data_filtered['months_since_earliest_credit'] = (
 ).round()
 
 
+# In[ ]:
+
+# fix up empoyment title (which is "employer name" more often than not
+
+def cleanup_emp_title(s):
+    s = unicode(s).strip()
+    if s == 'nan':
+        return ''
+    s = s.lower()
+    s = s.replace('united states', 'us')
+    s = s.replace(' llc', '')
+    s = s.replace('.', '')
+    s = s.replace(',', '')
+    s = s.replace('-', '')
+    if s.endswith(' inc'):
+        s = s[:-4]
+    s = s.replace(' ', '')
+    if s == 'self':
+        s = 'selfemployed'
+    if s == 'usps':
+        s = 'uspostalservice'
+    if s == 'ups':
+        s = 'unitedparcelservice'
+    if s == 'usaf':
+        s = 'usairforce'
+    if s == 'rn':
+        s = 'registerednurse'
+    if s.endswith('bank'):
+        s = s[:-4]
+    if s.endswith('corp'):
+        s = s[:-4]
+    return s
+
+data_filtered['emp_cleaned'] = data_filtered.employ_title.apply(cleanup_emp_title)
+
+
 # In[35]:
 
 # Separate the predictors (everything except "loan status") and the outcome
@@ -126,7 +162,7 @@ recoveries_avg = profit_data.recoveries.sum() / float(np.count_nonzero(profit_da
 # Certain columns in the raw data should not be in our model
 columns_not_to_expand = [
     'description',        # free-text, so don't one-hot encode (NLP is separate)
-    'verif_status',       # not sure why this is posing a problem....
+    'employ_title',       # replaced by cleaned-up version
     'loan_subgrade',      # tainted predictor
     'id',                 # unique to each row
     'interest_rate',      # tainted predictor

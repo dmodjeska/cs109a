@@ -78,6 +78,12 @@ def ROC_plot(model, X, Y, model_name):
         prev_false_positive = false_positive_rate
         prev_true_positive = true_positive_rate
 
+
+    # Close off the curve by ending at (0, 0) regardless of what the last point was
+    roc_data.append((0, 0))
+    # Use midpoint rectangle method to approximate AUC
+    auc += (0 + prev_true_positive) / 2.0 * (prev_false_positive - 0)
+
     plt.plot([roc[0] for roc in roc_data],
              [roc[1] for roc in roc_data],
             )

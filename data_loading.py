@@ -168,6 +168,7 @@ columns_not_to_expand = [
     'installment',        # tainted predictor
     'interest_rate',      # tainted predictor
     'index',              # unique to each row
+    'ipr',                # tainted predictor
     'issue_date',         # not useful in future, using economic indicators instead
     'earliest_credit',    # has been converted to months_since_earliest_credit
     'recoveries',         # post hoc for profit calculation only

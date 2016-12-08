@@ -78,7 +78,6 @@ def ROC_plot(model, X, Y, model_name):
         prev_false_positive = false_positive_rate
         prev_true_positive = true_positive_rate
 
-
     # Close off the curve by ending at (0, 0) regardless of what the last point was
     roc_data.append((0, 0))
     # Use midpoint rectangle method to approximate AUC
@@ -101,6 +100,14 @@ def ROC_plot(model, X, Y, model_name):
     plt.show()
 
     return auc
+
+
+# In[ ]:
+
+model_performance = {}
+
+
+# In[ ]:
 
 def cross_terms(x, poly_degree):
     # compute cross terms -- but not two one-hots against each other, because memory
@@ -129,9 +136,9 @@ def cross_term_names(x, poly_degree):
             continue
         x_out += [c1 + ' x ' + c2]
     return x_out
-# In[4]:
 
-model_performance = {}
+
+# In[4]:
 
 def eval_model_all_years(model_factory, 
                          columns = None, 
@@ -213,8 +220,9 @@ def eval_model_all_years(model_factory,
         'test_profit': profit_mm,
         'auc': area_under_curve,
     }
-
+    
     return model
+
 
 # In[ ]:
 
@@ -275,5 +283,6 @@ def eval_model_by_year(model_factory,
 
         print "%d  score: %.3f  baseline: %.3f   prec: %.3f   f1: %.3f  | test score %.3f  prec %.3f"  % (
             yr, score, y[years==yr].mean(), precision, f1_accum, test_score, test_precision)
-
+        
     return all_years_model;
+

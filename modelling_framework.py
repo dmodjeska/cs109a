@@ -102,15 +102,33 @@ def ROC_plot(model, X, Y, model_name):
 
     return auc
 
-def cross_terms(x):
+def cross_terms(x, poly_degree):
     # compute cross terms -- but not two one-hots against each other, because memory
     x_out = x[x.columns]
+    for degree in range(2, poly_degree+1):
+        for col in x.columns:
+            if '__' in col:
+                continue
+            x_out[col + '^' + str(degree)] = x[col] ** degree
     for c1, c2 in combinations(x.columns, 2):
         if '__' in c1 and '__' in c2:
             continue
         x_out[c1 + ' x ' + c2] = x[c1] * x[c2]
     return x_out
 
+def cross_term_names(x, poly_degree):
+    # compute cross terms -- but not two one-hots against each other, because memory
+    x_out = list(x.columns)
+    for degree in range(2, poly_degree+1):
+        for col in x.columns:
+            if '__' in col:
+                continue
+            x_out += [col + '^' + str(degree)]
+    for c1, c2 in combinations(x.columns, 2):
+        if '__' in c1 and '__' in c2:
+            continue
+        x_out += [c1 + ' x ' + c2]
+    return x_out
 # In[4]:
 
 model_performance = {}
@@ -141,13 +159,9 @@ def eval_model_all_years(model_factory,
         x_local = x[columns]
         x_local_test = x_test[columns]
         
-    if poly_degree == 2:
-        x_local = cross_terms(x_local)
-        x_local_test = cross_terms(x_local_test)
-    elif poly_degree is not None:
-        poly_xform = Preprocessing.PolynomialFeatures(degree=poly_degree, include_bias=False)
-        x_local = pd.DataFrame(poly_xform.fit_transform(x_local))
-        x_local_test = pd.DataFrame(poly_xform.fit_transform(x_local_test))
+    if poly_degree is not None:
+        x_local = cross_terms(x_local, poly_degree)
+        x_local_test = cross_terms(x_local_test, poly_degree)
         
     indexes = range(len(years))
     np.random.shuffle(indexes)

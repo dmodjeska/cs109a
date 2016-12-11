@@ -23,3 +23,7 @@ div.ournames {
 div.summary_table {
     font-family: 'Calibri', 'Verdana', sans-serif;
 }
+
+hr {
+    border-color: 0x777777   
+}

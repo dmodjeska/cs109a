@@ -137,7 +137,10 @@ def cleanup_emp_title(s):
         s = s[:-4]
     return s
 
-data_filtered['emp_cleaned'] = data_filtered.employ_title.apply(cleanup_emp_title)
+data_filtered['emp_cleaned'] = np.where(
+    pd.to_datetime(data_filtered.issue_date) >= datetime.datetime(2013, 9, 23),
+    data_filtered.employ_title.apply(cleanup_emp_title),
+    '')
 
 
 # In[35]:

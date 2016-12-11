@@ -48,31 +48,31 @@
 
 <p>The second thing we learn from the baseline Logistic Regression model is a sense of the most important predictors. We sort the predictors by absolute value of model coefficients, and list the top predictors below:</p>
 
-<code><ul>
-  <li>dti                                    -0.056826</li>
-  <li>revol_util                             -0.055701</li>
-  <li>annual_income                           0.047845</li>
-  <li>inquiry_6_mos                          -0.045184</li>
-  <li>cpi                                    -0.041426</li>
-  <li>gdp                                    -0.039468</li>
-  <li>rir                                    -0.029272</li>
-  <li>total_accounts                          0.028092</li>
-  <li>home_owner__MORTGAGE                    0.024625</li>
-  <li>home_owner__RENT                       -0.022464</li>
-  <li>months_since_earliest_credit            0.020701</li>
-  <li>delinq_2_yrs                           -0.016794</li>
-  <li>loan_purpose__credit_card               0.012470</li>
-  <li>open_accounts                          -0.011015</li>
-  <li>desc_len                                0.010777</li>
-  <li>employ_length__n/a                     -0.009203</li>
-  <li>employ_length__10                       0.008915</li>
-  <li>verif_status__Verified                 -0.007593</li>
-  <li>loan_amount                             0.007152</li>
-  <li>loan_purpose__other                    -0.006163</li>
-  <li>verif_status__Not_Verified              0.005847</li>
-  <li>address_state__FL                      -0.005842</li>
-  <li>loan_purpose__small_business           -0.005306</li>
-  </ul></code>
+<table class='predictors'>
+<tr><td>dti</td><td>-0.056826</td></tr>
+<tr><td>revol_util</td><td>-0.055701</td></tr>
+<tr><td>annual_income</td><td>0.047845</td></tr>
+<tr><td>inquiry_6_mos</td><td>-0.045184</td></tr>
+<tr><td>cpi</td><td>-0.041426</td></tr>
+<tr><td>gdp</td><td>-0.039468</td></tr>
+<tr><td>rir</td><td>-0.029272</td></tr>
+<tr><td>total_accounts</td><td>0.028092</td></tr>
+<tr><td>home_owner__MORTGAGE</td><td>0.024625</td></tr>
+<tr><td>home_owner__RENT</td><td>-0.022464</td></tr>
+<tr><td>months_since_earliest_credit</td><td>0.020701</td></tr>
+<tr><td>delinq_2_yrs</td><td>-0.016794</td></tr>
+<tr><td>loan_purpose__credit_card</td><td>0.012470</td></tr>
+<tr><td>open_accounts</td><td>-0.011015</td></tr>
+<tr><td>desc_len</td><td>0.010777</td></tr>
+<tr><td>employ_length__n/a</td><td>-0.009203</td></tr>
+<tr><td>employ_length__10</td><td>0.008915</td></tr>
+<tr><td>verif_status__Verified</td><td>-0.007593</td></tr>
+<tr><td>loan_amount</td><td>0.007152</td></tr>
+<tr><td>loan_purpose__other</td><td>-0.006163</td></tr>
+<tr><td>verif_status__Not_Verified</td><td>0.005847</td></tr>
+<tr><td>address_state__FL</td><td>-0.005842</td></tr>
+<tr><td>loan_purpose__small_business</td><td>-0.005306</td></tr>
+</table>
 
 <p>We already learn much about the data set. First are two negative indicators: the &ldquo;Debt to Income&rdquo; ratio and the &ldquo;Revolving line utilization rate. Then comes a positive predictor for &ldquo;annual income&rdquo;. Following this is another negative predictor, the number of credit inquiries made for this borrower in the preceding 6 months. That these four predictors top the list is not surprising: overextended borrowers are more likely to default. </p>
 
@@ -86,38 +86,38 @@
 
 <p>As we continue to inspect the list of important predictors, certain values for &ldquo;loan purpose&rdquo; and &ldquo;employment length&rdquo; start to become important. For economic indicators, CPI remains in the top ten predictors, but GDP falls off the list.</p>
 
-<code><ul>
-  <li>annual_income                           0.459223</li>
-  <li>loan_purpose__small_business           -0.343971</li>
-  <li>loan_purpose__credit_card               0.339828</li>
-  <li>employ_length__n/a                     -0.261436</li>
-  <li>revol_util                             -0.258278</li>
-  <li>emp_cleaned__                          -0.249169</li>
-  <li>inquiry_6_mos                          -0.197481</li>
-  <li>employ_length__1                        0.177445</li>
-  <li>cpi                                    -0.172602</li>
-  <li>loan_purpose__other                    -0.166542</li>
-  <li>loan_purpose__debt_consolidation        0.161694</li>
-  <li>address_state__CO                       0.152645</li>
-  <li>address_state__FL                      -0.149291</li>
-  <li>open_accounts                          -0.148040</li>
-  <li>home_owner__MORTGAGE                    0.144057</li>
-  <li>total_accounts                          0.142046</li>
-  <li>home_owner__RENT                       -0.131421</li>
-  <li>loan_purpose__major_purchase            0.128225</li>
-  <li>loan_purpose__moving                   -0.127842</li>
-  <li>dti                                    -0.125102</li>
-  <li>address_state__MA                      -0.122415</li>
-  <li>employ_length__5                        0.111429</li>
-  <li>address_state__MI                      -0.103764</li>
-  <li>address_state__NJ                      -0.102519</li>
-  <li>loan_amount                            -0.101755</li>
-  <li>address_state__AL                      -0.096565</li>
-  <li>delinq_2_yrs                           -0.093496</li>
-  <li>loan_purpose__car                       0.091900</li>
-  <li>address_state__OR                      -0.087966</li>
-  <li>address_state__NV                      -0.085949</li>
-  </ul></code>
+<table class='predictors'>
+<tr><td>annual_income</td><td>0.459223</td></tr>
+<tr><td>loan_purpose__small_business</td><td>-0.343971</td></tr>
+<tr><td>loan_purpose__credit_card</td><td>0.339828</td></tr>
+<tr><td>employ_length__n/a</td><td>-0.261436</td></tr>
+<tr><td>revol_util</td><td>-0.258278</td></tr>
+<tr><td>emp_cleaned__</td><td>-0.249169</td></tr>
+<tr><td>inquiry_6_mos</td><td>-0.197481</td></tr>
+<tr><td>employ_length__1</td><td>0.177445</td></tr>
+<tr><td>cpi</td><td>-0.172602</td></tr>
+<tr><td>loan_purpose__other</td><td>-0.166542</td></tr>
+<tr><td>loan_purpose__debt_consolidation</td><td>0.161694</td></tr>
+<tr><td>address_state__CO</td><td>0.152645</td></tr>
+<tr><td>address_state__FL</td><td>-0.149291</td></tr>
+<tr><td>open_accounts</td><td>-0.148040</td></tr>
+<tr><td>home_owner__MORTGAGE</td><td>0.144057</td></tr>
+<tr><td>total_accounts</td><td>0.142046</td></tr>
+<tr><td>home_owner__RENT</td><td>-0.131421</td></tr>
+<tr><td>loan_purpose__major_purchase</td><td>0.128225</td></tr>
+<tr><td>loan_purpose__moving</td><td>-0.127842</td></tr>
+<tr><td>dti</td><td>-0.125102</td></tr>
+<tr><td>address_state__MA</td><td>-0.122415</td></tr>
+<tr><td>employ_length__5</td><td>0.111429</td></tr>
+<tr><td>address_state__MI</td><td>-0.103764</td></tr>
+<tr><td>address_state__NJ</td><td>-0.102519</td></tr>
+<tr><td>loan_amount</td><td>-0.101755</td></tr>
+<tr><td>address_state__AL</td><td>-0.096565</td></tr>
+<tr><td>delinq_2_yrs</td><td>-0.093496</td></tr>
+<tr><td>loan_purpose__car</td><td>0.091900</td></tr>
+<tr><td>address_state__OR</td><td>-0.087966</td></tr>
+<tr><td>address_state__NV</td><td>-0.085949</td></tr>
+</table>
 
 <p><img src="images/image15.png" style="width: 60%;"></p>
 

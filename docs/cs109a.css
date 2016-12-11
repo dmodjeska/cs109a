@@ -33,3 +33,15 @@ hr {
 img {
     margin-left: 5%;
 }
+
+table.predictors {
+    font-family: 'Courier', 'Courier New', fixed;
+}
+
+table.predictors td:nth-of-type(2) {
+    text-align: right;
+}
+
+table.predictors tr:nth-of-type(odd) {
+    background-color: #d0d0d0;
+}

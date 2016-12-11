@@ -2,7 +2,7 @@
 
 body {
     background-color: white;
-    font-family: 'Cambria', 'Georgia', serif;
+    font-family: 'Georgia', serif;
     margin-left: .5in;
     margin-right: .5in;
     line-height: 150%;
@@ -22,7 +22,7 @@ div.ournames {
 }
 
 div.summary_table {
-    font-family: 'Calibri', 'Verdana', sans-serif;
+    font-family: 'Verdana', sans-serif;
 }
 
 hr {

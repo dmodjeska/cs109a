@@ -19,3 +19,7 @@ h1, h2 {
 div.ournames {
     text-align:center;
 }
+
+div.summary_table {
+    font-family: 'Calibri', 'Verdana', sans-serif;
+}

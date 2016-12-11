@@ -22,17 +22,161 @@ Harvard University, Autumn 2016, CS109a</div>
 
 <h2>Part 4: Data Modeling</h2>
 
-<p>In this module, we will build a repertoire of models using the data sources developed in previous modules. For each, we will discuss its strengths and weaknesses. We will include a variety of ensemble techniques to combine these models, as well.</p>
+<p>In this module, we will build a repertoire of models using the data sources developed in previous modules. For each model, we will discuss strengths and weaknesses, as well as visualize results. These models are classic ones from the machine learning field. We will also investigate stacked ensemble models as a potential way to improve prediction accuracy. Most of the modeling effort focuses on quantitative and categorical predictors, but some effort will be devoted to text mining as well.</p>
 
-<p>Specific model types that we will assess include:</p>
+<p>Specific prediction model types that we will assess include the following:</p>
 
 <ul>
-<li>Logistic Regression (both balanced and not)</li>
-<li>QDA</li>
-<li>Random Forests</li>
-<li>AdaBoost</li>
-<li>Support Vector Classifiers</li>
-<li>Model Stacking</li>
+ <li>Logistic Regression (both default and balanced)</li>
+ <li>QDA</li>
+ <li>Random Forests (both default and balanced)</li>
+ <li>Gradient Boosting and AdaBoost</li>
+ <li>Support Vector Classifiers</li>
+ <li>Model Stacking</li>
 </ul>
 
+<h3>Initial models</h3>
+
+<p>We start with the simplest baseline model, always predicting the majority outcome (1); as expected. This approach results in a class accuracy of 84.8%, which is simply the overall full-loan repayment rate.</p>
+
+<p>A cross-validated (but not class-balanced) Logistic Regression model does not improve on overall classification accuracy, because the imbalance in class sizes leads Logistic Regression model to consistently predict 1. However, this finding does provide some additional insights:</p>
+
+<p>First, since we know that we will focus on improving precision and not overall classification accuracy, we will want to evaluate our models on AUC, the area under the ROC curve when applied to the test data set. (We will also consider the overall classification accuracy and F1 scores on the test set, but the test-set AUC will be our main metric for model performance, because it predicts how &ldquo;expensive&rdquo; it will be to increase precision at the cost of recall.) The Logistic Regression model serves as an effective baseline model for this -- our AUC is 0.630<br><img src="images/image35.png" style="width: 399.00px; height: 289.00px;"></p>
+
+<p>The second thing we learn from the baseline Logistic Regression model is a sense of the most important predictors. We sort the predictors by absolute value of model coefficients, and list the top predictors below:</p>
+
+<code>dti                                    -0.056826<br>revol_util                             -0.055701<br>annual_income                           0.047845<br>inquiry_6_mos                          -0.045184<br>cpi                                    -0.041426<br>gdp                                    -0.039468<br>rir                                    -0.029272<br>total_accounts                          0.028092<br>home_owner__MORTGAGE                    0.024625<br>home_owner__RENT                       -0.022464<br>months_since_earliest_credit            0.020701<br>delinq_2_yrs                           -0.016794<br>loan_purpose__credit_card               0.012470<br>open_accounts                          -0.011015<br>desc_len                                0.010777<br>employ_length__n/a                     -0.009203<br>employ_length__10                       0.008915<br>verif_status__Verified                 -0.007593<br>loan_amount                             0.007152<br>loan_purpose__other                    -0.006163<br>verif_status__Not_Verified              0.005847<br>address_state__FL                      -0.005842<br>loan_purpose__small_business           -0.005306</code>
+
+<p>We already learn much about the data set. First are two negative indicators: the &ldquo;Debt to Income&rdquo; ratio and the &ldquo;Revolving line utilization rate. Then comes a positive predictor for &ldquo;annual income&rdquo;. Following this is another negative predictor, the number of credit inquiries made for this borrower in the preceding 6 months. That these four predictors top the list is not surprising: overextended borrowers are more likely to default. </p>
+
+<p>The next two predictors of a loan&#39;s default likelihood are the Consumer Price Index and the Gross Domestic Product. Within a simple model at least, this finding shows that the state of the national economy is generally more important than properties of a particular loan or borrower, aside from the four predictors discussed above.</p>
+
+<p>When we add class-balancing into the cross-validated Logistic Regression model, results become more interesting:</p>
+
+<p><img src="images/image09.png" style="width: 399.00px; height: 289.00px;"></p>
+
+<p>Our AUC increases to .657, which will turn out to be a hard benchmark to beat. The classification accuracy on the test set is 0.600 and its F1 score is 0.534. Both results are good, but not excellent.</p>
+
+<p>As we continue to inspect the list of important predictors, certain values for &ldquo;loan purpose&rdquo; and &ldquo;employment length&rdquo; start to become important. For economic indicators, CPI remains in the top ten predictors, but GDP falls off the list.</p>
+
+<code>annual_income                           0.459223<br>loan_purpose__small_business           -0.343971<br>loan_purpose__credit_card               0.339828<br>employ_length__n/a                     -0.261436<br>revol_util                             -0.258278<br>emp_cleaned__                          -0.249169<br>inquiry_6_mos                          -0.197481<br>employ_length__1                        0.177445<br>cpi                                    -0.172602<br>loan_purpose__other                    -0.166542<br>loan_purpose__debt_consolidation        0.161694<br>address_state__CO                       0.152645<br>address_state__FL                      -0.149291<br>open_accounts                          -0.148040<br>home_owner__MORTGAGE                    0.144057<br>total_accounts                          0.142046<br>home_owner__RENT                       -0.131421<br>loan_purpose__major_purchase            0.128225<br>loan_purpose__moving                   -0.127842<br>dti                                    -0.125102<br>address_state__MA                      -0.122415<br>employ_length__5                        0.111429<br>address_state__MI                      -0.103764<br>address_state__NJ                      -0.102519<br>loan_amount                            -0.101755<br>address_state__AL                      -0.096565<br>delinq_2_yrs                           -0.093496<br>loan_purpose__car                       0.091900<br>address_state__OR                      -0.087966<br>address_state__NV                      -0.085949</code>
+
+<p><img src="images/image15.png" style="width: 624.00px; height: 354.67px;"></p>
+
+<h3>Sanity check -- omitting loan subgrade</h3>
+
+<p>We temporarily restore subgrade to the predictor list in order to measure the potentially negative impact of eliminating &ldquo;tainted&rdquo; predictors.</p>
+
+<p>As it happens, the ROC curve with subgrade looks almost identical to the curve without subgrade:</p>
+
+<p><img src="images/image47.png" style="width: 399.00px; height: 289.00px;"></p>
+
+<p>Our AUC remains .656, but the list of predictors is now topped by &ldquo;subgrade&rdquo;:<br><img src="images/image37.png" style="width: 624.00px; height: 521.33px;"></p>
+
+<p>As &ldquo;subgrade&rdquo; (which implicitly includes FICO score) does not improve the performance of our model, we will continue to omit tainted predictors.</p>
+<h3>Cross-terms</h3>
+
+<p>We next build a class-balanced cross-validated Logistic Regression model using a set of cross-terms. Because of memory limitations, one restriction is that we don&rsquo;t compute cross-terms between two one-hot-encoded columns. The AUC remains 0.656, as above. Precision on the test set is lower than it is for the straightforward class-balanced cross-validated Logistic Regression model. We can conclude that this more sophisticated model does not improve our predictions.</p>
+
+<p>Still, it can be instructive to examine the model coefficients for additional insights into the relative importance of predictors. In this model, the joint term for CPI*GDP is sixth overall (and the first cross-term). The individual CPI and GDP predictors do not appear at all. We note that revol_util not only shows up fairly high on the list for individual components, but it also appears frequently in the cross-terms, always with a negative coefficient. This finding is consistent with the predictor&rsquo;s position in second place on the non-class-balanced cross-validated Logistic Regression model above.</p>
+
+<h3>Other models considered</h3>
+
+<p>QDA did rather slightly worse than Logistic Regression, achieving an AUC of only 0.626</p>
+
+<p><img src="images/image02.png" style="width: 399.00px; height: 289.00px;"></p>
+
+<p>Similarly, Gradient Boosting&rsquo;s AUC was 0.630:</p>
+
+<p><img src="images/image27.png" style="width: 399.00px; height: 289.00px;"></p>
+
+<p>Adaboost came in at 0.637</p>
+
+<p><img src="images/image44.png" style="width: 424.00px; height: 289.00px;"></p>
+
+<p>Random forests didn&rsquo;t do badly, with the best choice of hyperparameters giving an AUC of 0.650:</p>
+
+<p><img src="images/image13.png" style="width: 399.00px; height: 289.00px;"></p>
+
+<p>But the winner is the SVC, with an AUC of 0.666. Tuning C over the range 0.01 -- 100 does not change the AUC.</p>
+
+<p><img src="images/image25.png" style="width: 399.00px; height: 289.00px;"></p>
+
+<h3>Reducing dimensionality</h3>
+
+<p>It&rsquo;s worth noting that a dimensionally-reduced version of the predictors was used with a number of the models described above. Reduction was achieved through PCA. Modelling results were broadly similar to those for the unreduced predictors, which suggests that excess variance is not a central issue in our modelling process. </p>
+<h3>Models with NLP terms:</h3>
+
+<p>Although care was taken with preprocessing, modeling results with NLP data were unfortunately disappointing. Let&rsquo;s consider the two threads of data preparation identified above - a corpus-wide, dimensionally-reduced matrix of term frequencies, and a maximally differentiated, short term list for each loan class.</p>
+
+<p>To leverage the differentiated terms, we applied a similar range of models to those identified above, optimized in an exploratory manner. ROC curves were quite flat, with the AUC being at most approximately 0.50. Specific results are presented below.</p>
+
+<p>Logistic regression with an inverse regularization strength of .000001 and balanced class weights:</p>
+
+
+<p><img alt="roc_NLP log_reg balanced.png" src="images/image16.png" style="width: 387.50px; height: 280.91px;"></p>
+
+
+<p>QDA with a regularization parameter of 1:</p>
+
+<p><img alt="roc_QuadraticDiscriminantAnalysis.png" src="images/image38.png" style="width: 384.50px; height: 279.01px;"></p>
+
+
+<p>Random Forests with a maximum depth of 5, 300 estimators and balanced class weights:</p>
+
+
+<p><img alt="roc_RandomForestClassifier.png" src="images/image26.png" style="width: 388.50px; height: 281.91px;"></p>
+
+
+<p>Gradient Boosting with 10 estimators, a maximum depth of 10, and a learning rate of 0.1:</p>
+
+
+<p><img alt="roc_GradientBoostingClassifier.png" src="images/image00.png" style="width: 384.50px; height: 279.01px;"></p>
+
+<p>Results for modeling with the reduced corpus-wide matrix were quite similar to those above.</p>
+
+<p>Logistic regression with balanced class weights:</p>
+<h3><img alt="roc_LogReg PCA.png" src="images/image36.png" style="width: 388.50px; height: 281.91px;"></h3>
+
+<p>Random forests with balanced class weights:</p>
+
+<p><img alt="roc_NLP RFC balanced.png" src="images/image08.png" style="width: 389.50px; height: 282.63px;"></p>
+
+<h3>Stacking</h3>
+
+<p>In order to attempt improving the modeling results for the LC data, we used a stacking ensemble model. This mixed ensemble approach often seems to deliver the highest accuracy in data science competitions, anecdotally speaking. Our approach to stacking was two-fold. First, we created a set of models of mixed types, in order to leverage the learning strengths of each model. Second, we focused on balanced regression, in order to explore a range of class weights within one ensemble. In both cases, we wrapped the stacked ensemble inside a class for consistency with the project&rsquo;s overall modeling machinery.</p>
+
+<p>The results of stacking are shown below as ROC curves and model importances. Without relatively strong individual models to draw on, stacking AUC was not competitive with the best individual models above. Further refinement of both individual and ensemble models could perhaps improve these results. Interestingly, the most important individual models in each stacking ensemble were three decision trees. This finding highlights the importance of variety in populating a stacking ensemble, quite apart from the importance of tuning each individual model.</p>
+
+<p>We can note in passing that processing time for stacking ensembles increases as O(n), where n is the number of individual models in the ensemble. Although this processing increase was noticeable during our modeling execution, timing was tractable for the LC dataset.</p>
+
+<p>Stacked mixed models combined using balanced logistic regression:</p>
+
+
+<p><img alt="roc_Stack LogReg balanced (mixed).png" src="images/image06.png" style="width: 554.00px; height: 402.00px;"></p>
+
+
+<p>Stacked logistic regression models combined using balanced logistic regression:</p>
+
+
+<p><img alt="roc_Stack LogReg balanced (logreg).png" src="images/image14.png" style="width: 554.00px; height: 402.00px;"></p>
+
+
+<p>Stacked mixed models combined using a random forest:</p>
+
+<p><img alt="roc_Stack RF balanced (mixed).png" src="images/image18.png" style="width: 554.00px; height: 402.00px;"></p>
+
+<p>Stacked logistic regression models combined using a random forest:</p>
+
+<p><img alt="roc_Stack RF balanced (logreg).png" src="images/image42.png" style="width: 554.00px; height: 402.00px;"></p>
+
+<p>Stacked mixed models combined using a decision tree:</p>
+
+<p><img alt="roc_Stack Tree balanced (mixed).png" src="images/image03.png" style="width: 554.00px; height: 402.00px;"></p>
+
+<p>Stacked logistic regression models combined using a decision tree:</p>
+
+<p><img alt="roc_Stack Tree balanced (logreg).png" src="images/image40.png" style="width: 554.00px; height: 402.00px;"></p>
+
 </body>
+</html>

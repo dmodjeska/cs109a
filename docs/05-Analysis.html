@@ -22,15 +22,390 @@ Harvard University, Autumn 2016, CS109a</div>
 
 <h2>Part 5: Data Analysis</h2>
 
-<h3>Abstract</h3>
-<p>In this module, we will compare the models developed in the previous module. Based on the strongest model(s), we will look at which predictors have the strongest influence on the results.</p>
 
-<p>We will also explore how different participants in the Lending Club have different measures of ``success''. For example, Lending Club as an institution wishes to improve their grading algorithm and set interest rates commensurate with risk. An individual investor, on the other hand, wishes to minimize the likelihood of default; alternatively, they may wish to maximize their total return, taking into account that a default often follows a history of <i>partial</i> payments and is thus not a total write-off. Choosing an appropriate loss function changes the selection of the most successful model, which is the focus of this module.</p>
 
-<h3>Example...</h3>
+<p>In this module, we will compare the models developed in the previous module with each other. Based on the strongest model(s), we will look at which predictors have the strongest influence on results.</p>
 
-<p>So, for example, here is the ROC curve for the basic Logistic Regression model:</p>
+<p>We will also explore how different participants in the Lending Club ecology have different criteria for success. For example, Lending Club as an institution wishes to improve their grading algorithm and set interest rates commensurate with risk. An individual investor, by contrast, wishes to minimize the likelihood of default. Alternatively, an investor may wish to maximize their total return, taking into account that a default often follows a history of partial payments, thereby generating positive revenue. Choosing an appropriate loss function affects selection of the most successful model, which is the focus of this module.</p>
 
-<img src='images/roc_LogReg.png'>
+
+<h3>Summary comparison of all models:</h3>
+
+<a></a><a></a><table><tbody><tr><td>
+</td><td>
+<p>auc</p></td><td>
+<p>baseline</p></td><td>
+<p>f1</p></td><td>
+<p>prec</p></td><td>
+<p>score</p></td><td>
+<p>test_f1</p></td><td>
+<p>test_prec</p></td><td>
+<p>test_profit</p></td><td>
+<p>test_score</p></td></tr><tr><td>
+<p>RandomForestClassifier</p></td><td>
+<p>0.497518</p></td><td>
+<p>0.860074</p></td><td>
+<p>0.716248</p></td><td>
+<p>0.859688</p></td><td>
+<p>0.582459</p></td><td>
+<p>0.533418</p></td><td>
+<p>0.864835</p></td><td>
+<p>-24.230891</p></td><td>
+<p>0.581941</p></td></tr><tr><td>
+<p>LogReg PCA Balanced</p></td><td>
+<p>0.500083</p></td><td>
+<p>0.860074</p></td><td>
+<p>0.657955</p></td><td>
+<p>0.858047</p></td><td>
+<p>0.524233</p></td><td>
+<p>0.606677</p></td><td>
+<p>0.861497</p></td><td>
+<p>20.41234</p></td><td>
+<p>0.523668</p></td></tr><tr><td>
+<p>LogReg PCA</p></td><td>
+<p>0.500229</p></td><td>
+<p>0.860074</p></td><td>
+<p>0.924484</p></td><td>
+<p>0.793333</p></td><td>
+<p>0.859595</p></td><td>
+<p>0.001294</p></td><td>
+<p>0.857143</p></td><td>
+<p>-236.575713</p></td><td>
+<p>0.862136</p></td></tr><tr><td>
+<p>LogisticRegression</p></td><td>
+<p>0.499836</p></td><td>
+<p>0.860074</p></td><td>
+<p>0.698902</p></td><td>
+<p>0.914265</p></td><td>
+<p>0.564614</p></td><td>
+<p>0.002048</p></td><td>
+<p>0.826087</p></td><td>
+<p>-230.23108</p></td><td>
+<p>0.560531</p></td></tr><tr><td>
+<p>LogReg balanced basic x^3</p></td><td>
+<p>0.564158</p></td><td>
+<p>0.847953</p></td><td>
+<p>0.659433</p></td><td>
+<p>0.823989</p></td><td>
+<p>0.535093</p></td><td>
+<p>0.593443</p></td><td>
+<p>0.822941</p></td><td>
+<p>31.757548</p></td><td>
+<p>0.539385</p></td></tr><tr><td>
+<p>LogReg balanced basic x^2</p></td><td>
+<p>0.563749</p></td><td>
+<p>0.847953</p></td><td>
+<p>0.670414</p></td><td>
+<p>0.823727</p></td><td>
+<p>0.545276</p></td><td>
+<p>0.585755</p></td><td>
+<p>0.822404</p></td><td>
+<p>45.756872</p></td><td>
+<p>0.545796</p></td></tr><tr><td>
+<p>LogReg balanced employ x^2</p></td><td>
+<p>0.563749</p></td><td>
+<p>0.847953</p></td><td>
+<p>0.670414</p></td><td>
+<p>0.823727</p></td><td>
+<p>0.545276</p></td><td>
+<p>0.585755</p></td><td>
+<p>0.822404</p></td><td>
+<p>45.756872</p></td><td>
+<p>0.545796</p></td></tr><tr><td>
+<p>DTC log2 balanced</p></td><td>
+<p>0.582779</p></td><td>
+<p>0.847953</p></td><td>
+<p>0.672614</p></td><td>
+<p>0.817077</p></td><td>
+<p>0.55376</p></td><td>
+<p>0.632295</p></td><td>
+<p>0.818314</p></td><td>
+<p>220.314522</p></td><td>
+<p>0.508332</p></td></tr><tr><td>
+<p>Stack Tree balanced (mixed)</p></td><td>
+<p>0.588177</p></td><td>
+<p>0.847953</p></td><td>
+<p>0.798964</p></td><td>
+<p>0.804515</p></td><td>
+<p>0.683025</p></td><td>
+<p>0.383033</p></td><td>
+<p>0.818004</p></td><td>
+<p>-363.46915</p></td><td>
+<p>0.683409</p></td></tr><tr><td>
+<p>DTC</p></td><td>
+<p>0.543669</p></td><td>
+<p>0.847953</p></td><td>
+<p>0.791997</p></td><td>
+<p>0.809156</p></td><td>
+<p>0.674297</p></td><td>
+<p>0.447295</p></td><td>
+<p>0.815801</p></td><td>
+<p>-267.741252</p></td><td>
+<p>0.64598</p></td></tr><tr><td>
+<p>DTC sqrt balanced</p></td><td>
+<p>0.548462</p></td><td>
+<p>0.847953</p></td><td>
+<p>0.756043</p></td><td>
+<p>0.810064</p></td><td>
+<p>0.633844</p></td><td>
+<p>0.472163</p></td><td>
+<p>0.812912</p></td><td>
+<p>-228.90259</p></td><td>
+<p>0.63106</p></td></tr><tr><td>
+<p>Stack RF balanced (mixed)</p></td><td>
+<p>0.588829</p></td><td>
+<p>0.847953</p></td><td>
+<p>0.80685</p></td><td>
+<p>0.803577</p></td><td>
+<p>0.692641</p></td><td>
+<p>0.312236</p></td><td>
+<p>0.811109</p></td><td>
+<p>-500.528518</p></td><td>
+<p>0.722535</p></td></tr><tr><td>
+<p>Stack LogReg balanced (mixed)</p></td><td>
+<p>0.588821</p></td><td>
+<p>0.847953</p></td><td>
+<p>0.807932</p></td><td>
+<p>0.802166</p></td><td>
+<p>0.694025</p></td><td>
+<p>0.384472</p></td><td>
+<p>0.810072</p></td><td>
+<p>-356.430484</p></td><td>
+<p>0.684658</p></td></tr><tr><td>
+<p>RFC balanced 2/100</p></td><td>
+<p>0.637726</p></td><td>
+<p>0.847953</p></td><td>
+<p>0.713025</p></td><td>
+<p>0.791972</p></td><td>
+<p>0.594422</p></td><td>
+<p>0.531847</p></td><td>
+<p>0.789251</p></td><td>
+<p>-67.064904</p></td><td>
+<p>0.59897</p></td></tr><tr><td>
+<p>RFC balanced 3/100</p></td><td>
+<p>0.641098</p></td><td>
+<p>0.847953</p></td><td>
+<p>0.723229</p></td><td>
+<p>0.788135</p></td><td>
+<p>0.605173</p></td><td>
+<p>0.521847</p></td><td>
+<p>0.786758</p></td><td>
+<p>-72.396041</p></td><td>
+<p>0.606925</p></td></tr><tr><td>
+<p>RFC balanced 4/100</p></td><td>
+<p>0.644534</p></td><td>
+<p>0.847953</p></td><td>
+<p>0.739146</p></td><td>
+<p>0.782391</p></td><td>
+<p>0.622241</p></td><td>
+<p>0.506856</p></td><td>
+<p>0.783463</p></td><td>
+<p>-106.082474</p></td><td>
+<p>0.618392</p></td></tr><tr><td>
+<p>RFC balanced 5/100</p></td><td>
+<p>0.646437</p></td><td>
+<p>0.847953</p></td><td>
+<p>0.748665</p></td><td>
+<p>0.781217</p></td><td>
+<p>0.63207</p></td><td>
+<p>0.494005</p></td><td>
+<p>0.780173</p></td><td>
+<p>-150.199915</p></td><td>
+<p>0.628126</p></td></tr><tr><td>
+<p>RFC balanced 5/300</p></td><td>
+<p>0.647522</p></td><td>
+<p>0.847953</p></td><td>
+<p>0.753882</p></td><td>
+<p>0.779911</p></td><td>
+<p>0.637677</p></td><td>
+<p>0.4913</p></td><td>
+<p>0.779519</p></td><td>
+<p>-153.573796</p></td><td>
+<p>0.630129</p></td></tr><tr><td>
+<p>RFC balanced 6/100</p></td><td>
+<p>0.648098</p></td><td>
+<p>0.847953</p></td><td>
+<p>0.757184</p></td><td>
+<p>0.777485</p></td><td>
+<p>0.641615</p></td><td>
+<p>0.47975</p></td><td>
+<p>0.777155</p></td><td>
+<p>-177.027263</p></td><td>
+<p>0.638402</p></td></tr><tr><td>
+<p>RFC balanced 7/100</p></td><td>
+<p>0.649799</p></td><td>
+<p>0.847953</p></td><td>
+<p>0.773191</p></td><td>
+<p>0.774318</p></td><td>
+<p>0.659038</p></td><td>
+<p>0.461265</p></td><td>
+<p>0.773476</p></td><td>
+<p>-215.995358</p></td><td>
+<p>0.651213</p></td></tr><tr><td>
+<p>RFC balanced 8/100</p></td><td>
+<p>0.649646</p></td><td>
+<p>0.847953</p></td><td>
+<p>0.78746</p></td><td>
+<p>0.76903</p></td><td>
+<p>0.675431</p></td><td>
+<p>0.434595</p></td><td>
+<p>0.768145</p></td><td>
+<p>-265.046493</p></td><td>
+<p>0.668878</p></td></tr><tr><td>
+<p>RFC balanced 9/100</p></td><td>
+<p>0.648587</p></td><td>
+<p>0.847953</p></td><td>
+<p>0.803712</p></td><td>
+<p>0.762916</p></td><td>
+<p>0.694556</p></td><td>
+<p>0.40765</p></td><td>
+<p>0.764767</p></td><td>
+<p>-321.111447</p></td><td>
+<p>0.685118</p></td></tr><tr><td>
+<p>SmallBusiness</p></td><td>
+<p>0.506549</p></td><td>
+<p>0.847953</p></td><td>
+<p>0.911339</p></td><td>
+<p>0.762568</p></td><td>
+<p>0.837875</p></td><td>
+<p>0.033954</p></td><td>
+<p>0.761267</p></td><td>
+<p>-869.029054</p></td><td>
+<p>0.83824</p></td></tr><tr><td>
+<p>QDA</p></td><td>
+<p>0.625773</p></td><td>
+<p>0.847953</p></td><td>
+<p>0.917424</p></td><td>
+<p>0.759286</p></td><td>
+<p>0.847491</p></td><td>
+<p>0.001859</p></td><td>
+<p>0.744444</p></td><td>
+<p>-913.637756</p></td><td>
+<p>0.847833</p></td></tr><tr><td>
+<p>LogReg balanced .6</p></td><td>
+<p>0.655212</p></td><td>
+<p>0.847953</p></td><td>
+<p>0.723575</p></td><td>
+<p>0.728662</p></td><td>
+<p>0.607445</p></td><td>
+<p>0.283763</p></td><td>
+<p>0.73638</p></td><td>
+<p>-489.694574</p></td><td>
+<p>0.604203</p></td></tr><tr><td>
+<p>Stack RF balanced (logreg)</p></td><td>
+<p>0.501042</p></td><td>
+<p>0.847953</p></td><td>
+<p>0.733312</p></td><td>
+<p>0.576167</p></td><td>
+<p>0.706008</p></td><td>
+<p>0.001831</p></td><td>
+<p>0.589286</p></td><td>
+<p>-913.237437</p></td><td>
+<p>0.848116</p></td></tr><tr><td>
+<p>Stack LogReg balanced (logreg)</p></td><td>
+<p>0.501616</p></td><td>
+<p>0.847953</p></td><td>
+<p>0.917591</p></td><td>
+<p>0.545397</p></td><td>
+<p>0.847846</p></td><td>
+<p>0.00208</p></td><td>
+<p>0.576923</p></td><td>
+<p>-912.78824</p></td><td>
+<p>0.848116</p></td></tr><tr><td>
+<p>Stack Tree balanced (logreg)</p></td><td>
+<p>0.501616</p></td><td>
+<p>0.847953</p></td><td>
+<p>0.917573</p></td><td>
+<p>0.559286</p></td><td>
+<p>0.847811</p></td><td>
+<p>0.00208</p></td><td>
+<p>0.576923</p></td><td>
+<p>-912.78824</p></td><td>
+<p>0.848116</p></td></tr><tr><td>
+<p>GBC</p></td><td>
+<p>0.630332</p></td><td>
+<p>0.847953</p></td><td>
+<p>0.917717</p></td><td>
+<p>NaN</p></td><td>
+<p>0.847953</p></td><td>
+<p>0</p></td><td>
+<p>NaN</p></td><td>
+<p>-915.941869</p></td><td>
+<p>0.848351</p></td></tr><tr><td>
+<p>GBC PCA</p></td><td>
+<p>0.491381</p></td><td>
+<p>0.860074</p></td><td>
+<p>0.92477</p></td><td>
+<p>NaN</p></td><td>
+<p>0.860074</p></td><td>
+<p>0</p></td><td>
+<p>NaN</p></td><td>
+<p>-237.070559</p></td><td>
+<p>0.862602</p></td></tr><tr><td>
+<p>GradientBoostingClassifier</p></td><td>
+<p>0.495911</p></td><td>
+<p>0.860074</p></td><td>
+<p>0.92477</p></td><td>
+<p>NaN</p></td><td>
+<p>0.860074</p></td><td>
+<p>0</p></td><td>
+<p>NaN</p></td><td>
+<p>-230.871859</p></td><td>
+<p>0.862602</p></td></tr><tr><td>
+<p>QuadraticDiscriminantAnalysis</p></td><td>
+<p>0.495139</p></td><td>
+<p>0.860074</p></td><td>
+<p>0.92477</p></td><td>
+<p>NaN</p></td><td>
+<p>0.860074</p></td><td>
+<p>0</p></td><td>
+<p>NaN</p></td><td>
+<p>-230.871859</p></td><td>
+<p>0.862602</p></td></tr><tr><td>
+<p>RFC 5/300</p></td><td>
+<p>0.646762</p></td><td>
+<p>0.847953</p></td><td>
+<p>0.917717</p></td><td>
+<p>NaN</p></td><td>
+<p>0.847953</p></td><td>
+<p>0</p></td><td>
+<p>NaN</p></td><td>
+<p>-915.941869</p></td><td>
+<p>0.848351</p></td></tr></tbody></table>
+
+<p><img src="images/image32.png" style="width: 524.00px; height: 271.00px;"></p>
+
+<p><img src="images/image29.png" style="width: 524.00px; height: 271.00px;"></p>
+
+<p><img src="images/image28.png" style="width: 524.00px; height: 271.00px;"></p>
+
+<p>*** TODO: Unravel important predictors<sup><a href="#cmnt3">[c]</a></sup></p>
+<h3>Using &ldquo;Payback Ratio&rdquo; to transform classification into regression</h3>
+
+<p>The modelling outcome that we&rsquo;ve used thus far is a categorical one: a &ldquo;Fully Paid&rdquo; loan is assigned the label 1, and a loan that has defaulted is assigned the label 0. By replacing this outcome with a continuous &ldquo;payback ratio&rdquo; measure, we can investigate the use of regression techniques.</p>
+
+<p>We define the payback ratio as follows: For any given loan, the amount that has been paid by the borrower is the sum of three data columns: &ldquo;total received principal&rdquo;, &ldquo;total received interest&rdquo;, and &ldquo;total received late fees&rdquo;. In addition, the amount that a borrower is expected to pay is the value in the &ldquo;installment&rdquo; column times the overall number of payments. We have previously filtered loans to 36-month terms earlier in this modeling pipeline. The ratio of &ldquo;actual payments&rdquo; / &ldquo;expected payments&rdquo; is the raw payback ratio. This ratio is compatible with category labels of 0 and 1: a loan that is paid as expected will result in &ldquo;1&rdquo; using both approaches, and a loan in which the borrower &ldquo;takes the money and runs&rdquo; will result in &ldquo;0&rdquo; with both approaches. </p>
+
+<p>We will need to make one further adjustment. If a loan is paid off early, then the &ldquo;actual payments&rdquo; will be less than the &ldquo;expected payments&rdquo; but the time value of money will make up the difference -- since the loan was repaid early, the money can be reinvested, and no loss is incurred by the investor. Consequently, for loans that are &ldquo;Fully Paid&rdquo; we take the payment ratio to be 1, and it is only for written-off loans that we compute the actual payment ratio.</p>
+
+<p>Having defined our continuous outcome, we can now employ linear regression (with various basis functions) for modelling. Our first attempt is with cross-validated Ridge regression, which gives a test R^2 of 0.036 -- not an encouraging result. (This is nevertheless much better than the result from unregularized linear regression, which gives a test R<sup>2</sup> of only 0.006. Cross-validated Lasso gives a test R<sup>2</sup> of 0.014.)</p>
+
+<p>We try again with cross-terms and, for the continuous predictors, polynomial terms up to ninth degree -- all of these give increasingly negative values for the test R<sup>2</sup>.</p>
+
+<p>Finally, we try using a cutoff to transform our linear regression model back to a classification problem. This approach does not perform well, with an AUC of 0.536:</p>
+
+<p><img src="images/image17.png" style="width: 399.00px; height: 289.00px"></p>
+
+<h3>Modelling goals and success opportunities</h3>
+
+<p>In Part 2 of this report, we discussed the problem posed by the selection bias in this data. In particular, because the corpus includes only approved loans, we cannot assess whether our model correctly reduces the proportion of false negatives. Consequently, the only way to improve our classification rate is to reduce the proportion of false positives. If that task were easy, the existing LC models would have already eliminated these false positives from the Kaggle data set. Our models have unfortunately little to offer Lending Club as an organization.</p>
+
+<p>On the other hand, there is a relevant principle to follow: &ldquo;I don&rsquo;t have to outrun the bear, I only have to outrun you&rdquo;. Nate Silver makes a similar observation in his book The Signal and The Noise (Penguin, 2015). So we can definitely offer value to the individual Lending Club member. Say that a member wishes to invest an arbitrary amount of money, with a maximum established for the risk placed on any one loan. We can choose one of our models and use it to rank all available loans in order of probability of being paid in full. We can then allocate the maximum per-loan amount (or the remaining to-be-funded balance) on the top-ranked loans until the member&rsquo;s resources are fully allocated. This triage approach would serve as a sort of intermediary or para-advisor between Lending Club and the individual investor, sorting out complexity, reducing uncertainty, and increasing confidence in the process.</p>
+
+<h3>Future Research</h3>
+
+<p>Future research suggested by this work would proceed in two primary directions. Both of these directions are broadly investor-side. First, it would be useful to validate the benefit of priority ranking approved loans as a route to financial gain. This validation would likely lead to model refinements and perhaps tuning of the data science pipeline on the basis of investor feedback. Second, it would be highly useful to investigate the nature of unapproved loans with Lending Club. An external researcher might potentially obtain a large budget to deliberately fund loans with a high probability of default, in order to study their properties and to assess the model&rsquo;s true recall rate. By contrast, Lending Club itself might make data available for unfunded loans, sanitized with particular care. </p>
+
+<p>More purely technical future research could be productive as well. For example, deep learning approaches (such as neural networks) could be investigated for their utility in extracting additional signal from the noisy LC data. As another example, additional external economic indicators could be examined, in case certain aspects of loan context would shed light on loan performance. (In particular, deriving economic predictors from the zip codes, analogous to the national economic indicators that we derived from the issue date, could be a fruitful line of inquiry.)</p>
 
 </body>

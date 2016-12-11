@@ -21,36 +21,217 @@ Harvard University, Autumn 2016, CS109a</div>
 </ul>
 
 <h2>Part 3: Data Exploration</h2>
-<h3>Abstract</h3>
-<p>In this module, we will revisit the highlights of Milestone 3. We will idenitify which of the available columns are response variables (such as ``recoveries''), which ones are tainted predictors (such as ``interest rate''), and which are candidate predictors (such as ``annual income'').</p>
 
-<p>We will spend some time here discussing ways of using NLP and NLP-like methods to extract useful predictors from the free-text ``description'' field. Examples include the number of words, the richness of the vocabulary, and the rate of spelling errors.</p>
+<p>In this module, we will revisit the highlights of from data exploration, as previously written up in Milestone 3. We will identify which of the available columns are response variables (such as &ldquo;recoveries&rdquo;), which ones are tainted predictors (such as &ldquo;interest rate&rdquo;), and which are candidate predictors (such as &ldquo;annual income&rdquo;).</p>
 
-<p>We will also consider in more depth the importance of ``issue date'', which cannot serve directly as a future predictor but whose impact is clearly felt in the data. We will assess several methodolgies for compensating for this effect.</p>
+<p>We will spend some time here discussing ways of using NLP and NLP-like methods to engineer useful features from the free-text ``description&#39;&#39; field. Examples include the number of words, the richness of the vocabulary, and the rate of spelling errors.</p>
 
-<h3>Predictors</h3> 
+<p>We will also consider in more depth the importance of ``issue date&#39;&#39;, which cannot serve directly as a future predictor but whose impact is clearly felt in the data. We will assess several methodologies for compensating for this effect.</p>
 
-<p>*** TO DO</p>
+<h3>Filtering rows</h3>
 
-<p>Originally, when we built our exploratory models, we thought: we
-are trying to predict whether a loan will default, so let's go with
-1="default" and 0="paid in full". But this turns out to be the wrong
-choice for two reasons: First, because it turns out that we want to
-focus on being more selective, and in order to describe that using
-precision we need the desired outcome to be 1. Second, we will also be
-looking at payments received as a fraction of payments expected, to
-turn this from a classification problem into a regression problem, and
-so "paid in full" means 100% (or 1) and "completely written off" means
-0% (or 0), with partial payment falling in the intermediate range.</p>
+<p>We begin by focusing exclusively on loans issued in the years 2011, 2012, and 2013. There are far fewer loans issued prior to 2011; perhaps due to economic conditions at the time, they have a higher overall default rate. For loans issued in 2014 and later, there is a censoring effect since not all loans have had sufficient time to mature. For the same reason, we also exclude loans with a 60-month term.</p>
 
-<h3>Extracting Predictors using NLP</h3> 
+<p>As we will discuss in a moment, we consider only loans whose status is &ldquo;Fully Paid&rdquo; or &ldquo;Charged Off&rdquo;. We do not yet have enough information about loans that are still outstanding, and other loan-status values are rare enough that including them would complicate modeling without appreciable benefit.</p>
 
-<p>*** TO DO</p>
+<h3>Outcomes</h3>
 
-<h3>Issue Date</h3> 
+<p>For the classification problem, we rely on the loan_status column. It has several values, but we focus on two: &ldquo;Fully Paid&rdquo; and &ldquo;Charged Off&rdquo;. The other values are much rarer and their interpretation is less clear. We assigned the label 1 to &ldquo;Fully Paid&rdquo; and 0 to &ldquo;Charged Off&rdquo;.</p>
 
-<p>We have already discussed, in section 2, the use of Federal Reserve data to account for much of the impact of the &ldquo;issue date&rdquo; on our model. Another point where it has an impact is in the interpretation of other fields that contain dates, such as &ldquo;earliest credit report&rdquo;. We subtract the latter from the former, generating a new predictor &ldquo;months since earliest credit report&rdquo;, which is independent of the issue date of the loan. We then disregard the absolute date of &ldquo;earliest credit report&rdquo;</p>
+<p>This assignment of labels has two advantages. First (as we will discuss later), the nature of the problem is asymmetric, in that we would rather miss out on underwriting a good loan than take the loss of underwriting a bad one. This asymmetry is naturally expressed in trying to improve the precision of our model. Second, at the end of this analysis we plan to consider &ldquo;payments received as a fraction of payments expected&rdquo;, to transform this classification problem into a regression one. In that case, &ldquo;paid in full&rdquo; means 100% (or 1) and &ldquo;completely written off&rdquo; means 0% (or 0), with partial payment falling in an intermediate range.</p>
+
+<h3>Issue Date</h3>
+
+<p>In Section 2, we have already discussed the use of Federal Reserve (&ldquo;Fed&rdquo;) data to account for much of the impact of &ldquo;issue date&rdquo; on our model. Another point where Fed data has an impact is in the interpretation of other fields that contain dates, such as &ldquo;earliest credit report&rdquo;. We subtract the latter from the former, generating a new predictor &ldquo;months since earliest credit report&rdquo;. This predictor is independent of the issue date of the loan. We can then disregard the absolute date of &ldquo;earliest credit report&rdquo;</p>
+
+<h3>Predictors</h3>
+
+<p>We divide the predictors into several categories:</p>
+
+<h3>Properties of the loan</h3>
+
+<h4> Loan_amnt</h4>
+
+<p><img alt="" src="images/image24.png" style="width: 624.00px; height: 290.67px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+
+<p>This is the amount of money which the borrower requested. A naive assumption would be that larger loans are more likely to default than smaller ones. The fact that the QQ plot is consistently above the diagonal informally refutes this hypothesis. For each quantile, the size of the bad loans at that quantile is smaller than the size of the good loans.</p>
+
+<h4>Term</h4>
+
+<p>As discussed above, while this is technically a predictor, we chose instead to use it as a filter, because 60-month loans do not provide enough information for us to analyze and model with.</p>
+
+<h4>Desc</h4>
+
+<p>This is the free-text description field from the loan application. As described below, we derive several numerical measures from this field.</p>
+
+<h4>Purpose</h4>
+
+<p><img alt="" src="images/image39.png" style="width: 624.00px; height: 329.33px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+
+<p>This is a categorical variable. The right-hand chart shows the default rate by &ldquo;purpose&rdquo; with a 95% confidence interval. We can clearly see the statistically significant difference among categories. We retain &lsquo;Purpose&rsquo; as a predictor and expect it to be important.</p>
+
+<h4>Title</h4>
+
+<p><img alt="" src="images/image11.png" style="width: 624.00px; height: 348.00px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+
+<p>This is the &ldquo;title&rdquo; of the loan and is related to &ldquo;Purpose&rdquo;. We retain it as a predictor, although the two fields partly overlap in intent and scope.</p>
+
+<h4>Initial_list_status</h4>
+
+<p><img alt="" src="images/image41.png" style="width: 624.00px; height: 265.33px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title="">This indicates whether the loan is intended to be funded wholly (&ldquo;W&rdquo;) or fractionally (&ldquo;F&rdquo;). There is a statistically significant difference between the two categories, although it is small. Accordingly, we retain this as a predictor but do not expect much utility from it.</p>
+
+<h4>Application_type</h4>
+
+<p>There is a consistent &ldquo;Joint&rdquo; application in the data set. We exclude it and eliminate this predictor.</p>
+<h3>Properties of the borrower</h3>
+
+<h4>Emp_title</h4>
+
+<p>This is nominally the &ldquo;employment title&rdquo;, though LC is combining it with &ldquo;employer name&rdquo;, which was used for loans predating 23 September 2013. Since we will no longer be seeing an employer name, we disregard values predating the switch in variable usage.</p>
+
+<p>We also apply a cleanup function to deal with inconsistent capitalization, use of related terms, and similar basic lexical and semantic issues.</p>
+
+<h4>Emp_length</h4>
+
+<p>While this column has mostly numerical values, there are two values -- &ldquo;10+ years&rdquo; and &ldquo;N/A&rdquo; -- that seem more feature-like and less numeric. Furthermore, these are the two most interesting values in the column:</p>
+
+<p><img alt="" src="images/image33.png" style="width: 624.00px; height: 297.33px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+
+<p>So we choose to leave &lsquo;Emp_length&rsquo; as a categorical column.</p>
+
+<h4>Home_ownership</h4>
+
+<p><img alt="" src="images/image21.png" style="width: 624.00px; height: 300.00px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+
+<p>The three values that are seen in a substantial number of records also have small non-overlapping confidence intervals for their default rates. This is clearly a valuable predictor.</p>
+
+<h4>Annual_inc</h4>
+
+<p><img alt="" src="images/image43.png" style="width: 624.00px; height: 290.67px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+
+<p>Needless to say, annual income is expected to be a key predictor. The QQ plot is consistently below the identity, in some cases by a significant amount. This indicates that higher values of annual income correlate with a higher probability of full loan payment. (This situation is somewhat visible in the histograms. The benefit of the QQ chart lies in making interpretation of the histograms easier.)</p>
+
+<h4>Verification_status</h4>
+
+<p><img alt="" src="images/image05.png" style="width: 624.00px; height: 312.00px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+
+<p>This is clearly a significant predictor</p>
+
+<h4>Zip_code</h4>
+
+<p>We opted not to use zip code, because the cardinality of the data is quite large, and we are using addr_state to represent the user&rsquo;s geography. (Another way of using zip code, however, would have been leveraging 2010 census data to determine median income for an applicant&#39;s location.)</p>
+
+<h4>Addr_state</h4>
+
+<p><img alt="" src="images/image19.png" style="width: 624.00px; height: 284.00px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+
+<p>The right hand plot shows a clear impact of state residence on loan default rate. (Colorado is a good example.) &lsquo;Addr-state&rsquo; will be a useful predictor.</p>
+
+<h4>DTI</h4>
+
+<p><img alt="" src="images/image31.png" style="width: 624.00px; height: 294.67px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+
+<p>This is the debt-to-income ratio (excluding any mortgages and this loan application). A classic measure of creditworthiness, this measure belongs in our model. The histograms make clear the negative correlation between DTI and probability of paying in full, even without the QQ plot to confirm that visual impression.</p>
+
+<h4>Delinq_2yrs</h4>
+
+<p>The number of 30+ days past-due incidences of delinquency in the borrower&#39;s credit file for the past 2 years</p>
+
+<h4>Earliest_cr_line</h4>
+
+<p>As discussed above, we convert this to &ldquo;months since earliest cr line&rdquo; in order to relativize dates.</p>
+
+<h4>Inq_last_6mths</h4>
+
+<p><img alt="" src="images/image12.png" style="width: 624.00px; height: 270.67px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+
+<p>The difference among 0, 1, and 2 is statistically significant over a wide range and with a large sample size. This is a worthwhile predictor.</p>
+
+<h4>Mths_since_last_delinq</h4>
+
+<p><img alt="" src="images/image23.png" style="width: 624.00px; height: 296.00px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+
+<p>Months since last delinquency shows a slight difference, with the QQ plot settling just below the identity line. We preserve this as a predictor.</p>
+
+<h4>Mths_since_last_record</h4>
+
+<p><img alt="" src="images/image07.png" style="width: 624.00px; height: 296.00px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+
+<p>The difference here is quite striking and we include this as a predictor. This indictor is the number of months since the last &ldquo;public record&rdquo; and does not indicate whether the record in question is positive or negative.</p>
+
+<h4>Open_acc</h4>
+
+<p><img alt="" src="images/image46.png" style="width: 624.00px; height: 294.67px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+
+<p>The number of open credit lines looks to be neutral as a predictor. We&rsquo;ll include it but we don&rsquo;t expect much to come of it.</p>
+
+<h4>Pub_rec</h4>
+
+<p><img alt="" src="images/image30.png" style="width: 624.00px; height: 274.67px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+
+<p>This is &ldquo;the number of derogatory public records&rdquo; The behavior is suspicious, where the default rate is &ldquo;0&rdquo; for some very small sample sizes; because p is 0 for those samples, the confidence interval is not a useful measure.</p>
+
+<h4>Revol_bal</h4>
+
+<p><img alt="" src="images/image22.png" style="width: 624.00px; height: 290.67px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+
+<p>The revolving-credit balance does not show an appreciable difference between the two populations.</p>
+
+<h4>Revol_util</h4>
+
+<p><img alt="" src="images/image34.png" style="width: 624.00px; height: 296.00px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+
+<p>Once again, the difference in the means between the two populations is underscored by the QQ plot. The &ldquo;Revolving line utilization rate, or the amount of credit the borrower is using relative to all available revolving credit&rdquo; is a measure of how close to overextended the applicant is. The difference between the QQ plot and the identity is strong and consistent, and we expect this to be a powerful predictor.</p>
+
+<h4>Total_acc</h4>
+
+<p><img alt="" src="images/image01.png" style="width: 624.00px; height: 293.33px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+
+<p>&ldquo;The total number of credit lines currently in the borrower&#39;s credit file&rdquo; looks to be a weak predictor.</p>
+
+<h4>mths_since_last_major_derog</h4>
+
+<h4><img alt="" src="images/image45.png" style="width: 624.00px; height: 296.00px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></h4>
+
+<p>This predictor appears quite weak.</p>
+
+<h4>Collections_12_mths_ex_med</h4>
+
+<p><img alt="" src="images/image20.png" style="width: 624.00px; height: 268.00px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+
+<p>As this predictor is overwhelming &ldquo;0&rdquo;, it has little if any use.</p>
+
+<h4>Annual_inc_joint<br>Dti_joint<br>Verification_status_joint</h4>
+
+<p>As we are eliminating the single joint application in our filtered data set, these columns can be filtered as well.</p>
 
 
+<h4>Total_rev_hi_lim</h4>
 
+<p><img alt="" src="images/image10.png" style="width: 624.00px; height: 290.67px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+
+<p>The total revolving high credit limit looks to slightly favor good loans.</p>
+
+<h4>Open_rv_12m<br>Open_rv_24m<br>Max_bal_bc<br>All_util<br>Inq_fi<br>Total_cu_tl<br>total_bal_il<br>Inq_last_12m<br>Il_util<br>Open_il_6m<br>Open_il_12m<br>Open_il_24m<br>Mths_since_rcnt_il<br>open_acc_6m</h4>
+
+<p>These predictors are non-null for only a handful of loans, all of which are paid in full. Thus the predictors are not useful. </p>
+
+<h3>Tainted Predictors</h3>
+
+<p><br>Tainted predictors are those which are computed using proprietary scoring algorithms. It is quite possible that Lending Club or the agency computing a FICO score continually tinkers with algorithms to improve financial results. Therefore we cannot be certain that the semantics of related variables remains stable during our sample period, nor that they will remain so in the future. We therefore omit not only the various FICO columns, grade, and subgrade, but also the interest_rate and installment columns, which are derived from the loan subgrade assigned by LC. </p>
+
+<p>We are aware that our models may well underperform those that account for the FICO score and its derived measure, the Lending Club grade/subgrade classification. (We address this in the data modeling section of this report.) </p>
+
+<p>For purposes of academic research, however, we feel that it would be improper to include the tainted predictors because of the opacity involved. Additional insight derived from this research can potentially help to improve official rating and lending algorithms, as well as helping the investor community to refine practical analysis.</p>
+
+<h3>Extracting Predictors using NLP</h3>
+
+<p>Given the potential richness of the free-text description field in the loan application, we devoted some time to processing this text for analysis. Although a minority of applications included text in this field, LC may at some point in the future make the field required if its predictive power increases. Processing of the text field proceeded in two parallel threads, which will be described below.</p>
+
+<p>First, a document-term matrix was created for all loan applications with description fields. English stopwords were excluded, and the remaining terms were stemmed. This vectorizing of the descriptions was completed using unigrams. Given the large dimensionality of the resulting matrix (which had on the order of 5,000 columns), reduction was applied using PCA in order to reduce excess variance.</p>
+
+<p>Second, the most distinctive terms for good and bad loans were computed separately, following the algorithm described in the paper by Chang, Kim, and Kondo (2015-2016). Term frequency/inverse term frequency (TF-IDF) matrices were calculated for each class of loan, using the same stopwords and stemming described above. After normalization, we prepared a list of the 30 terms with the greatest absolute difference in TF-IDF scores across the two loan classes. A reduced document-term matrix was prepared using just these terms, with the resulting scalars converted to booleans for modeling efficiency.</p>
+
+<p>It appears that the terms used in the description fields of loan applications are not effective as a basis for classifying loans into good or bad.</p>
 </body>
+</html>

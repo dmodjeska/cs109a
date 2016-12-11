@@ -21,6 +21,108 @@ Harvard University, Autumn 2016, CS109a</div>
 </ul>
 
 <h2>Part 1: Initial Context</h2>
-<p>Before we begin the formal steps of the data science pipeline, we will set out the problem posed by the Lending Club data. We will summarize key points raised in the literature review that we conducted for milestone 2.</p>
+
+<h3>Problem Statement</h3>
+
+<p>The Lending Club is an online peer-to-peer marketplace for small loans, founded in 2006. Applicants provide information about themselves, their financial situation, and the purpose to which they intend to put their loan. Then &ldquo;members&rdquo; choose whether and how much to underwrite specific loans. Additional analysis could potentially support investors in underwriting the highest quality loans. </p>
+
+<p>Lending Club provides </span><span class="c25"><a class="c31" href="https://www.google.com/url?q=https://www.kaggle.com/wendykan/lending-club-loan-data&amp;sa=D&amp;ust=1481485919641000&amp;usg=AFQjCNEfq3EGWz9B1hMkrLmSPCsGlPm6LA">a rich data set</a></span><span>&nbsp;on the Kaggle website, which includes loans issued from 2007-2015. For this project, we analyzed the data set, selecting an appropriate set of predictors, building several models, and assessing their performance.</p>
+<h3 class="c7 c10" id="h.5tf4cwoka6fr"><span>Literature</span><span>&nbsp;Review</span></h3><p>Serrano-Cinca, Guti\&#39;errez-Nieto, L\&#39;opez-Palacios (2015) </p>
+
+<p><span class="c1">Determinants of Default in P2P Lending.</span><span>&nbsp;</p>
+
+<p><span class="c14">PLoS ONE</p>
+
+<p>10(10):e0139427.</p>
+
+<p>doi:10.1371/journal.pone.0139427.</p>
+
+<p>This paper examines P2P lending in a Lending Club data set from 2008 to 2014 ({\it i.e.}, our project dataset). In addition to providing an introduction to the P2P lending domain, the paper pursues two goals: explanation of factors underlying past defaults, and prediction of future defaults.</p>
+
+<p>To explain factors underlying defaults, the authors examined a range of variables, using Chi-squared tests to determine significance for the categorical variables and t-tests for the continuous variables. The most important factor for explaining default rates was the loan grade assigned by the Lending Club: the lower the grade, the more likely a borrower is to default. (Loan grading uses a proprietary algorithm,</p>
+
+<p>which in turn uses a proprietary borrower credit score.) Loan purpose was another useful factor. For example, wedding loans tend to be repaid more often than small-business loans. Highly dependent on loan grade, interest rate was a relevant variable for explaining loan defaults: the higher the interest rate, the more likely default. So were certain borrower characteristics, such as annual income, current</p>
+
+<p>housing situation, credit history, and borrower indebtedness. (Loan amount and length of employment were not found to be useful.)</p>
+
+<p>For prediction, the authors used logistic regression for defaults, as well as Cox regression for loan survival ({\it i.e.}, when default may occur). From a business perspective, survival analysis enriches the information available to a lender, since substantial partial repayment may differ dramatically from either full repayment or very early default. Survival analysis confirmed the importance of loan purpose, while quantifying related risk. For predicting binary outcomes, the authors&#39; optimal logistic regression model again found loan grade to be the most useful factor, along with indebtedness variables. This model achieved a useful prediction accuracy (on a testing set) of approximately 81\%. </p>
+
+<p>For the sake of our course project, this paper is useful in several ways. First, it introduces the business domain and suggests the most useful related variables from the Lending Club dataset. Second, the paper establishes a baseline for explanation and prediction by statistical methods, upon which more machine-learning approaches might be built. One such approach is using NLP to extract information from the free-form text portions of a loan application. Third, the paper emphasizes the importance of non-binary considerations in predicting loan outcomes, such as expectations around partial repayment. Fourth, the paper documented possible risks during prediction/analysis, such as multicollinearity, evolving data dictionaries, and lack of intertemporal validation. Finally, the authors&#39; thorough methodology provides a solid foundation for subsequent analysis and/or prediction.</p>
+
+<p>Malekipirbazari, Milad; Aksakalli, Vural.</p>
+
+<p><span class="c1">Risk assessment in social lending via random forests.</p>
+
+<p><span class="c14">Expert Systems with Applications</span><span>, Volume 42, Issue 10, </p>
+
+<p>15~June 2015, pp.~4621--4631</p>
+
+<p>http://dx.doi.org/10.1016/j.eswa.2015.02.001</p>
+
+
+
+<p>This paper considers the use of random forests for classifying loans as ``good&#39;&#39; or ``bad&#39;&#39;; that is, whether they are likely to be repaid in full. As with our project, the authors are using the data from Lending Club, restricting their data set to loans originated between January~2012 and September~2014.</p>
+
+<p>In particular, the authors compare the performance of four common approaches to classification: random forests (RF), support vector machines (SVM), logistic regression (LR), and $k$-nearest neighbor (KNN).</p>
+
+<p>Another interesting aspect of their study is that they exclude both the FICO score and the Lending Club grade in their set of candidate predictors. These scores have two problems: because they are proprietary, we cannot tell to what degree they already incorporate other predictors; also, we have no reason to believe that the composition of these scores has stayed the same over the time period under consideration, nor between that time and now.</p>
+
+<p>There is an additional benefit that comes from the decision to exclude the FICO and LC scores from consideration as predictors. The authors are then able to compare the results of their four machine-learning techniques to the predictions returned by the proprietary algorithms.</p>
+
+<p>The paper includes three main sections.</p>
+
+<p>First, the paper gives a brief overview of how the authors winnowed the available data, both by restricting rows to loans that were either paid in full or delinquent, and by limiting columns to fifteen variables that had enough information to produce a reasonable predictor.</p>
+
+<p>Second, the authors then describe each of the four approaches in turn. These &nbsp;summaries are general, although the illustrations are using the Lending Club data, and for random forests they go into some detail on how they selected the parameters for this data set.</p>
+
+<p>Finally, the authors use 5-fold cross-validation to compare the results for each of the four techniques. The random forest, with their optimized parameters, has the highest accuracy and area-under-curve, and the lowest MSE. For the area of interest, the RF model also outperforms the FICO and LC scores. When the number of loans to be approved is forced to be higher, the LC scores start to outperform the RF models.</p>
+
+<p>This paper is a good starting point for our project for two reasons. First, the authors clearly explain their methodology. Second, despite the title of the paper singling out random forests, they actually implement and discuss four of the major families of classifiers and their application to the Lending Club data set.</p>
+
+<p><span class="c1">Additional Bibliography</p>
+
+<p>Chang, Shunpo; Kim, Simon; Kondo, Genki. </span><span class="c1">Predicting Default Risk of Lending Club Loans.</span><span>&nbsp;Stanford University, CS229: Machine Learning, Autumn 2015-16.</p>
+
+<p>A report on predicting loan defaults with the Lending Club data. The report includes a novel approach to leveraging the free-text description field of a loan application.</p>
+
+<p>Emekter, Riza; Tu, Yanbin; Jirasakuldech, Benjamas; Lu, Min. </p>
+
+<p><span class="c1">Evaluating credit risk and loan performance in online Peer-to-Peer (P2P) lending.</p>
+
+<p><span class="c14">Applied Economics</span><span>, 47:1 (13 Oct 2014), pp.~54--70.</p>
+
+<p>A sophisticated analysis (cited by Malekipirbazari and Aksakalli) that identifies a source of selection bias in the population of loan applicants, and concludes that Lending Club does not increase interest rates commensurate with risk.</p>
+
+
+
+<p>Guo, Yanhong; Zhou, Wenjun; Luo, Chunyu; Liu, Chuanren; Xiongc, Hui.</p>
+
+<p><span class="c1">Instance-based credit risk assessment for investment decisions in P2P lending.</p>
+
+<p><span class="c14">European Journal of Operational Research</span><span>&nbsp;(29 May 2015)</p>
+
+<p>A straightforward analysis of the Lending Club data using a Gaussian kernel to weight all neighbors.</p>
+
+
+
+<p>Jin, Yu; Zhu, Yudan.</p>
+
+<p><span class="c1">A data-driven approach to predict default risk of loan for online Peer-to-Peer (P2P) lending.</p>
+
+<p><span class="c14">2015 Fifth international Conference on Communication Systems and Network Technologies</p>
+
+<p>A short paper that focuses on identifying which predictors in the Lending Club data have the greatest relevance.</p>
+
+
+<p>Dorfleitner, Gregor; Priberny, Christopher; Schuster, Stephanie; Stoiber, Johannes; Weber, &nbsp;Martina; de Castro, Ivan; Kammlear, Julia.</p>
+
+<p><span class="c1">Description-text related soft information in peer-to-peer lending &ndash; Evidence from two leading European platforms.</p>
+
+<p><span class="c14">Journal of Banking &amp; Finance</span><span>&nbsp;(15 Dec. 2015)</p>
+
+<p>This paper focuses on two aspects of the free-text portion of data from two European P2P sites: the number of misspelled words (based on the GNU Aspell database) and the length of the text. Without actually doing semantic NLP, they are able to extract significant predictors from this channel.</p>
+
+
+
  
 </body>

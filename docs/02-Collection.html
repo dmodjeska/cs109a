@@ -22,26 +22,29 @@ Harvard University, Autumn 2016, CS109a</div>
 
 <h2>Part 2: Data Collection</h2>
 
-<h3>Abstract</h3>
-<p>This module will discuss some issues with the raw data provided by LC, as well as the need to acquire additional data for context.</p>
-
-<p>The data in the Lending Club dataset covers the period 2008--2015, which includes the global <a href='https://fred.stlouisfed.org/series/JHDUSRGDPBR'>&ldquo;Great Recession&rdquo; of 2007Q4--2009Q2.</a> In order to account for the variation in economic conditions, we felt it necessary to collect additional data reflecting economic conditions, and join that with the LC data. We used the Federal Reserve ``FRED'' database, and in our presentation we will discuss this process.</p>
-
-<p>We will also discuss the role that selection bias plays in the raw LC data. In particular, the provided dataset only includes loans that were {\it approved} by Lending Club members.</p>
+<p>In this part, we discuss some issues with the raw data provided by Lending Club, as well as the need to acquire additional data for context.</p>
 
 <h3>Economic conditions</h3>
 
-We note that the default rate differs over time. [***IMAGE NEEDED.] In theory, a naive model would regard the issue date of the loan (<tt>issue_d</tt>) as a useful predictor, but of course we are not interested in predicting the past. We decided that the impact of the issue date was probably related to economic conditions, and so we augmented our data set with data from <a href="https://fred.stlouisfed.org/">the Federal Reserve of St. Louis's &ldquo;FRED&rdquo; database</a>. [*** MORE HERE]
+<p>The data in the Lending Club dataset covers the period 2008--2015, which includes the global <a href="https://fred.stlouisfed.org/series/JHDUSRGDPBR">&ldquo;Great Recession&rdquo; of 2007 Q4--2009 Q2.</a> In order to account for the variation in economic conditions, we felt it necessary to collect additional data reflecting economic conditions, and join that with the LC data. We used the Federal Reserve&#39;s &ldquo;FRED&rdquo; database, and in our presentation we will discuss this process.</p>
+
+<p>We will also discuss the role that selection bias plays in the raw LC data. In particular, the provided dataset only includes loans that were approved by Lending Club members.</p>
+
+<p>We note that the loan default rate differs over time:</p>
+
+<p><img src="images/image04.png" /></p>
+
+<p>In theory, a naive model would regard the issue date of the loan (issue_d) as a useful predictor. Naturally, however, we are not interested in predicting the past. We determined that the impact of the issue date was likely related to economic conditions. Therefore we augmented our data set with data from <a  href="https://fred.stlouisfed.org/">the Federal Reserve of St. Louis&#39;s &ldquo;FRED&rdquo; database</a>. Three major metrics of economic conditions were selected for the popularity, availability, and ability to provide context for the Lending Club data itself. These quarterly metrics are consumer price index (CPI), gross domestic product (GDP), and unemployment rate. The metrics were aligned with the quarter in which a LC loan was issued, for prediction purposes. </p>
 
 <h3>Selection bias</h3>
 
-<p>The data provided by Lending Club relates to loans that were actually funded by Lending Club members. As such, it does not include loan applications that did not result in actual loans being issued. This poses several difficulties in our analysis:</p>
+<p>The data provided by Lending Club covers loans that were actually funded by Lending Club members. As such, this data omits loan applications for which loans were not actually issued. This omission poses several difficulties in our analysis:</p>
 
-<ul>
-<li>We cannot improve the model's score by improving the model's recall. That is, our model should get credit for approving loans which were not underwritten by Lending Club members and which would have been paid in full. But because, by definition, such loans are absent from the data set, this is not available to us.</li>
-<li>Those loans which the Lending Club members correctly declined to fund are also not in the data set. Consequently, our model-builder cannot identify common properties of these loans.</li>
-</ul>
+<ul><li>We cannot improve any model&rsquo;s score by improving the model&rsquo;s recall. That is, our model could potentially be valuable in recommending approval for loans that were not actually underwritten by Lending Club members, but which would have been paid in full. Because such loans are by definition absent from the LC data set, this path is not available for our research. (I.e., false negatives are not available for analysis.)</li></ul>
 
-<p>In essence, then, the problem before us is <i>not</i> to build a general-purpose model that can analyze a new loan application and decide whether or not to fund it. Instead, the problem is to act, as it were, as an iteration of a boosting algorithm, taking only those loans which the Lending Club membership has decided are worth funding, and finding the edge cases where that human decision forest has failed.</p>
+<ul><li>Those loans which Lending Club members correctly declined to fund are also absent from the data set. As a consequence of this absence, our model-building cannot identify common properties of these unfunded loans.</li></ul>
+
+<p>In essence, then, the problem before us is not to build a general-purpose model that can analyze a new loan application and decide whether to fund it. Rather, the problem is to act like an iteration of a boosting algorithm -- taking only those loans which the Lending Club membership has decided to fund, and finding the edge cases where that human &ldquo;decision ensemble&rdquo; has failed. (I.e., the problem is to find false positives.)</p>
 
 </body>
+</html>

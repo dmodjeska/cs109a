@@ -44,7 +44,8 @@
 
 <p>A cross-validated (but not class-balanced) Logistic Regression model does not improve on overall classification accuracy, because the imbalance in class sizes leads Logistic Regression model to consistently predict 1. However, this finding does provide some additional insights:</p>
 
-<p>First, since we know that we will focus on improving precision and not overall classification accuracy, we will want to evaluate our models on AUC, the area under the ROC curve when applied to the test data set. (We will also consider the overall classification accuracy and F1 scores on the test set, but the test-set AUC will be our main metric for model performance, because it predicts how &ldquo;expensive&rdquo; it will be to increase precision at the cost of recall.) The Logistic Regression model serves as an effective baseline model for this -- our AUC is 0.630<br><img src="images/image35.png" style="width: 40%;"></p>
+<p>First, since we know that we will focus on improving precision and not overall classification accuracy, we will want to evaluate our models on AUC, the area under the ROC curve when applied to the test data set. (We will also consider the overall classification accuracy and F1 scores on the test set, but the test-set AUC will be our main metric for model performance, because it predicts how &ldquo;expensive&rdquo; it will be to increase precision at the cost of recall.) The Logistic Regression model serves as an effective baseline model for this -- our AUC is 0.630.</p>
+  <p><img src="images/image35.png" style="width: 40%;"></p>
 
 <p>The second thing we learn from the baseline Logistic Regression model is a sense of the most important predictors. We sort the predictors by absolute value of model coefficients, and list the top predictors below:</p>
 
@@ -150,7 +151,7 @@
 
 <p><img src="images/image27.png" style="width: 40%;"></p>
 
-<p>AdaBoost came in at 0.637</p>
+<p>AdaBoost came in at 0.637:</p>
 
 <p><img src="images/image44.png" style="width: 40%;"></p>
 

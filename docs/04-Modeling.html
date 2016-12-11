@@ -79,7 +79,7 @@
 
 <p>When we add class-balancing into the cross-validated Logistic Regression model, results become more interesting:</p>
 
-<p><img src="images/image09.png" style="width: 399.00px; height: 289.00px;"></p>
+<p><img src="images/image09.png" style="width: 40%;"></p>
 
 <p>Our AUC increases to .657, which will turn out to be a hard benchmark to beat. The classification accuracy on the test set is 0.600 and its F1 score is 0.534. Both results are good, but not excellent.</p>
 
@@ -118,7 +118,7 @@
   <li>address_state__NV                      -0.085949</li>
   </ul></code>
 
-<p><img src="images/image15.png" style="width: 60%"></p>
+<p><img src="images/image15.png" style="width: 60%;"></p>
 
 <h3>Sanity check -- omitting loan subgrade</h3>
 
@@ -126,11 +126,11 @@
 
 <p>As it happens, the ROC curve with subgrade looks almost identical to the curve without subgrade:</p>
 
-<p><img src="images/image47.png" style="width: 399.00px; height: 289.00px;"></p>
+<p><img src="images/image47.png" style="width: 40%;"></p>
 
 <p>Our AUC remains .656, but the list of predictors is now topped by &ldquo;subgrade&rdquo;:<br>
   <br>
-  <img src="images/image37.png" style="width: 60%"></p>
+  <img src="images/image37.png" style="width: 60%;"></p>
 
 <p>As &ldquo;subgrade&rdquo; (which implicitly includes FICO score) does not improve the performance of our model, we will continue to omit tainted predictors.</p>
 <h3>Cross-terms</h3>
@@ -143,23 +143,23 @@
 
 <p>QDA did rather slightly worse than Logistic Regression, achieving an AUC of only 0.626</p>
 
-<p><img src="images/image02.png" style="width: 399.00px; height: 289.00px;"></p>
+<p><img src="images/image02.png" style="width: 40%;"></p>
 
 <p>Similarly, Gradient Boosting&rsquo;s AUC was 0.630:</p>
 
-<p><img src="images/image27.png" style="width: 399.00px; height: 289.00px;"></p>
+<p><img src="images/image27.png" style="width: 40%;"></p>
 
 <p>Adaboost came in at 0.637</p>
 
-<p><img src="images/image44.png" style="width: 424.00px; height: 289.00px;"></p>
+<p><img src="images/image44.png" style="width: 40%;"></p>
 
 <p>Random forests didn&rsquo;t do badly, with the best choice of hyperparameters giving an AUC of 0.650:</p>
 
-<p><img src="images/image13.png" style="width: 399.00px; height: 289.00px;"></p>
+<p><img src="images/image13.png" style="width: 40%;"></p>
 
 <p>But the winner is the SVC, with an AUC of 0.666. Tuning C over the range 0.01 -- 100 does not change the AUC.</p>
 
-<p><img src="images/image25.png" style="width: 399.00px; height: 289.00px;"></p>
+<p><img src="images/image25.png" style="width: 40%;"></p>
 
 <h3>Reducing dimensionality</h3>
 
@@ -173,33 +173,33 @@
 <p>Logistic regression with an inverse regularization strength of .000001 and balanced class weights:</p>
 
 
-<p><img alt="roc_NLP log_reg balanced.png" src="images/image16.png" style="width: 387.50px; height: 280.91px;"></p>
+<p><img alt="roc_NLP log_reg balanced.png" src="images/image16.png" style="width: 40%;"></p>
 
 
 <p>QDA with a regularization parameter of 1:</p>
 
-<p><img alt="roc_QuadraticDiscriminantAnalysis.png" src="images/image38.png" style="width: 384.50px; height: 279.01px;"></p>
+<p><img alt="roc_QuadraticDiscriminantAnalysis.png" src="images/image38.png" style="width: 340%;"></p>
 
 
 <p>Random Forests with a maximum depth of 5, 300 estimators and balanced class weights:</p>
 
 
-<p><img alt="roc_RandomForestClassifier.png" src="images/image26.png" style="width: 388.50px; height: 281.91px;"></p>
+<p><img alt="roc_RandomForestClassifier.png" src="images/image26.png" style="width: 40%;"></p>
 
 
 <p>Gradient Boosting with 10 estimators, a maximum depth of 10, and a learning rate of 0.1:</p>
 
 
-<p><img alt="roc_GradientBoostingClassifier.png" src="images/image00.png" style="width: 384.50px; height: 279.01px;"></p>
+<p><img alt="roc_GradientBoostingClassifier.png" src="images/image00.png" style="width: 40%;"></p>
 
 <p>Results for modeling with the reduced corpus-wide matrix were quite similar to those above.</p>
 
 <p>Logistic regression with balanced class weights:</p>
-<h3><img alt="roc_LogReg PCA.png" src="images/image36.png" style="width: 388.50px; height: 281.91px;"></h3>
+<h3><img alt="roc_LogReg PCA.png" src="images/image36.png" style="width: 40%;"></h3>
 
 <p>Random forests with balanced class weights:</p>
 
-<p><img alt="roc_NLP RFC balanced.png" src="images/image08.png" style="width: 389.50px; height: 282.63px;"></p>
+<p><img alt="roc_NLP RFC balanced.png" src="images/image08.png" style="width: 40%;"></p>
 
 <h3>Stacking</h3>
 
@@ -212,30 +212,30 @@
 <p>Stacked mixed models combined using balanced logistic regression:</p>
 
 
-<p><img alt="roc_Stack LogReg balanced (mixed).png" src="images/image06.png" style="width: 554.00px; height: 402.00px;"></p>
+<p><img alt="roc_Stack LogReg balanced (mixed).png" src="images/image06.png" style="width: 40%;"></p>
 
 
 <p>Stacked logistic regression models combined using balanced logistic regression:</p>
 
 
-<p><img alt="roc_Stack LogReg balanced (logreg).png" src="images/image14.png" style="width: 554.00px; height: 402.00px;"></p>
+<p><img alt="roc_Stack LogReg balanced (logreg).png" src="images/image14.png" style="width: 40%;"></p>
 
 
 <p>Stacked mixed models combined using a random forest:</p>
 
-<p><img alt="roc_Stack RF balanced (mixed).png" src="images/image18.png" style="width: 554.00px; height: 402.00px;"></p>
+<p><img alt="roc_Stack RF balanced (mixed).png" src="images/image18.png" style="width: 40%;"></p>
 
 <p>Stacked logistic regression models combined using a random forest:</p>
 
-<p><img alt="roc_Stack RF balanced (logreg).png" src="images/image42.png" style="width: 554.00px; height: 402.00px;"></p>
+<p><img alt="roc_Stack RF balanced (logreg).png" src="images/image42.png" style="width: 40%;"></p>
 
 <p>Stacked mixed models combined using a decision tree:</p>
 
-<p><img alt="roc_Stack Tree balanced (mixed).png" src="images/image03.png" style="width: 554.00px; height: 402.00px;"></p>
+<p><img alt="roc_Stack Tree balanced (mixed).png" src="images/image03.png" style="width: 40%;"></p>
 
 <p>Stacked logistic regression models combined using a decision tree:</p>
 
-<p><img alt="roc_Stack Tree balanced (logreg).png" src="images/image40.png" style="width: 554.00px; height: 402.00px;"></p>
+<p><img alt="roc_Stack Tree balanced (logreg).png" src="images/image40.png" style="width: 40%;"></p>
 
 </body>
 </html>

@@ -54,7 +54,7 @@
 
 <h4> Loan_amnt</h4>
 
-<p><img alt="" src="images/image24.png" style="width: 624.00px; height: 290.67px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+<p><img alt="" src="images/image24.png" style="width: 50%; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
 
 <p>This is the amount of money which the borrower requested. A naive assumption would be that larger loans are more likely to default than smaller ones. The fact that the QQ plot is consistently above the diagonal informally refutes this hypothesis. For each quantile, the size of the bad loans at that quantile is smaller than the size of the good loans.</p>
 
@@ -68,19 +68,19 @@
 
 <h4>Purpose</h4>
 
-<p><img alt="" src="images/image39.png" style="width: 624.00px; height: 329.33px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+<p><img alt="" src="images/image39.png" style="width: 50%; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
 
 <p>This is a categorical variable. The right-hand chart shows the default rate by &ldquo;purpose&rdquo; with a 95% confidence interval. We can clearly see the statistically significant difference among categories. We retain &lsquo;Purpose&rsquo; as a predictor and expect it to be important.</p>
 
 <h4>Title</h4>
 
-<p><img alt="" src="images/image11.png" style="width: 624.00px; height: 348.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+<p><img alt="" src="images/image11.png" style="width: 50%; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
 
 <p>This is the &ldquo;title&rdquo; of the loan and is related to &ldquo;Purpose&rdquo;. We retain it as a predictor, although the two fields partly overlap in intent and scope.</p>
 
 <h4>Initial_list_status</h4>
 
-<p><img alt="" src="images/image41.png" style="width: 624.00px; height: 265.33px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""><p>
+<p><img alt="" src="images/image41.png" style="width: 50%; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""><p>
 <p>This indicates whether the loan is intended to be funded wholly (&ldquo;W&rdquo;) or fractionally (&ldquo;F&rdquo;). There is a statistically significant difference between the two categories, although it is small. Accordingly, we retain this as a predictor but do not expect much utility from it.</p>
 
 <h4>Application_type</h4>
@@ -98,25 +98,25 @@
 
 <p>While this column has mostly numerical values, there are two values -- &ldquo;10+ years&rdquo; and &ldquo;N/A&rdquo; -- that seem more feature-like and less numeric. Furthermore, these are the two most interesting values in the column:</p>
 
-<p><img alt="" src="images/image33.png" style="width: 624.00px; height: 297.33px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+<p><img alt="" src="images/image33.png" style="width: 50%; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
 
 <p>So we choose to leave &lsquo;Emp_length&rsquo; as a categorical column.</p>
 
 <h4>Home_ownership</h4>
 
-<p><img alt="" src="images/image21.png" style="width: 624.00px; height: 300.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+<p><img alt="" src="images/image21.png" style="width: 50%; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
 
 <p>The three values that are seen in a substantial number of records also have small non-overlapping confidence intervals for their default rates. This is clearly a valuable predictor.</p>
 
 <h4>Annual_inc</h4>
 
-<p><img alt="" src="images/image43.png" style="width: 624.00px; height: 290.67px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+<p><img alt="" src="images/image43.png" style="width: 50%; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
 
 <p>Needless to say, annual income is expected to be a key predictor. The QQ plot is consistently below the identity, in some cases by a significant amount. This indicates that higher values of annual income correlate with a higher probability of full loan payment. (This situation is somewhat visible in the histograms. The benefit of the QQ chart lies in making interpretation of the histograms easier.)</p>
 
 <h4>Verification_status</h4>
 
-<p><img alt="" src="images/image05.png" style="width: 624.00px; height: 312.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+<p><img alt="" src="images/image05.png" style="width: 50%; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
 
 <p>This is clearly a significant predictor</p>
 
@@ -126,13 +126,13 @@
 
 <h4>Addr_state</h4>
 
-<p><img alt="" src="images/image19.png" style="width: 624.00px; height: 284.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+<p><img alt="" src="images/image19.png" style="width: 50%; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
 
 <p>The right hand plot shows a clear impact of state residence on loan default rate. (Colorado is a good example.) &lsquo;Addr-state&rsquo; will be a useful predictor.</p>
 
 <h4>DTI</h4>
 
-<p><img alt="" src="images/image31.png" style="width: 624.00px; height: 294.67px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+<p><img alt="" src="images/image31.png" style="width: 50%; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
 
 <p>This is the debt-to-income ratio (excluding any mortgages and this loan application). A classic measure of creditworthiness, this measure belongs in our model. The histograms make clear the negative correlation between DTI and probability of paying in full, even without the QQ plot to confirm that visual impression.</p>
 
@@ -146,61 +146,61 @@
 
 <h4>Inq_last_6mths</h4>
 
-<p><img alt="" src="images/image12.png" style="width: 624.00px; height: 270.67px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+<p><img alt="" src="images/image12.png" style="width: 50%; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
 
 <p>The difference among 0, 1, and 2 is statistically significant over a wide range and with a large sample size. This is a worthwhile predictor.</p>
 
 <h4>Mths_since_last_delinq</h4>
 
-<p><img alt="" src="images/image23.png" style="width: 624.00px; height: 296.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+<p><img alt="" src="images/image23.png" style="width: 50%; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
 
 <p>Months since last delinquency shows a slight difference, with the QQ plot settling just below the identity line. We preserve this as a predictor.</p>
 
 <h4>Mths_since_last_record</h4>
 
-<p><img alt="" src="images/image07.png" style="width: 624.00px; height: 296.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+<p><img alt="" src="images/image07.png" style="width: 50%; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
 
 <p>The difference here is quite striking and we include this as a predictor. This indictor is the number of months since the last &ldquo;public record&rdquo; and does not indicate whether the record in question is positive or negative.</p>
 
 <h4>Open_acc</h4>
 
-<p><img alt="" src="images/image46.png" style="width: 624.00px; height: 294.67px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+<p><img alt="" src="images/image46.png" style="width: 50%; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
 
 <p>The number of open credit lines looks to be neutral as a predictor. We&rsquo;ll include it but we don&rsquo;t expect much to come of it.</p>
 
 <h4>Pub_rec</h4>
 
-<p><img alt="" src="images/image30.png" style="width: 624.00px; height: 274.67px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+<p><img alt="" src="images/image30.png" style="width: 50%; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
 
 <p>This is &ldquo;the number of derogatory public records&rdquo; The behavior is suspicious, where the default rate is &ldquo;0&rdquo; for some very small sample sizes; because p is 0 for those samples, the confidence interval is not a useful measure.</p>
 
 <h4>Revol_bal</h4>
 
-<p><img alt="" src="images/image22.png" style="width: 624.00px; height: 290.67px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+<p><img alt="" src="images/image22.png" style="width: 50%; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
 
 <p>The revolving-credit balance does not show an appreciable difference between the two populations.</p>
 
 <h4>Revol_util</h4>
 
-<p><img alt="" src="images/image34.png" style="width: 624.00px; height: 296.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+<p><img alt="" src="images/image34.png" style="width: 50%; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
 
 <p>Once again, the difference in the means between the two populations is underscored by the QQ plot. The &ldquo;Revolving line utilization rate, or the amount of credit the borrower is using relative to all available revolving credit&rdquo; is a measure of how close to overextended the applicant is. The difference between the QQ plot and the identity is strong and consistent, and we expect this to be a powerful predictor.</p>
 
 <h4>Total_acc</h4>
 
-<p><img alt="" src="images/image01.png" style="width: 624.00px; height: 293.33px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+<p><img alt="" src="images/image01.png" style="width: 50%; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
 
 <p>&ldquo;The total number of credit lines currently in the borrower&#39;s credit file&rdquo; looks to be a weak predictor.</p>
 
 <h4>mths_since_last_major_derog</h4>
 
-<h4><img alt="" src="images/image45.png" style="width: 624.00px; height: 296.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></h4>
+<h4><img alt="" src="images/image45.png" style="width: 50%; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></h4>
 
 <p>This predictor appears quite weak.</p>
 
 <h4>Collections_12_mths_ex_med</h4>
 
-<p><img alt="" src="images/image20.png" style="width: 624.00px; height: 268.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+<p><img alt="" src="images/image20.png" style="width: 50%; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
 
 <p>As this predictor is overwhelming &ldquo;0&rdquo;, it has little if any use.</p>
 
@@ -211,7 +211,7 @@
 
 <h4>Total_rev_hi_lim</h4>
 
-<p><img alt="" src="images/image10.png" style="width: 624.00px; height: 290.67px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
+<p><img alt="" src="images/image10.png" style="width: 50%; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""></p>
 
 <p>The total revolving high credit limit looks to slightly favor good loans.</p>
 

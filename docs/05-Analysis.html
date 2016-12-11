@@ -390,7 +390,7 @@
 
 <p>We will need to make one further adjustment. If a loan is paid off early, then the &ldquo;actual payments&rdquo; will be less than the &ldquo;expected payments&rdquo; but the time value of money will make up the difference -- since the loan was repaid early, the money can be reinvested, and no loss is incurred by the investor. Consequently, for loans that are &ldquo;Fully Paid&rdquo; we take the payment ratio to be 1, and it is only for written-off loans that we compute the actual payment ratio.</p>
 
-<p>Having defined our continuous outcome, we can now employ linear regression (with various basis functions) for modelling. Our first attempt is with cross-validated Ridge regression, which gives a test R^2 of 0.036 -- not an encouraging result. (This is nevertheless much better than the result from unregularized linear regression, which gives a test R<sup>2</sup> of only 0.006. Cross-validated Lasso gives a test R<sup>2</sup> of 0.014.)</p>
+<p>Having defined our continuous outcome, we can now employ linear regression (with various basis functions) for modelling. Our first attempt is with cross-validated Ridge regression, which gives a test R<sup>2</sup> of 0.036 -- not an encouraging result. (This is nevertheless much better than the result from unregularized linear regression, which gives a test R<sup>2</sup> of only 0.006. Cross-validated Lasso gives a test R<sup>2</sup> of 0.014.)</p>
 
 <p>We try again with cross-terms and, for the continuous predictors, polynomial terms up to ninth degree -- all of these give increasingly negative values for the test R<sup>2</sup>.</p>
 

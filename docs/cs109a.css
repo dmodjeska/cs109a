@@ -25,7 +25,8 @@ div.summary_table {
 }
 
 hr {
-    color: #777777;   
+    color: #777777;  
+    width: 50%;
 }
 
 img {

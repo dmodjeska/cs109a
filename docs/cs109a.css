@@ -1,4 +1,5 @@
 /* CS109a.css */
+
 body {
     background-color: white;
     font-family: 'Cambria', 'Georgia', serif;
@@ -11,9 +12,10 @@ h1 {
     text-align:center;
 }
 
-h1, h2 {
-    color:#333333;
+h1 {
+    color: #333333;
 }
+
 div.ournames {
     text-align:center;
 }

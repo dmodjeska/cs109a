@@ -14,13 +14,13 @@
     Harvard University, Autumn 2016</h4>
   </div>
 
-<ul>
-<li><a href='index.html'>Home</a></li>
-<li><a href='01-Context.html'>1. Initial Context</a></li>
-<li><a href='02-Collection.html'>2. Data Collection</a></li>
-<li><a href='03-Exploration.html'>3. Data Exploration</a></li>
-<li><a href='04-Modeling.html'>4. Data Modeling</a></li>
-<li><a href='05-Analysis.html'>5. Modeling Analysis</a></li>
+<ul class='toc'>
+ <li><a href='index.html'>Home</a></li>
+ <li><a href='01-Context.html'>1. Initial Context</a></li>
+ <li><a href='02-Collection.html'>2. Data Collection</a></li>
+ <li><a href='03-Exploration.html'>3. Data Exploration</a></li>
+ <li><a href='04-Modeling.html'>4. Data Modeling</a></li>
+ <li><a href='05-Analysis.html'>5. Modeling Analysis</a></li>
 </ul>
 
 <h2>Part 5: Modeling Analysis</h2>
@@ -32,348 +32,349 @@
 
 <h3>Summary comparison of all models:</h3>
 
-<div class='summary_table' style="margin-left:5%">
-<a></a><a></a><table><tbody><tr><td>
-</td><td>
-<p style="font-weight:bold">auc</p></td><td>
-<p style="font-weight:bold">baseline</p></td><td>
-<p style="font-weight:bold">f1</p></td><td>
-<p style="font-weight:bold">prec</p></td><td>
-<p style="font-weight:bold">score</p></td><td>
-<p style="font-weight:bold">test_f1</p></td><td>
-<p style="font-weight:bold">test_prec</p></td><td>
-<p style="font-weight:bold">test_profit</p></td><td>
-<p style="font-weight:bold">test_score</p></td></tr><tr><td>
-<p style="font-weight:bold">RandomForestClassifier</p></td><td>
-<p>0.497518</p></td><td>
-<p>0.860074</p></td><td>
-<p>0.716248</p></td><td>
-<p>0.859688</p></td><td>
-<p>0.582459</p></td><td>
-<p>0.533418</p></td><td>
-<p>0.864835</p></td><td>
-<p>-24.230891</p></td><td>
-<p>0.581941</p></td></tr><tr><td>
-<p style="font-weight:bold">LogReg PCA Balanced</p></td><td>
-<p>0.500083</p></td><td>
-<p>0.860074</p></td><td>
-<p>0.657955</p></td><td>
-<p>0.858047</p></td><td>
-<p>0.524233</p></td><td>
-<p>0.606677</p></td><td>
-<p>0.861497</p></td><td>
-<p>20.41234</p></td><td>
-<p>0.523668</p></td></tr><tr><td>
-<p style="font-weight:bold">LogReg PCA</p></td><td>
-<p>0.500229</p></td><td>
-<p>0.860074</p></td><td>
-<p>0.924484</p></td><td>
-<p>0.793333</p></td><td>
-<p>0.859595</p></td><td>
-<p>0.001294</p></td><td>
-<p>0.857143</p></td><td>
-<p>-236.575713</p></td><td>
-<p>0.862136</p></td></tr><tr><td>
-<p style="font-weight:bold">LogisticRegression</p></td><td>
-<p>0.499836</p></td><td>
-<p>0.860074</p></td><td>
-<p>0.698902</p></td><td>
-<p>0.914265</p></td><td>
-<p>0.564614</p></td><td>
-<p>0.002048</p></td><td>
-<p>0.826087</p></td><td>
-<p>-230.23108</p></td><td>
-<p>0.560531</p></td></tr><tr><td>
-<p style="font-weight:bold">LogReg balanced basic x^3</p></td><td>
-<p>0.564158</p></td><td>
-<p>0.847953</p></td><td>
-<p>0.659433</p></td><td>
-<p>0.823989</p></td><td>
-<p>0.535093</p></td><td>
-<p>0.593443</p></td><td>
-<p>0.822941</p></td><td>
-<p>31.757548</p></td><td>
-<p>0.539385</p></td></tr><tr><td>
-<p style="font-weight:bold">LogReg balanced basic x^2</p></td><td>
-<p>0.563749</p></td><td>
-<p>0.847953</p></td><td>
-<p>0.670414</p></td><td>
-<p>0.823727</p></td><td>
-<p>0.545276</p></td><td>
-<p>0.585755</p></td><td>
-<p>0.822404</p></td><td>
-<p>45.756872</p></td><td>
-<p>0.545796</p></td></tr><tr><td>
-<p style="font-weight:bold">LogReg balanced employ x^2</p></td><td>
-<p>0.563749</p></td><td>
-<p>0.847953</p></td><td>
-<p>0.670414</p></td><td>
-<p>0.823727</p></td><td>
-<p>0.545276</p></td><td>
-<p>0.585755</p></td><td>
-<p>0.822404</p></td><td>
-<p>45.756872</p></td><td>
-<p>0.545796</p></td></tr><tr><td>
-<p style="font-weight:bold">DTC log2 balanced</p></td><td>
-<p>0.582779</p></td><td>
-<p>0.847953</p></td><td>
-<p>0.672614</p></td><td>
-<p>0.817077</p></td><td>
-<p>0.55376</p></td><td>
-<p>0.632295</p></td><td>
-<p>0.818314</p></td><td>
-<p>220.314522</p></td><td>
-<p>0.508332</p></td></tr><tr><td>
-<p style="font-weight:bold">Stack Tree balanced (mixed)</p></td><td>
-<p>0.588177</p></td><td>
-<p>0.847953</p></td><td>
-<p>0.798964</p></td><td>
-<p>0.804515</p></td><td>
-<p>0.683025</p></td><td>
-<p>0.383033</p></td><td>
-<p>0.818004</p></td><td>
-<p>-363.46915</p></td><td>
-<p>0.683409</p></td></tr><tr><td>
-<p style="font-weight:bold">DTC</p></td><td>
-<p>0.543669</p></td><td>
-<p>0.847953</p></td><td>
-<p>0.791997</p></td><td>
-<p>0.809156</p></td><td>
-<p>0.674297</p></td><td>
-<p>0.447295</p></td><td>
-<p>0.815801</p></td><td>
-<p>-267.741252</p></td><td>
-<p>0.64598</p></td></tr><tr><td>
-<p style="font-weight:bold">DTC sqrt balanced</p></td><td>
-<p>0.548462</p></td><td>
-<p>0.847953</p></td><td>
-<p>0.756043</p></td><td>
-<p>0.810064</p></td><td>
-<p>0.633844</p></td><td>
-<p>0.472163</p></td><td>
-<p>0.812912</p></td><td>
-<p>-228.90259</p></td><td>
-<p>0.63106</p></td></tr><tr><td>
-<p style="font-weight:bold">Stack RF balanced (mixed)</p></td><td>
-<p>0.588829</p></td><td>
-<p>0.847953</p></td><td>
-<p>0.80685</p></td><td>
-<p>0.803577</p></td><td>
-<p>0.692641</p></td><td>
-<p>0.312236</p></td><td>
-<p>0.811109</p></td><td>
-<p>-500.528518</p></td><td>
-<p>0.722535</p></td></tr><tr><td>
-<p style="font-weight:bold">Stack LogReg balanced (mixed)</p></td><td>
-<p>0.588821</p></td><td>
-<p>0.847953</p></td><td>
-<p>0.807932</p></td><td>
-<p>0.802166</p></td><td>
-<p>0.694025</p></td><td>
-<p>0.384472</p></td><td>
-<p>0.810072</p></td><td>
-<p>-356.430484</p></td><td>
-<p>0.684658</p></td></tr><tr><td>
-<p style="font-weight:bold">RFC balanced 2/100</p></td><td>
-<p>0.637726</p></td><td>
-<p>0.847953</p></td><td>
-<p>0.713025</p></td><td>
-<p>0.791972</p></td><td>
-<p>0.594422</p></td><td>
-<p>0.531847</p></td><td>
-<p>0.789251</p></td><td>
-<p>-67.064904</p></td><td>
-<p>0.59897</p></td></tr><tr><td>
-<p style="font-weight:bold">RFC balanced 3/100</p></td><td>
-<p>0.641098</p></td><td>
-<p>0.847953</p></td><td>
-<p>0.723229</p></td><td>
-<p>0.788135</p></td><td>
-<p>0.605173</p></td><td>
-<p>0.521847</p></td><td>
-<p>0.786758</p></td><td>
-<p>-72.396041</p></td><td>
-<p>0.606925</p></td></tr><tr><td>
-<p style="font-weight:bold">RFC balanced 4/100</p></td><td>
-<p>0.644534</p></td><td>
-<p>0.847953</p></td><td>
-<p>0.739146</p></td><td>
-<p>0.782391</p></td><td>
-<p>0.622241</p></td><td>
-<p>0.506856</p></td><td>
-<p>0.783463</p></td><td>
-<p>-106.082474</p></td><td>
-<p>0.618392</p></td></tr><tr><td>
-<p style="font-weight:bold">RFC balanced 5/100</p></td><td>
-<p>0.646437</p></td><td>
-<p>0.847953</p></td><td>
-<p>0.748665</p></td><td>
-<p>0.781217</p></td><td>
-<p>0.63207</p></td><td>
-<p>0.494005</p></td><td>
-<p>0.780173</p></td><td>
-<p>-150.199915</p></td><td>
-<p>0.628126</p></td></tr><tr><td>
-<p style="font-weight:bold">RFC balanced 5/300</p></td><td>
-<p>0.647522</p></td><td>
-<p>0.847953</p></td><td>
-<p>0.753882</p></td><td>
-<p>0.779911</p></td><td>
-<p>0.637677</p></td><td>
-<p>0.4913</p></td><td>
-<p>0.779519</p></td><td>
-<p>-153.573796</p></td><td>
-<p>0.630129</p></td></tr><tr><td>
-<p style="font-weight:bold">RFC balanced 6/100</p></td><td>
-<p>0.648098</p></td><td>
-<p>0.847953</p></td><td>
-<p>0.757184</p></td><td>
-<p>0.777485</p></td><td>
-<p>0.641615</p></td><td>
-<p>0.47975</p></td><td>
-<p>0.777155</p></td><td>
-<p>-177.027263</p></td><td>
-<p>0.638402</p></td></tr><tr><td>
-<p style="font-weight:bold">RFC balanced 7/100</p></td><td>
-<p>0.649799</p></td><td>
-<p>0.847953</p></td><td>
-<p>0.773191</p></td><td>
-<p>0.774318</p></td><td>
-<p>0.659038</p></td><td>
-<p>0.461265</p></td><td>
-<p>0.773476</p></td><td>
-<p>-215.995358</p></td><td>
-<p>0.651213</p></td></tr><tr><td>
-<p style="font-weight:bold">RFC balanced 8/100</p></td><td>
-<p>0.649646</p></td><td>
-<p>0.847953</p></td><td>
-<p>0.78746</p></td><td>
-<p>0.76903</p></td><td>
-<p>0.675431</p></td><td>
-<p>0.434595</p></td><td>
-<p>0.768145</p></td><td>
-<p>-265.046493</p></td><td>
-<p>0.668878</p></td></tr><tr><td>
-<p style="font-weight:bold">RFC balanced 9/100</p></td><td>
-<p>0.648587</p></td><td>
-<p>0.847953</p></td><td>
-<p>0.803712</p></td><td>
-<p>0.762916</p></td><td>
-<p>0.694556</p></td><td>
-<p>0.40765</p></td><td>
-<p>0.764767</p></td><td>
-<p>-321.111447</p></td><td>
-<p>0.685118</p></td></tr><tr><td>
-<p style="font-weight:bold">SmallBusiness</p></td><td>
-<p>0.506549</p></td><td>
-<p>0.847953</p></td><td>
-<p>0.911339</p></td><td>
-<p>0.762568</p></td><td>
-<p>0.837875</p></td><td>
-<p>0.033954</p></td><td>
-<p>0.761267</p></td><td>
-<p>-869.029054</p></td><td>
-<p>0.83824</p></td></tr><tr><td>
-<p style="font-weight:bold">QDA</p></td><td>
-<p>0.625773</p></td><td>
-<p>0.847953</p></td><td>
-<p>0.917424</p></td><td>
-<p>0.759286</p></td><td>
-<p>0.847491</p></td><td>
-<p>0.001859</p></td><td>
-<p>0.744444</p></td><td>
-<p>-913.637756</p></td><td>
-<p>0.847833</p></td></tr><tr><td>
-<p style="font-weight:bold">LogReg balanced .6</p></td><td>
-<p>0.655212</p></td><td>
-<p>0.847953</p></td><td>
-<p>0.723575</p></td><td>
-<p>0.728662</p></td><td>
-<p>0.607445</p></td><td>
-<p>0.283763</p></td><td>
-<p>0.73638</p></td><td>
-<p>-489.694574</p></td><td>
-<p>0.604203</p></td></tr><tr><td>
-<p style="font-weight:bold">Stack RF balanced (logreg)</p></td><td>
-<p>0.501042</p></td><td>
-<p>0.847953</p></td><td>
-<p>0.733312</p></td><td>
-<p>0.576167</p></td><td>
-<p>0.706008</p></td><td>
-<p>0.001831</p></td><td>
-<p>0.589286</p></td><td>
-<p>-913.237437</p></td><td>
-<p>0.848116</p></td></tr><tr><td>
-<p style="font-weight:bold">Stack LogReg balanced (logreg)</p></td><td>
-<p>0.501616</p></td><td>
-<p>0.847953</p></td><td>
-<p>0.917591</p></td><td>
-<p>0.545397</p></td><td>
-<p>0.847846</p></td><td>
-<p>0.00208</p></td><td>
-<p>0.576923</p></td><td>
-<p>-912.78824</p></td><td>
-<p>0.848116</p></td></tr><tr><td>
-<p style="font-weight:bold">Stack Tree balanced (logreg)</p></td><td>
-<p>0.501616</p></td><td>
-<p>0.847953</p></td><td>
-<p>0.917573</p></td><td>
-<p>0.559286</p></td><td>
-<p>0.847811</p></td><td>
-<p>0.00208</p></td><td>
-<p>0.576923</p></td><td>
-<p>-912.78824</p></td><td>
-<p>0.848116</p></td></tr><tr><td>
-<p style="font-weight:bold">GBC</p></td><td>
-<p>0.630332</p></td><td>
-<p>0.847953</p></td><td>
-<p>0.917717</p></td><td>
-<p>NaN</p></td><td>
-<p>0.847953</p></td><td>
-<p>0</p></td><td>
-<p>NaN</p></td><td>
-<p>-915.941869</p></td><td>
-<p>0.848351</p></td></tr><tr><td>
-<p style="font-weight:bold">GBC PCA</p></td><td>
-<p>0.491381</p></td><td>
-<p>0.860074</p></td><td>
-<p>0.92477</p></td><td>
-<p>NaN</p></td><td>
-<p>0.860074</p></td><td>
-<p>0</p></td><td>
-<p>NaN</p></td><td>
-<p>-237.070559</p></td><td>
-<p>0.862602</p></td></tr><tr><td>
-<p style="font-weight:bold">GradientBoostingClassifier</p></td><td>
-<p>0.495911</p></td><td>
-<p>0.860074</p></td><td>
-<p>0.92477</p></td><td>
-<p>NaN</p></td><td>
-<p>0.860074</p></td><td>
-<p>0</p></td><td>
-<p>NaN</p></td><td>
-<p>-230.871859</p></td><td>
-<p>0.862602</p></td></tr><tr><td>
-<p style="font-weight:bold">QuadraticDiscriminantAnalysis</p></td><td>
-<p>0.495139</p></td><td>
-<p>0.860074</p></td><td>
-<p>0.92477</p></td><td>
-<p>NaN</p></td><td>
-<p>0.860074</p></td><td>
-<p>0</p></td><td>
-<p>NaN</p></td><td>
-<p>-230.871859</p></td><td>
-<p>0.862602</p></td></tr><tr><td>
-<p style="font-weight:bold">RFC 5/300</p></td><td>
-<p>0.646762</p></td><td>
-<p>0.847953</p></td><td>
-<p>0.917717</p></td><td>
-<p>NaN</p></td><td>
-<p>0.847953</p></td><td>
-<p>0</p></td><td>
-<p>NaN</p></td><td>
-<p>-915.941869</p></td><td>
-<p>0.848351</p></td></tr></tbody></table>
+<div class='summary_table'>
+<a></a><a></a><table><thead><tr><th>Model</th>
+<th>auc</th>
+<th>baseline</th>
+<th>f1</th>
+<th>prec</th>
+<th>score</th>
+<th>test_f1</th>
+<th>test_prec</th>
+<th>test_profit</th>
+<th>test_score</th></tr></thead>
+<tbody>
+<tr><th>RandomForestClassifier</th>
+<td>0.497518</td>
+<td>0.860074</td>
+<td>0.716248</td>
+<td>0.859688</td>
+<td>0.582459</td>
+<td>0.533418</td>
+<td>0.864835</td>
+<td>-24.230891</td>
+<td>0.581941</td></tr>
+<tr><th>LogReg PCA Balanced</th>
+<td>0.500083</td>
+<td>0.860074</td>
+<td>0.657955</td>
+<td>0.858047</td>
+<td>0.524233</td>
+<td>0.606677</td>
+<td>0.861497</td>
+<td>20.41234</td>
+<td>0.523668</td></tr>
+<tr><th>LogReg PCA</th>
+<td>0.500229</td>
+<td>0.860074</td>
+<td>0.924484</td>
+<td>0.793333</td>
+<td>0.859595</td>
+<td>0.001294</td>
+<td>0.857143</td>
+<td>-236.575713</td>
+<td>0.862136</td></tr>
+<tr><th>LogisticRegression</th>
+<td>0.499836</td>
+<td>0.860074</td>
+<td>0.698902</td>
+<td>0.914265</td>
+<td>0.564614</td>
+<td>0.002048</td>
+<td>0.826087</td>
+<td>-230.23108</td>
+<td>0.560531</td></tr>
+<tr><th>LogReg balanced basic x^3</th>
+<td>0.564158</td>
+<td>0.847953</td>
+<td>0.659433</td>
+<td>0.823989</td>
+<td>0.535093</td>
+<td>0.593443</td>
+<td>0.822941</td>
+<td>31.757548</td>
+<td>0.539385</td></tr>
+<tr><th>LogReg balanced basic x^2</th>
+<td>0.563749</td>
+<td>0.847953</td>
+<td>0.670414</td>
+<td>0.823727</td>
+<td>0.545276</td>
+<td>0.585755</td>
+<td>0.822404</td>
+<td>45.756872</td>
+<td>0.545796</td></tr>
+<tr><th>LogReg balanced employ x^2</th>
+<td>0.563749</td>
+<td>0.847953</td>
+<td>0.670414</td>
+<td>0.823727</td>
+<td>0.545276</td>
+<td>0.585755</td>
+<td>0.822404</td>
+<td>45.756872</td>
+<td>0.545796</td></tr>
+<tr><th>DTC log2 balanced</th>
+<td>0.582779</td>
+<td>0.847953</td>
+<td>0.672614</td>
+<td>0.817077</td>
+<td>0.55376</td>
+<td>0.632295</td>
+<td>0.818314</td>
+<td>220.314522</td>
+<td>0.508332</td></tr>
+<tr><th>Stack Tree balanced (mixed)</th>
+<td>0.588177</td>
+<td>0.847953</td>
+<td>0.798964</td>
+<td>0.804515</td>
+<td>0.683025</td>
+<td>0.383033</td>
+<td>0.818004</td>
+<td>-363.46915</td>
+<td>0.683409</td></tr>
+<tr><th>DTC</th>
+<td>0.543669</td>
+<td>0.847953</td>
+<td>0.791997</td>
+<td>0.809156</td>
+<td>0.674297</td>
+<td>0.447295</td>
+<td>0.815801</td>
+<td>-267.741252</td>
+<td>0.64598</td></tr>
+<tr><th>DTC sqrt balanced</th>
+<td>0.548462</td>
+<td>0.847953</td>
+<td>0.756043</td>
+<td>0.810064</td>
+<td>0.633844</td>
+<td>0.472163</td>
+<td>0.812912</td>
+<td>-228.90259</td>
+<td>0.63106</td></tr>
+<tr><th>Stack RF balanced (mixed)</th>
+<td>0.588829</td>
+<td>0.847953</td>
+<td>0.80685</td>
+<td>0.803577</td>
+<td>0.692641</td>
+<td>0.312236</td>
+<td>0.811109</td>
+<td>-500.528518</td>
+<td>0.722535</td></tr>
+<tr><th>Stack LogReg balanced (mixed)</th>
+<td>0.588821</td>
+<td>0.847953</td>
+<td>0.807932</td>
+<td>0.802166</td>
+<td>0.694025</td>
+<td>0.384472</td>
+<td>0.810072</td>
+<td>-356.430484</td>
+<td>0.684658</td></tr>
+<tr><th>RFC balanced 2/100</th>
+<td>0.637726</td>
+<td>0.847953</td>
+<td>0.713025</td>
+<td>0.791972</td>
+<td>0.594422</td>
+<td>0.531847</td>
+<td>0.789251</td>
+<td>-67.064904</td>
+<td>0.59897</td></tr>
+<tr><th>RFC balanced 3/100</th>
+<td>0.641098</td>
+<td>0.847953</td>
+<td>0.723229</td>
+<td>0.788135</td>
+<td>0.605173</td>
+<td>0.521847</td>
+<td>0.786758</td>
+<td>-72.396041</td>
+<td>0.606925</td></tr>
+<tr><th>RFC balanced 4/100</th>
+<td>0.644534</td>
+<td>0.847953</td>
+<td>0.739146</td>
+<td>0.782391</td>
+<td>0.622241</td>
+<td>0.506856</td>
+<td>0.783463</td>
+<td>-106.082474</td>
+<td>0.618392</td></tr>
+<tr><th>RFC balanced 5/100</th>
+<td>0.646437</td>
+<td>0.847953</td>
+<td>0.748665</td>
+<td>0.781217</td>
+<td>0.63207</td>
+<td>0.494005</td>
+<td>0.780173</td>
+<td>-150.199915</td>
+<td>0.628126</td></tr>
+<tr><th>RFC balanced 5/300</th>
+<td>0.647522</td>
+<td>0.847953</td>
+<td>0.753882</td>
+<td>0.779911</td>
+<td>0.637677</td>
+<td>0.4913</td>
+<td>0.779519</td>
+<td>-153.573796</td>
+<td>0.630129</td></tr>
+<tr><th>RFC balanced 6/100</th>
+<td>0.648098</td>
+<td>0.847953</td>
+<td>0.757184</td>
+<td>0.777485</td>
+<td>0.641615</td>
+<td>0.47975</td>
+<td>0.777155</td>
+<td>-177.027263</td>
+<td>0.638402</td></tr>
+<tr><th>RFC balanced 7/100</th>
+<td>0.649799</td>
+<td>0.847953</td>
+<td>0.773191</td>
+<td>0.774318</td>
+<td>0.659038</td>
+<td>0.461265</td>
+<td>0.773476</td>
+<td>-215.995358</td>
+<td>0.651213</td></tr>
+<tr><th>RFC balanced 8/100</th>
+<td>0.649646</td>
+<td>0.847953</td>
+<td>0.78746</td>
+<td>0.76903</td>
+<td>0.675431</td>
+<td>0.434595</td>
+<td>0.768145</td>
+<td>-265.046493</td>
+<td>0.668878</td></tr>
+<tr><th>RFC balanced 9/100</th>
+<td>0.648587</td>
+<td>0.847953</td>
+<td>0.803712</td>
+<td>0.762916</td>
+<td>0.694556</td>
+<td>0.40765</td>
+<td>0.764767</td>
+<td>-321.111447</td>
+<td>0.685118</td></tr>
+<tr><th>SmallBusiness</th>
+<td>0.506549</td>
+<td>0.847953</td>
+<td>0.911339</td>
+<td>0.762568</td>
+<td>0.837875</td>
+<td>0.033954</td>
+<td>0.761267</td>
+<td>-869.029054</td>
+<td>0.83824</td></tr>
+<tr><th>QDA</th>
+<td>0.625773</td>
+<td>0.847953</td>
+<td>0.917424</td>
+<td>0.759286</td>
+<td>0.847491</td>
+<td>0.001859</td>
+<td>0.744444</td>
+<td>-913.637756</td>
+<td>0.847833</td></tr>
+<tr><th>LogReg balanced .6</th>
+<td>0.655212</td>
+<td>0.847953</td>
+<td>0.723575</td>
+<td>0.728662</td>
+<td>0.607445</td>
+<td>0.283763</td>
+<td>0.73638</td>
+<td>-489.694574</td>
+<td>0.604203</td></tr>
+<tr><th>Stack RF balanced (logreg)</th>
+<td>0.501042</td>
+<td>0.847953</td>
+<td>0.733312</td>
+<td>0.576167</td>
+<td>0.706008</td>
+<td>0.001831</td>
+<td>0.589286</td>
+<td>-913.237437</td>
+<td>0.848116</td></tr>
+<tr><th>Stack LogReg balanced (logreg)</th>
+<td>0.501616</td>
+<td>0.847953</td>
+<td>0.917591</td>
+<td>0.545397</td>
+<td>0.847846</td>
+<td>0.00208</td>
+<td>0.576923</td>
+<td>-912.78824</td>
+<td>0.848116</td></tr>
+<tr><th>Stack Tree balanced (logreg)</th>
+<td>0.501616</td>
+<td>0.847953</td>
+<td>0.917573</td>
+<td>0.559286</td>
+<td>0.847811</td>
+<td>0.00208</td>
+<td>0.576923</td>
+<td>-912.78824</td>
+<td>0.848116</td></tr>
+<tr><th>GBC</th>
+<td>0.630332</td>
+<td>0.847953</td>
+<td>0.917717</td>
+<td>NaN</td>
+<td>0.847953</td>
+<td>0</td>
+<td>NaN</td>
+<td>-915.941869</td>
+<td>0.848351</td></tr>
+<tr><th>GBC PCA</th>
+<td>0.491381</td>
+<td>0.860074</td>
+<td>0.92477</td>
+<td>NaN</td>
+<td>0.860074</td>
+<td>0</td>
+<td>NaN</td>
+<td>-237.070559</td>
+<td>0.862602</td></tr>
+<tr><th>GradientBoostingClassifier</th>
+<td>0.495911</td>
+<td>0.860074</td>
+<td>0.92477</td>
+<td>NaN</td>
+<td>0.860074</td>
+<td>0</td>
+<td>NaN</td>
+<td>-230.871859</td>
+<td>0.862602</td></tr>
+<tr><th>QuadraticDiscriminantAnalysis</th>
+<td>0.495139</td>
+<td>0.860074</td>
+<td>0.92477</td>
+<td>NaN</td>
+<td>0.860074</td>
+<td>0</td>
+<td>NaN</td>
+<td>-230.871859</td>
+<td>0.862602</td></tr>
+<tr><th>RFC 5/300</th>
+<td>0.646762</td>
+<td>0.847953</td>
+<td>0.917717</td>
+<td>NaN</td>
+<td>0.847953</td>
+<td>0</td>
+<td>NaN</td>
+<td>-915.941869</td>
+<td>0.848351</td></tr>
+</tbody></table>
 </div>
 
 <p><img src="images/image32.png" style="width: 60%;"></p>

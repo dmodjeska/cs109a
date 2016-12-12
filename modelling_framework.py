@@ -6,6 +6,7 @@
 # In[1]:
 
 import itertools as it
+import json
 import matplotlib
 import matplotlib.cm as cmx
 import matplotlib.colors as colors
@@ -220,7 +221,10 @@ def eval_model_all_years(model_factory,
         'test_profit': profit_mm,
         'auc': area_under_curve,
     }
-    
+
+    logfile = open('model_performance.txt', 'a')
+    logfile.write(json.dumps({'name': model_name, 'perf': model_performance[model_name]}))
+    logfile.close()
     return model
 
 

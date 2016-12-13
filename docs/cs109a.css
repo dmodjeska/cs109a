@@ -57,6 +57,10 @@ table.predictors td:nth-of-type(2) {
     text-align: right;
 }
 
+table.predictors th {
+    text-align: left;
+}
+
 table tr:nth-of-type(odd) {
     background-color: #d0d0d0;
 }

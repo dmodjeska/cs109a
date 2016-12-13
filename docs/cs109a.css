@@ -33,7 +33,8 @@ div.summary_table tbody {
 
 div.summary_table tbody th,
 div.summary_table tbody td {
-    padding-right: 1em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
 }
 
 hr {

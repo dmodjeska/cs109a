@@ -223,7 +223,7 @@ def eval_model_all_years(model_factory,
     }
 
     logfile = open('model_performance.txt', 'a')
-    logfile.write(json.dumps({'name': model_name, 'perf': model_performance[model_name]}))
+    logfile.write(json.dumps({'name': model_name, 'perf': model_performance[model_name]}) + '\n')
     logfile.close()
     return model
 

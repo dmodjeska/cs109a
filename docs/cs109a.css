@@ -30,11 +30,14 @@ div.summary_table tbody {
     text-align: right;
 }
 
+div.summary_table {
+    font-size: 0.9em;
+}
+
 div.summary_table tbody th,
 div.summary_table tbody td {
     padding-left: 0.5em;
     padding-right: 0.5em;
-    font-size: 0.9em;
 }
 
 hr {

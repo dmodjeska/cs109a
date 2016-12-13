@@ -69,6 +69,11 @@ table tr:nth-of-type(odd) {
     background-color: #d0d0d0;
 }
 
+td.better {
+    font-weight: bold;
+    background-color: #ffd0d0;
+}
+
 ul.toc {
     margin-bottom: 2%;
 }

@@ -50,6 +50,7 @@ img {
 table.predictors {
     font-family: 'Courier', 'Courier New', fixed;
     margin-left: 5%;
+    margin-bottom: 1%;
 }
 
 table.predictors td:nth-of-type(2) {

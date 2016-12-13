@@ -23,3 +23,7 @@ Peer-to-peer loans issued by the Lending Club (LC) require investors to analyze 
 * docs: final project report in HTML format
 * milestones: intermediate project reports in LaTex format
 * intermediate files: pre-processed data
+
+### Data Sources
+* [Lending Club data set on Kaggle](https://www.kaggle.com/wendykan/lending-club-loan-data)
+* [The Federal Reserve Bank of St. Louis - FRED Economic Data](https://fred.stlouisfed.org/)

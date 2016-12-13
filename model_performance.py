@@ -5,6 +5,8 @@ import json
 import matplotlib.pyplot as plt
 import pandas as pd
 
+plt.style.use('ggplot')
+
 model_performance = {}
 for line in open('model_performance.txt', 'r'):
     d = json.loads(line)
@@ -20,9 +22,11 @@ for k, d in sorted(model_performance.items()):
 h.close()
 
 model_performance_df = pd.DataFrame(model_performance).T
+model_performance_df.fillna(0)
 for col in model_performance_df.columns:
+    print col
     plt.figure(figsize=(15, .25*len(model_performance_df)))
-    model_performance_df[col].sort_values().plot(kind='barh')
+    model_performance_df[col].sort_values().plot(kind='barh', width=0.85)
     plt.title(col)
     plt.savefig('docs/images/score_' + col + '.png',
                 bbox_inches='tight')

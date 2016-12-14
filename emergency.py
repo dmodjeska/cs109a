@@ -349,51 +349,140 @@ for gamma in (10,):
                                          C=C, gamma=gamma),
                              model_group='SVC',
                              model_name="SVC C=" + str(C) + " g=" + str(gamma))
+
+logfile_name='model_performance_2q.txt'
         
+for gamma in (100,):
+    for C in (10.0,):
+        print C, gamma, datetime.datetime.now()
+        eval_model_all_years(lambda: SVC(class_weight='balanced',
+                                         probability=True,
+                                         C=C, gamma=gamma),
+                             model_group='SVC',
+                             model_name="SVC C=" + str(C) + " g=" + str(gamma))
+        
+
+logfile_name='model_performance_2r.txt'
+        
+for gamma in (100,):
+    for C in (100.0,):
+        print C, gamma, datetime.datetime.now()
+        eval_model_all_years(lambda: SVC(class_weight='balanced',
+                                         probability=True,
+                                         C=C, gamma=gamma),
+                             model_group='SVC',
+                             model_name="SVC C=" + str(C) + " g=" + str(gamma))
+        
+logfile_name='model_performance_2s.txt'
+        
+for gamma in (.01,):
+    for C in (100.0,):
+        print C, gamma, datetime.datetime.now()
+        eval_model_all_years(lambda: SVC(class_weight='balanced',
+                                         probability=True,
+                                         C=C, gamma=gamma),
+                             model_group='SVC',
+                             model_name="SVC C=" + str(C) + " g=" + str(gamma))
+
+logfile_name='model_performance_2t.txt'
+        
+for gamma in (.01,):
+    for C in (1.0,):
+        print C, gamma, datetime.datetime.now()
+        eval_model_all_years(lambda: SVC(class_weight='balanced',
+                                         probability=True,
+                                         C=C, gamma=gamma),
+                             model_group='SVC',
+                             model_name="SVC C=" + str(C) + " g=" + str(gamma))
+
+
+execfile('emergency-head.py')
+logfile_name='model_performance_2i.txt'
+        
+gamma=0.5
+C=.01
+print C, gamma, datetime.datetime.now()
+eval_model_all_years(lambda: SVC(class_weight='balanced',
+                                 probability=True,
+                                 C=C, gamma=gamma),
+                     model_group='SVC',
+                     model_name="SVC C=" + str(C) + " g=" + str(gamma))
+
+
+execfile('emergency-head.py')
+logfile_name='model_performance_2i2.txt'
+        
+gamma=0.5
+C=1
+print C, gamma, datetime.datetime.now()
+eval_model_all_years(lambda: SVC(class_weight='balanced',
+                                 probability=True,
+                                 C=C, gamma=gamma),
+                     model_group='SVC',
+                     model_name="SVC C=" + str(C) + " g=" + str(gamma))
+
+
+execfile('emergency-head.py')
+logfile_name='model_performance_2i3.txt'
+        
+gamma=0.5
+C=100
+print C, gamma, datetime.datetime.now()
+eval_model_all_years(lambda: SVC(class_weight='balanced',
+                                 probability=True,
+                                 C=C, gamma=gamma),
+                     model_group='SVC',
+                     model_name="SVC C=" + str(C) + " g=" + str(gamma))
+
 
 # Where are we with SVC?
 '''
-One window: gamma=0.0001, C=10^-2 (10:48-13:09)
-            gamma=0.0001, C=10^0  (13:09-15:36)
-            gamma=0.0001, C=10^+2 (15:36-...)
+h: gamma=0.0001, C=10^-2 (10:48-13:09)
+   gamma=0.0001, C=10^0  (13:09-15:36)
+   gamma=0.0001, C=10^+2 (15:36-...)
 
-One window: gamma=0.5,    C=10^-2 (10:52-13:47)
-                          C=10^0  (13:47-...)
-                          C=10^+2 (...)
+i: gamma=0.5, C=10^-2 (10:52-13:47)
+              C=10^0  (13:47-...)
+              C=10^+2 (...)
 
-One window: gamma=0.001,  C=10^-2 (10:46-13:08)
-            gamma=0.001,  C=10^0  (13:08-15:28)
-            gamma=0.001,  C=10^+2 (15:28-...)
+g: gamma=0.001,  C=10^-2 (10:46-13:08)
+   gamma=0.001,  C=10^0  (13:08-15:28)
+   gamma=0.001,  C=10^+2 (15:28-...)
 Can kill when: gamma=0.01,   C=10^-2 (...)
-            gamma=0.01,   C=10^0  (...)
-            gamma=0.01,   C=10^+2 (...)
-Can kill when: g.=0.1,    C=10^-2 (...)
-            gamma=0.1,    C=10^0  (...)
-            gamma=0.1,    C=10^+2 (...)
 
-One window: gamma=0.1,    C=10^-2 (...)
-            gamma=0.1,    C=10^0  (...)
-            gamma=0.1,    C=10^+2 (...)
+j: gamma=0.1,    C=10^-2 (...)
+   gamma=0.1,    C=10^0  (...)
+   gamma=0.1,    C=10^+2 (...) ==>t
 
-One window: gamma=0.01,    C=10^-2 (13:30-...)
-            gamma=0.01,    C=10^0  (...)
-            gamma=0.01,    C=10^+2 (...)
+k: gamma=0.01,    C=10^-2 (13:30-...)
+   gamma=0.01,    C=10^0  (...)
+   gamma=0.01,    C=10^+2 (...) ==>s
 
-One window: gamma 1/120,  C=1 
-            gamma 1/120,  C=10
-            gamma 1/120,  C=100
+l: GBC (rate=0.1, est=1000,5000; max_depth 2-5)
+
+m: gamma 1/120,  C=1 
+   gamma 1/120,  C=10
+   gamma 1/120,  C=100
 then kill
 
-One window: gamma 1/110,  C=1
-            gamma 1/110,  C=10
-            gamma 1/110,  C=100
+n: gamma 1/110,  C=1
+   gamma 1/110,  C=10
+   gamma 1/110,  C=100
 
-One window: gamma 1/130,  C=1
-            gamma 1/130,  C=10
-            gamma 1/130,  C=100
+o: gamma 1/130,  C=1
+   gamma 1/130,  C=10
+   gamma 1/130,  C=100
 
-One window: gamma 10,  C=1
-            gamma 10,  C=10
-            gamma 10,  C=100
+p: gamma 10,  C=1
+   gamma 10,  C=10
+   gamma 10,  C=100
+
+q: gamma 100, C=10
+
+r: gamma 100, C=100
+
+s: gamma .01, C=100
+
+t: 0.01, 1
 
 '''

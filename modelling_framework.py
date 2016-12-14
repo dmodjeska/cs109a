@@ -36,10 +36,12 @@ from sklearn.neighbors import KNeighborsClassifier as KNN
 from sklearn.svm import SVC
 from scipy.io import mmread
 
-get_ipython().magic(u'matplotlib inline')
+#get_ipython().magic(u'matplotlib inline')
 plt.style.use('ggplot') 
-from IPython.display import display, HTML
+#from IPython.display import display, HTML
 
+logfile_name = 'model_performance_x.txt'
+show_plots = True
 
 # # Start evaluating models
 
@@ -72,7 +74,7 @@ def ROC_plot(model, X, Y, model_name):
         true_positive_rate = ((yhat == 1) & (Y == 1)).sum() * 1.0 / ((Y == 1).sum())
         roc_data.append((false_positive_rate, true_positive_rate))
         # mark the key thresholds that we might use
-        if p in (0.5, 0.6, 0.85):
+        if p == 0.5:
             plt.scatter(false_positive_rate, true_positive_rate)  
         # Use midpoint rectangle method to approximate AUC
         auc += (true_positive_rate + prev_true_positive) / 2.0 * (prev_false_positive - false_positive_rate)
@@ -98,7 +100,9 @@ def ROC_plot(model, X, Y, model_name):
     plt.savefig('docs/images/roc_' + model_name.replace('/', '_') + '.png',
                 bbox_inches='tight'
     )
-    plt.show()
+    if show_plots:
+        plt.show()
+    plt.close()
 
     return auc
 
@@ -152,10 +156,14 @@ def eval_model_all_years(model_factory,
                          years = years, 
                          years_test = years_test, 
                          profit_data_test = profit_data_test,
-                         model_name = None):
+                         model_name = None,
+                         model_group = None):
     k = 5
     np.random.seed(1729)
     
+    start_time = datetime.datetime.now()
+    print start_time, "starting", (model_name or 'Anonymous')
+
     if columns is None:
         x_local = x
         x_local_test = x_test
@@ -195,6 +203,9 @@ def eval_model_all_years(model_factory,
         if model_name is None:
             model_name = type(model).__name__
 
+    if model_group is None:
+        model_group = model_name
+
     # but also test against the x_test
     model = model_factory().fit(x_local, y)
     test_y_hat = (model.predict_proba(x_local_test)[:,0] > prob_threshold)
@@ -202,27 +213,38 @@ def eval_model_all_years(model_factory,
     test_precision = y_test[test_y_hat].mean()
     test_f1 = f1_score(y_test, test_y_hat, pos_label = 1)
 
+    test_precision_INV = y_test[~test_y_hat].mean()
+    test_f1_INV = f1_score(y_test, ~test_y_hat, pos_label = 1)
+
     # expected profit
     profit_mm = calc_expected_profit(profit_data_test, test_y_hat)
 
     area_under_curve = ROC_plot(model, x_local_test, y_test, model_name)
 
-    print "all   score: %.3f  baseline: %.3f   prec: %.3f   f1: %.3f  | test score %.3f  prec %.3f f1 %.3f  GP %dMM" % (
-        score, y.mean(), precision, f1_accum, test_score, test_precision, test_f1, profit_mm)
+    elapsed_time = datetime.datetime.now() - start_time
+
+    print datetime.datetime.now(), "elapsed:", elapsed_time
+    
+    print "all   score: %.3f  prec: %.3f   f1: %.3f  | test score %.3f  prec %.3f f1 %.3f  ~prec %.3f GP %dMM" % (
+        score, precision, f1_accum, test_score, test_precision, test_f1, test_precision_INV, profit_mm)
 
     model_performance[model_name] = {
         'score': score,
-        'baseline' : y.mean(),
         'prec' : precision,
         'f1': f1_accum,
         'test_score': test_score,
         'test_prec': test_precision,
         'test_f1': test_f1,
+        'test_prec_inv': test_precision_INV,
+        'test_f1_inv': test_f1_INV,
         'test_profit': profit_mm,
         'auc': area_under_curve,
+        'timestamp': str(start_time),
+        'elapsed': str(elapsed_time),
+        'group': model_group,
     }
 
-    logfile = open('model_performance.txt', 'a')
+    logfile = open(logfile_name, 'a')
     logfile.write(json.dumps({'name': model_name, 'perf': model_performance[model_name]}) + '\n')
     logfile.close()
     return model

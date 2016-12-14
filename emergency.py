@@ -285,8 +285,19 @@ for gamma in (0.1,):
                              model_group='SVC',
                              model_name="SVC C=" + str(C) + " g=" + str(gamma))
 
+logfile_name='model_performance_2k.txt'
+        
+for gamma in (0.01,):
+    for C in 10 ** np.arange(-2.0, 2.1, 2.0):
+        print C, gamma, datetime.datetime.now()
+        eval_model_all_years(lambda: SVC(class_weight='balanced',
+                                         probability=True,
+                                         C=C, gamma=gamma),
+                             model_group='SVC',
+                             model_name="SVC C=" + str(C) + " g=" + str(gamma))
 
-# NOT YET LAUNCHED
+
+logfile_name='model_performance_2l.txt'
 
 for learning_rate in (0.1,):
     for n_est in (1000, 5000):
@@ -294,20 +305,65 @@ for learning_rate in (0.1,):
             eval_model_all_years(lambda: GBC(n_estimators = n_est, max_depth = max_depth, learning_rate = learning_rate),
                                  model_group='GBC',
                                  model_name='GBC %d/%d/%f' % (n_est, max_depth, learning_rate,))
+
+logfile_name='model_performance_2m.txt'
         
+for gamma in (1/120, 1/110, 1/130):
+    for C in (1.0, 10.0, 100.0):
+        print C, gamma, datetime.datetime.now()
+        eval_model_all_years(lambda: SVC(class_weight='balanced',
+                                         probability=True,
+                                         C=C, gamma=gamma),
+                             model_group='SVC',
+                             model_name="SVC C=" + str(C) + " g=" + str(gamma))
+
+logfile_name='model_performance_2n.txt'
+        
+for gamma in (1/110,):
+    for C in (1.0, 10.0, 100.0):
+        print C, gamma, datetime.datetime.now()
+        eval_model_all_years(lambda: SVC(class_weight='balanced',
+                                         probability=True,
+                                         C=C, gamma=gamma),
+                             model_group='SVC',
+                             model_name="SVC C=" + str(C) + " g=" + str(gamma))
+
+logfile_name='model_performance_2o.txt'
+        
+for gamma in (1/130,):
+    for C in (1.0, 10.0, 100.0):
+        print C, gamma, datetime.datetime.now()
+        eval_model_all_years(lambda: SVC(class_weight='balanced',
+                                         probability=True,
+                                         C=C, gamma=gamma),
+                             model_group='SVC',
+                             model_name="SVC C=" + str(C) + " g=" + str(gamma))
+
+logfile_name='model_performance_2p.txt'
+        
+for gamma in (10,):
+    for C in (1.0, 10.0, 100.0):
+        print C, gamma, datetime.datetime.now()
+        eval_model_all_years(lambda: SVC(class_weight='balanced',
+                                         probability=True,
+                                         C=C, gamma=gamma),
+                             model_group='SVC',
+                             model_name="SVC C=" + str(C) + " g=" + str(gamma))
+        
+
 # Where are we with SVC?
 '''
 One window: gamma=0.0001, C=10^-2 (10:48-13:09)
-            gamma=0.0001, C=10^0  (13:09-...)
-            gamma=0.0001, C=10^+2 (...)
+            gamma=0.0001, C=10^0  (13:09-15:36)
+            gamma=0.0001, C=10^+2 (15:36-...)
 
-One window: gamma=0.5,    C=10^-2 (10:52-...)
-                          C=10^0  (...)
+One window: gamma=0.5,    C=10^-2 (10:52-13:47)
+                          C=10^0  (13:47-...)
                           C=10^+2 (...)
 
 One window: gamma=0.001,  C=10^-2 (10:46-13:08)
-            gamma=0.001,  C=10^0  (13:08-...)
-            gamma=0.001,  C=10^+2 (...-...)
+            gamma=0.001,  C=10^0  (13:08-15:28)
+            gamma=0.001,  C=10^+2 (15:28-...)
 Can kill when: gamma=0.01,   C=10^-2 (...)
             gamma=0.01,   C=10^0  (...)
             gamma=0.01,   C=10^+2 (...)
@@ -319,8 +375,25 @@ One window: gamma=0.1,    C=10^-2 (...)
             gamma=0.1,    C=10^0  (...)
             gamma=0.1,    C=10^+2 (...)
 
-One window: gamma=0.01,    C=10^-2 (...)
+One window: gamma=0.01,    C=10^-2 (13:30-...)
             gamma=0.01,    C=10^0  (...)
             gamma=0.01,    C=10^+2 (...)
+
+One window: gamma 1/120,  C=1 
+            gamma 1/120,  C=10
+            gamma 1/120,  C=100
+then kill
+
+One window: gamma 1/110,  C=1
+            gamma 1/110,  C=10
+            gamma 1/110,  C=100
+
+One window: gamma 1/130,  C=1
+            gamma 1/130,  C=10
+            gamma 1/130,  C=100
+
+One window: gamma 10,  C=1
+            gamma 10,  C=10
+            gamma 10,  C=100
 
 '''

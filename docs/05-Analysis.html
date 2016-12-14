@@ -67,11 +67,13 @@ are represented in this report.</p>
 <ul>
   <li>The <b>Support Vector Classifier</b> (with an RBF kernel) has
   the highest AUC overall, at 0.666, for the best choices of the
-  hyperparameters <i>C</i> and <i>gamma</i>. This model group does not
-  do particularly well with metrics other than AUC, however. SVC
-  performance lets us improve precision with the lowest cost in
-  recall; but based on F1 and accuracy scores in the test data, this
-  model group doesn't start with a strong minimum.</li>
+  hyperparameters <i>C</i> and <i>gamma</i>. [NB: We are still
+  re-running the SVC models so the charts below do not currently
+  reflect this.] This model group does not do particularly well with
+  metrics other than AUC, however. SVC performance lets us improve
+  precision with the lowest cost in recall; but based on F1 and
+  accuracy scores in the test data, this model group doesn't start
+  with a strong minimum.</li>
 
   <li>The <b>Gradient Booster Classifier</b> group of models are
   competitive in AUC for some hyperparameter values. With 100
@@ -79,6 +81,11 @@ are represented in this report.</p>
   result is as high as 0.664. These results almost match those from
   SVC -- it is possible that additional estimators could give GBC an
   edge over SVC.</li>
+
+  <li>The <b>Balanced Cross-Validated Logistic Regression</b> model
+  -- which we had chosen as our baseline for the AUC, turns out to
+  be the model with the best precision on the test data set. Sometimes,
+  the simplest model is the best.</li>
 </ul>
   
 <p>Some other model groups exceed the baseline in some way, but they

@@ -15,9 +15,12 @@ for filename in ('model_performance_2.txt',
                  'model_performance_2d.txt',
                  'model_performance_2e.txt',
                  'model_performance_2f.txt',
-#                 'model_performance_2g.txt',
+                 'model_performance_2g.txt',
                  'model_performance_2h.txt',
 #                 'model_performance_2i.txt',
+                 'model_performance_2j.txt',
+                 'model_performance_2k.txt',
+                 'model_performance_2l.txt',
              ):
     print "loading", filename
     for line in open(filename, 'r'):

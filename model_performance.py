@@ -20,7 +20,16 @@ for filename in ('model_performance_2.txt',
         d = json.loads(line)
         model_performance[d['name']] = d['perf']
 
-baseline_values = model_performance['LogReg_CV balanced']
+baseline_models = {
+    'auc': 'LogReg_CV balanced',
+    'test_f1_inv': 'Always 1',
+    'test_score': 'Always 1',
+    'test_prec_inv': 'Always 1',
+}
+
+baseline_values = {}
+for k,v in baseline_models.items():
+    baseline_values[k] = model_performance[v][k]
 
 print "html"
 h = open('docs/model_performance_table.js', 'w')
@@ -33,10 +42,9 @@ for k, d in sorted(model_performance.items()):
             continue
         try:
             base_value = baseline_values[k2]
+            base_value = round(base_value, 3)
         except:
-            continue
-        if k2 != 'auc':
-            base_value = round(model_performance['Always 1'][k2], 3)
+            pass
             
         if k2 in ('auc', 'test_f1_inv', 'test_prec_inv', 'test_score') and round(v, 3) > base_value:
             s += "<td class='better'>%.3f</td>" % (v, )
@@ -50,8 +58,6 @@ model_performance_df = pd.DataFrame(model_performance).T
 for col in ('auc', 'test_score', 'test_f1_inv', 'test_prec_inv'):
     print col
     base_value = baseline_values[col]
-    if col != 'auc':
-        base_value = model_performance['Always 1'][col]
     plt.figure(figsize=(15, .25*len(model_performance_df)))
     plt.axvline(x=base_value, color='darkgrey')
     sorted_values = model_performance_df[col].fillna(0).sort_values()

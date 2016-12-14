@@ -44,14 +44,20 @@ this final report part.</p>
 <h3>Summary comparison of all models:</h3>
 
 <p>The following table and bar charts compare all of the models in our
-notebook. For most metrics, we take as a baseline the balanced
-cross-validated logistic regression model, which has an AUC of 0.657,
-a test F1 of 0.534, and a test precision of 0.781. For classification
-accuracy, we take as a baseline the .848 rate resulting from the
-"Always 1" model (as well as all of the unbalanced models). <em>In
-each case, results that surpass our benchmark are highlighted in
-red.</em></p>
-  
+notebook. The appopriate choice of baseline model depends on which
+metric we are using to compare the models. All metrics are computed
+using the test data set.</p>
+
+<ul>
+ <li>For most metrics, we use the <b>Always 1</b> model, which has an
+  F1 score of 0.918, a classification accuracy of 0.848 (the fraction
+  which are paid in full), and a precision of 0.848.</li>
+ <li>For the AUC, the "Always 1" model is degenerate, so we use
+  the <b>balanced, cross-validated Logistic Regression</b> model,
+  which is a simple model that allows us to choose the tradeoff
+  between precision and recall. It has AUC=0.657</li>
+</ul>
+
 <p>Note that in cases where we optimized model hyperparameters using a
 grid of values, all the values <!--only the optimal hyperparameters-->
 are represented in this report.</p>
@@ -75,9 +81,6 @@ are represented in this report.</p>
   result is as high as 0.664. These results almost match those from
   SVC -- it is possible that additional estimators could give GBC an
   edge over SVC.</li>
-
-  <li>The <b>Random Forest Classifier</b> at best achieves precision
-  on the test set of about .893</li>
 </ul>
   
 <p>Some other model groups exceed the baseline in some way, but they
@@ -107,7 +110,10 @@ have weaknesses that may undercut their usefulness in general:</p>
 outperform the baseline model by about the same amount -- each with an
 AUC around 0.666, compared to 0.657 for the baseline model.</em> Both
 SVC and GBC models have reasonable but not excellent values for other
-metrics.</p>
+metrics. Precision is commonly better than the baseline, even without
+adjusting the precision/recall relationship. We were unable to improve
+either the F1 score nor the overall classification accuracy.
+</p>
 
 <p><a href="#continued_1">[Skip to <i>ROC Area Under Curve</i>]</a></p>
 

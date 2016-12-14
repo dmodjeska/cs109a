@@ -7,6 +7,7 @@ import pandas as pd
 
 plt.style.use('ggplot')
 
+print "loading"
 model_performance = {}
 for line in open('model_performance.txt', 'r'):
     d = json.loads(line)
@@ -14,6 +15,7 @@ for line in open('model_performance.txt', 'r'):
 
 baseline_values = model_performance['LogReg_CV balanced']
 
+print "html"
 h = open('docs/model_performance.html', 'w')
 for k, d in sorted(model_performance.items()):
     s = "<tr><th>%s</th>" % (k, )
@@ -33,11 +35,16 @@ for k, d in sorted(model_performance.items()):
 h.close()
 
 model_performance_df = pd.DataFrame(model_performance).T
-model_performance_df.fillna(0)
 for col in model_performance_df.columns:
     print col
+    base_value = baseline_values[col]
+    if col == 'test_score':
+        base_value = 0.848
     plt.figure(figsize=(15, .25*len(model_performance_df)))
-    model_performance_df[col].sort_values().plot(kind='barh', width=0.85)
+    sorted_values = model_performance_df[col].fillna(0).sort_values()
+    sorted_values.plot(kind='barh', 
+                       color=['kr'[i] for i in list(sorted_values > base_value)],
+                       width=0.85)
     plt.title(col)
     plt.savefig('docs/images/score_' + col + '.png',
                 bbox_inches='tight')

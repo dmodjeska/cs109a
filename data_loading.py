@@ -26,6 +26,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 from IPython.display import display, HTML
 
+do_matrix = 'skip_matrix' not in global
 
 # In[28]:
 
@@ -58,8 +59,9 @@ diff_terms_file = dir_str + "diff_terms_" + pct_str + ".json"
 ### load processed data
 data = pd.read_json(processed_data_file)
 data_nlp = pd.read_json(nlp_data_file)
-desc_matrix_coo = mmread(term_freqs_file)
-desc_matrix = sp.sparse.csr_matrix(desc_matrix_coo)
+if do_matrix:
+    desc_matrix_coo = mmread(term_freqs_file)
+    desc_matrix = sp.sparse.csr_matrix(desc_matrix_coo)
 count_cols_df = pd.read_json(diff_terms_file)
 
 count_cols_bool = count_cols_df.values > 0.0
@@ -261,7 +263,7 @@ data_nlp_filtered = data_nlp.iloc[filter_flags]
 x_nlp_filtered = data_nlp_filtered.drop('loan_status', 1)
 y_nlp_filtered = data_nlp_filtered.loan_status
 
-desc_matrix_filtered = desc_matrix[filter_flags]
+#desc_matrix_filtered = desc_matrix[filter_flags]
 count_cols_bool_filtered = count_cols_bool[filter_flags]
 
 
@@ -277,8 +279,9 @@ y_nlp_train = y_nlp_filtered.iloc[train_flags]
 x_nlp_test = x_nlp_filtered.iloc[~train_flags, :]
 y_nlp_test = y_nlp_filtered.iloc[~train_flags]
 
-desc_matrix_train = pd.DataFrame(desc_matrix_filtered[train_flags, :].toarray())
-desc_matrix_test = pd.DataFrame(desc_matrix_filtered[~train_flags, :].toarray())
+if do_matrix:
+    desc_matrix_train = pd.DataFrame(desc_matrix_filtered[train_flags, :].toarray())
+    desc_matrix_test = pd.DataFrame(desc_matrix_filtered[~train_flags, :].toarray())
 
 count_cols_bool_train = pd.DataFrame(count_cols_bool_filtered[train_flags, :])
 count_cols_bool_test = pd.DataFrame(count_cols_bool_filtered[~train_flags, :])
@@ -291,8 +294,9 @@ years_nlp_test = pd.to_datetime(x_nlp_test.issue_date).dt.year
 
 ### match indexes
 
-desc_matrix_train.index = x_nlp_train.index
-desc_matrix_test.index = x_nlp_test.index
+if do_matrix:
+    desc_matrix_train.index = x_nlp_train.index
+    desc_matrix_test.index = x_nlp_test.index
 
 count_cols_bool_train.index = x_nlp_train.index
 count_cols_bool_test.index = x_nlp_test.index
@@ -339,23 +343,25 @@ x_test_expanded_pca = data_filtered_expanded_x_pca.iloc[~sample_flags, :73]
 
 # In[50]:
 
-tsvd = tSVD(n_components = 500, random_state=1729)
-desc_matrix_filtered_pca = pd.DataFrame(tsvd.fit_transform(desc_matrix_filtered))
-desc_matrix_filtered_pca.index = x_nlp_filtered.index
-pca_cum_var_expl = np.cumsum(np.round(tsvd.explained_variance_ratio_, 4) * 100)
+if do_matrix:
+    tsvd = tSVD(n_components = 500, random_state=1729)
+    desc_matrix_filtered_pca = pd.DataFrame(tsvd.fit_transform(desc_matrix_filtered))
+    desc_matrix_filtered_pca.index = x_nlp_filtered.index
+    pca_cum_var_expl = np.cumsum(np.round(tsvd.explained_variance_ratio_, 4) * 100)
 
 
 # In[51]:
 
-print "max variance explained", pca_cum_var_expl.max()
-print "PCA: first and last columns where % variance explained >= 84:",             np.where(pca_cum_var_expl >= 84)[0][[0, -1]]
+if do_matrix:
+    print "max variance explained", pca_cum_var_expl.max()
+    print "PCA: first and last columns where % variance explained >= 84:",             np.where(pca_cum_var_expl >= 84)[0][[0, -1]]
 
 
 # In[52]:
 
-desc_matrix_pca = desc_matrix_filtered_pca.iloc[train_flags, :]
-desc_matrix_test_pca = desc_matrix_filtered_pca.iloc[~train_flags, :]
-
+if do_matrix:
+    desc_matrix_pca = desc_matrix_filtered_pca.iloc[train_flags, :]
+    desc_matrix_test_pca = desc_matrix_filtered_pca.iloc[~train_flags, :]
 
 # In[ ]:
 

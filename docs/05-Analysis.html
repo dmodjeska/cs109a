@@ -52,7 +52,7 @@
   
 <p><b>In summary, we find that, using AUC as our metric, the SVC and GBC outperform the baseline model by about the same amount -- each with an AUC about 0.666, compared to 0.657 for the baseline model.</b> They both have reasonable but not great values for the other metrics.</p>
 
-<p><a href="#continued">[Skip to ROC Area Under Curve]</a></p>
+<p><a href="#continued_1">[Skip to ROC Area Under Curve]</a></p>
 
 <div class='summary_table'>
 <a></a><a></a><table><thead><tr><th>Model</th>
@@ -232,23 +232,29 @@
 <tr><th>Stack Tree balanced (mixed)</th><td>0.540</td><td>0.805</td><td>0.808</td><td>0.690</td><td>0.374</td><td class='better'>0.815</td><td>0.689</td></tr>
 </tbody></table>
 </div>
-<p><a href="#continued">[Skip to Test Classification Accuracy]</a></p>
+<p><a href="#continued_2">[Skip to Test Classification Accuracy]</a></p>
 
+  <a name='continued_1' />
+  
 <h4>ROC Area Under Curve</h4>
 
 <p><img src="images/score_auc.png"  style="width: 90%;"></p>
-<p><a href="#continued">[Skip to Test Precision]</a></p>
+<p><a href="#continued_3">[Skip to Test Precision]</a></p>
 
+  <a name='continued_2' />
+  
 <h4>Test Classification Accuracy</h4>
 
 <p><img src="images/score_test_score.png" style="width: 90%;"></p>
-<p><a href="#continued">[Skip to Using Payback Ratio]</a></p>
+<p><a href="#continued_4">[Skip to Using Payback Ratio]</a></p>
 
+  <a name='continued_3' />
+  
 <h4>Test Precision</h4>
 
 <p><img src="images/score_test_prec.png" style="width: 90%;"></p>
 
-<a name='continued' />
+<a name='continued_4' />
 <h3>Using &ldquo;Payback Ratio&rdquo; to transform classification into regression</h3>
 
 <p>The modelling outcome that we&rsquo;ve used thus far is a categorical one: a &ldquo;Fully Paid&rdquo; loan is assigned the label 1, and a loan that has defaulted is assigned the label 0. By replacing this outcome with a continuous &ldquo;payback ratio&rdquo; measure, we can investigate the use of regression techniques.</p>

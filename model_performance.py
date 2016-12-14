@@ -14,11 +14,16 @@ for filename in ('model_performance_2.txt',
                  'model_performance_2c.txt',
                  'model_performance_2d.txt',
                  'model_performance_2e.txt',
+                 'model_performance_2f.txt',
+#                 'model_performance_2g.txt',
+                 'model_performance_2h.txt',
+#                 'model_performance_2i.txt',
              ):
     print "loading", filename
     for line in open(filename, 'r'):
         d = json.loads(line)
         model_performance[d['name']] = d['perf']
+            
 
 baseline_models = {
     'auc': 'LogReg_CV balanced',
@@ -35,7 +40,7 @@ print "html"
 h = open('docs/model_performance_table.js', 'w')
 for k, d in sorted(model_performance.items()):
     s = "<tr><th>%s</th>" % (k, )
-    for k2 in ('auc', 'f1', 'prec', 'score', 'test_f1_inv', 'test_prec_inv', 'test_score',) :
+    for k2 in ('auc', 'test_f1_inv', 'test_prec_inv', 'test_score',) :
         v = d[k2]
     
         if k2 in ('baseline', 'test_profit', 'elapsed', 'timestamp', 'model_group'):

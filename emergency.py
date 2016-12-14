@@ -263,7 +263,7 @@ for gamma in (0.0001,):
                              model_group='SVC',
                              model_name="SVC C=" + str(C) + " g=" + str(gamma))
         
-logfile_name='model_performance_2g.txt'
+logfile_name='model_performance_2i.txt'
         
 for gamma in (0.5,):
     for C in 10 ** np.arange(-2.0, 2.1, 2.0):
@@ -273,7 +273,18 @@ for gamma in (0.5,):
                                          C=C, gamma=gamma),
                              model_group='SVC',
                              model_name="SVC C=" + str(C) + " g=" + str(gamma))
+
+logfile_name='model_performance_2j.txt'
         
+for gamma in (0.1,):
+    for C in 10 ** np.arange(-2.0, 2.1, 2.0):
+        print C, gamma, datetime.datetime.now()
+        eval_model_all_years(lambda: SVC(class_weight='balanced',
+                                         probability=True,
+                                         C=C, gamma=gamma),
+                             model_group='SVC',
+                             model_name="SVC C=" + str(C) + " g=" + str(gamma))
+
 
 # NOT YET LAUNCHED
 
@@ -284,3 +295,32 @@ for learning_rate in (0.1,):
                                  model_group='GBC',
                                  model_name='GBC %d/%d/%f' % (n_est, max_depth, learning_rate,))
         
+# Where are we with SVC?
+'''
+One window: gamma=0.0001, C=10^-2 (10:48-13:09)
+            gamma=0.0001, C=10^0  (13:09-...)
+            gamma=0.0001, C=10^+2 (...)
+
+One window: gamma=0.5,    C=10^-2 (10:52-...)
+                          C=10^0  (...)
+                          C=10^+2 (...)
+
+One window: gamma=0.001,  C=10^-2 (10:46-13:08)
+            gamma=0.001,  C=10^0  (13:08-...)
+            gamma=0.001,  C=10^+2 (...-...)
+Can kill when: gamma=0.01,   C=10^-2 (...)
+            gamma=0.01,   C=10^0  (...)
+            gamma=0.01,   C=10^+2 (...)
+Can kill when: g.=0.1,    C=10^-2 (...)
+            gamma=0.1,    C=10^0  (...)
+            gamma=0.1,    C=10^+2 (...)
+
+One window: gamma=0.1,    C=10^-2 (...)
+            gamma=0.1,    C=10^0  (...)
+            gamma=0.1,    C=10^+2 (...)
+
+One window: gamma=0.01,    C=10^-2 (...)
+            gamma=0.01,    C=10^0  (...)
+            gamma=0.01,    C=10^+2 (...)
+
+'''

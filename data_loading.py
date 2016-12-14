@@ -26,7 +26,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 from IPython.display import display, HTML
 
-do_matrix = 'skip_matrix' not in global
+do_matrix = 'skip_matrix' not in globals()
 
 # In[28]:
 

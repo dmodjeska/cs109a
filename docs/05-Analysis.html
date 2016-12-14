@@ -52,10 +52,11 @@ using the test data set.</p>
  <li>For most metrics, we use the <b>Always 1</b> model, which has an
   F1 score of 0.918, a classification accuracy of 0.848 (the fraction
   which are paid in full), and a precision of 0.848.</li>
- <li>For the AUC, the "Always 1" model is degenerate, so we use
-  the <b>balanced, cross-validated Logistic Regression</b> model,
+ <li>For AUC, the "Always 1" model does not offer an informative baseline, since AUC is simply 0.5. 
+  To obtain a more informative baseline for AUC,
+  we use the <b>balanced, cross-validated Logistic Regression</b> model,
   which is a simple model that allows us to choose the tradeoff
-  between precision and recall. It has AUC=0.657</li>
+  between precision and recall. This model has AUC = 0.657</li>
 </ul>
 
 <p>Note that in cases where we optimized model hyperparameters using a

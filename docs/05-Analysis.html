@@ -56,7 +56,7 @@ red.</em></p>
 grid of values, all the values <!--only the optimal hyperparameters-->
 are represented in this report.</p>
 
-<p>Two groups of models stand out for performance:</p>
+<p>Certain groups of models stand out for performance:</p>
 
 <ul>
   <li>The <b>Support Vector Classifier</b> (with an RBF kernel) has
@@ -75,6 +75,9 @@ are represented in this report.</p>
   result is as high as 0.664. These results almost match those from
   SVC -- it is possible that additional estimators could give GBC an
   edge over SVC.</li>
+
+  <li>The <b>Random Forest Classifier</b> at best achieves precision
+  on the test set of about .893</li>
 </ul>
   
 <p>Some other model groups exceed the baseline in some way, but they
@@ -91,9 +94,13 @@ have weaknesses that may undercut their usefulness in general:</p>
   but low AUC and low test classification accuracy.</li>
 
   <li>Some <b>NLP</b> models did well in the F1 and overall scores of
-  the test set; but because the NLP models represent only a loan
-  subset, with different default properties and frequencies, we cannot
-  directly compare these results to the baselines.</li>
+  the test set; but because the NLP models represent only a subset of
+  the population of loans under consideration, with different rates of
+  loan defaults and different distributions against the core
+  predictors, we cannot directly compare these results to the
+  baselines. They are therefore omitted from the summaries below, but
+  were discussed in <a href="04-Modeling.html#NLP">the previous
+  section</a>.</li>
 </ul>
   
 <p><em>In summary, using AUC as our metric, the SVC and GBC models

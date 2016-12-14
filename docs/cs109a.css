@@ -70,7 +70,6 @@ table tr:nth-of-type(odd) {
 }
 
 td.better {
-    font-weight: bold;
     background-color: #ffd0d0;
 }
 

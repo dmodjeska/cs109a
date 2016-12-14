@@ -38,10 +38,12 @@
 
 <p>Two groups of models stand out for performance.</p>
 
-* <p>The <b>Support Vector Classifier</b> (with an RBF kernel) has the highest AUC overall, at 0.666, irregardless of hyperparameter value. <i>C</i>. This model group does not do particularly well with metrics other than AUC, however. SVC performance lets us improve precision with the lowest cost in recall; but based on F1 and accuracy scores in the test data, this model group doesn't start with a strong minimum. (Given additional research time, we would also experiment with <i>gamma</i> values, which might improve performance further.)</p>
+  <ul>
+<li>The <b>Support Vector Classifier</b> (with an RBF kernel) has the highest AUC overall, at 0.666, irregardless of hyperparameter value. <i>C</i>. This model group does not do particularly well with metrics other than AUC, however. SVC performance lets us improve precision with the lowest cost in recall; but based on F1 and accuracy scores in the test data, this model group doesn't start with a strong minimum. (Given additional research time, we would also experiment with <i>gamma</i> values, which might improve performance further.)</li>
 
-* <p>The <b>Gradient Booster Classifier</b> group of models are competitive in AUC for some hyperparameter values. With 100 estimators, the AUC range is 0.659--0.662; with 500 estimators, the result is as high as 0.664. These results almost match those from SVC -- it is possible that additional estimators could give GBC an edge over SVC.</p>
-
+<li>The <b>Gradient Booster Classifier</b> group of models are competitive in AUC for some hyperparameter values. With 100 estimators, the AUC range is 0.659--0.662; with 500 estimators, the result is as high as 0.664. These results almost match those from SVC -- it is possible that additional estimators could give GBC an edge over SVC.</li>
+  </ul>
+  
 <p>Some other model groups exceed the baseline in some way, but they have weaknesses that may undercut their usefulness in general.</p>
 
 <p>The <b>Decision Tree Classifier</b> models scored well vis-a-vis precision on the test set, but were weak in other measures. Given that we have aimed to maximize precision, these models are worth considering.</p>

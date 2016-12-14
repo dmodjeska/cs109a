@@ -32,8 +32,28 @@
 
 <h3>Summary comparison of all models:</h3>
 
-  <p style="margin-left:5%;"><em>Note: results that exceed baseline models are shown in pink below.</em></p>
+<p>The following table and bar charts compare all the models in our notebook. For most metrics, we take as our baseline the balanced cross-validated logistic regression model, which has an AUC of 0.657, a test F1 of 0.534, and a test precision of 0.781. For the classification accuracy, we take as our baseline the .848 rate that we get from the "Always 1" model, along with all of the unbalanced models. <b>In each case, values that surpass our benchmark are highlighted in red.</b></p>
   
+<p>Note that in cases where we use a grid of values for the hyperparameter, all the values are represented in this report.</p>
+
+<p>Two groups of models stand out.</p>
+
+<p>The <b>Support Vector Classifier</b> (with an RBF kernel) has the highest AUC, at 0.666, regardless of the value of the parameter <i>C</i>. It does not do particularly well in any of the other metrics, however. This gives us the ability to improve precision with the lowest cost in terms of recall, but based on the F1 and accuracy scores in the test data, we're not starting from a particularly strong point. We did not have time to experiment with the value of <i>gamma</i>, which could improve performance further.</p>
+
+<p>The <b>Gradient Booster Classifier</b> class of models has, for some values of the hyperparameters, a competitive AUC. With 100 estimators we get 0.659--0.662, and with 500 estimators we get as high as 0.664. These are almost as good as the SVC, and it is possible that adding even more estimators could give GBC an edge over SVC.</p>
+
+<p>Some other groups of models exceed the benchmark in some way but have other weaknesses which may render them not useful in general.</p>
+
+<p>The <b>Decision Tree Classifier</b> models scored well vis-a-vis precision on the test set, but were weak in other measures. Given that we have been looking to maximize precision, these models are worth considering.</p>
+
+<p>Some of the <b>polynomial balanced Logistic Regression Classifiers with limited feature inputs</b> have high test F1 and precision scores, but have low AUC and low test classification accuracy.</p>
+
+<p>Some of the NLP models scored highly in the F1 and overall scores of the test set, but because they are dealing with a subset of the loans, with different default properties and frequencies, we cannot directly compare them to the baselines.</p>
+  
+<p><b>In summary, we find that, using AUC as our metric, the SVC and GBC outperform the baseline model by about the same amount -- each with an AUC about 0.666, compared to 0.657 for the baseline model.</b> They both have reasonable but not great values for the other metrics.</p>
+
+<p><a href="#continued">[Skip to next paragraph]</a></p>
+
 <div class='summary_table'>
 <a></a><a></a><table><thead><tr><th>Model</th>
 <th>auc</th>
@@ -211,13 +231,23 @@
 <tr><th>Stack Tree balanced (mixed)</th><td>0.540</td><td>0.805</td><td>0.808</td><td>0.690</td><td>0.374</td><td class='better'>0.815</td><td>0.689</td></tr>
 </tbody></table>
 </div>
+<p><a href="#continued">[Skip to next paragraph]</a></p>
+
+<h4>ROC Area Under Curve comparison</h4>
 
 <p><img src="images/score_auc.png"  style="width: 90%;"></p>
+<p><a href="#continued">[Skip to next paragraph]</a></p>
+
+<h4>Test Classification Accuracy comparison</h4>
 
 <p><img src="images/score_test_score.png" style="width: 90%;"></p>
+<p><a href="#continued">[Skip to next paragraph]</a></p>
+
+<h4>Test Precision comparison</h4>
 
 <p><img src="images/score_test_prec.png" style="width: 90%;"></p>
 
+<a name='continued' />
 <h3>Using &ldquo;Payback Ratio&rdquo; to transform classification into regression</h3>
 
 <p>The modelling outcome that we&rsquo;ve used thus far is a categorical one: a &ldquo;Fully Paid&rdquo; loan is assigned the label 1, and a loan that has defaulted is assigned the label 0. By replacing this outcome with a continuous &ldquo;payback ratio&rdquo; measure, we can investigate the use of regression techniques.</p>

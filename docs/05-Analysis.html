@@ -25,42 +25,88 @@
 
 <h2>Part 5: Modeling Analysis</h2>
 
-<p>In this part, we will compare the models developed in the part 4 with each other. On the basis of the strongest model(s), we will look at the predictors that most influence results.</p>
+<p>In this part, we will compare the models developed in the part 4
+with each other. On the basis of the strongest model(s), we will look
+at the predictors that most influence results.</p>
 
-<p>We will also explore how participants in the Lending Club ecology have varying criteria for success. For example, the Lending Club institution wishes to improve their grading algorithm and set interest rates commensurate with risk. An individual investor, by contrast, wishes to minimize the likelihood of default. Alternatively, an investor may wish to maximize their total return, taking into account that a default often follows a history of partial payments, thereby generating positive revenue. Choosing an appropriate loss function affects selection of the most successful model, which is the focus of this final report part.</p>
+<p>We will also explore how participants in the Lending Club ecology
+have varying criteria for success. For example, the Lending Club
+institution wishes to improve their grading algorithm and set interest
+rates commensurate with risk. An individual investor, by contrast,
+wishes to minimize the likelihood of default. Alternatively, an
+investor may wish to maximize their total return, taking into account
+that a default often follows a history of partial payments, thereby
+generating positive revenue. Choosing an appropriate loss function
+affects selection of the most successful model, which is the focus of
+this final report part.</p>
 
 
 <h3>Summary comparison of all models:</h3>
 
-<p>The following table and bar charts compare all of the models in our notebook. For most metrics, we take as a baseline the balanced cross-validated logistic regression model, which has an AUC of 0.657, a test F1 of 0.534, and a test precision of 0.781. For classification accuracy, we take as a baseline the .848 rate resulting from the "Always 1" model (as well as all of the unbalanced models). <em>In each case, results that surpass our benchmark are highlighted in red.</em></p>
+<p>The following table and bar charts compare all of the models in our
+notebook. For most metrics, we take as a baseline the balanced
+cross-validated logistic regression model, which has an AUC of 0.657,
+a test F1 of 0.534, and a test precision of 0.781. For classification
+accuracy, we take as a baseline the .848 rate resulting from the
+"Always 1" model (as well as all of the unbalanced models). <em>In
+each case, results that surpass our benchmark are highlighted in
+red.</em></p>
   
-<p>Note that in cases where we optimized model hyperparameters using a grid of values, only the optimal hyperparameters are represented in this report.</p>
+<p>Note that in cases where we optimized model hyperparameters using a
+grid of values, all the values <!--only the optimal hyperparameters-->
+are represented in this report.</p>
 
 <p>Two groups of models stand out for performance:</p>
 
-  <ul>
-<li>The <b>Support Vector Classifier</b> (with an RBF kernel) has the highest AUC overall, at 0.666, irregardless of hyperparameter value. <i>C</i>. This model group does not do particularly well with metrics other than AUC, however. SVC performance lets us improve precision with the lowest cost in recall; but based on F1 and accuracy scores in the test data, this model group doesn't start with a strong minimum. (Given additional research time, we would also experiment with <i>gamma</i> values, which might improve performance further.)</li>
+<ul>
+  <li>The <b>Support Vector Classifier</b> (with an RBF kernel) has
+  the highest AUC overall, at 0.666, irregardless of hyperparameter
+  value. <i>C</i>. This model group does not do particularly well with
+  metrics other than AUC, however. SVC performance lets us improve
+  precision with the lowest cost in recall; but based on F1 and
+  accuracy scores in the test data, this model group doesn't start
+  with a strong minimum. (Given additional research time, we would
+  also experiment with <i>gamma</i> values, which might improve
+  performance further.)</li>
 
-<li>The <b>Gradient Booster Classifier</b> group of models are competitive in AUC for some hyperparameter values. With 100 estimators, the AUC range is 0.659--0.662; with 500 estimators, the result is as high as 0.664. These results almost match those from SVC -- it is possible that additional estimators could give GBC an edge over SVC.</li>
-  </ul>
-  
-<p>Some other model groups exceed the baseline in some way, but they have weaknesses that may undercut their usefulness in general:</p>
-
-  <ul>
-<li>The <b>Decision Tree Classifier</b> models scored well vis-a-vis precision on the test set, but were weak in other measures. Given that we have aimed to maximize precision, these models are worth considering.</li>
-
-<li>Some <b>polynomial balanced Logistic Regression Classifiers with limited feature inputs</b> have high test F1 and precision scores, but low AUC and low test classification accuracy.</li>
-
-<li>Some <b>NLP</b> models did well in the F1 and overall scores of the test set; but because the NLP models represent only a loan subset, with different default properties and frequencies, we cannot directly compare these results to the baselines.</li>
+  <li>The <b>Gradient Booster Classifier</b> group of models are
+  competitive in AUC for some hyperparameter values. With 100
+  estimators, the AUC range is 0.659--0.662; with 500 estimators, the
+  result is as high as 0.664. These results almost match those from
+  SVC -- it is possible that additional estimators could give GBC an
+  edge over SVC.</li>
 </ul>
   
-<p><em>In summary, using AUC as our metric, the SVC and GBC models outperform the baseline model by about the same amount -- each with an AUC around 0.666, compared to 0.657 for the baseline model.</em> Both SVC and GBC models have reasonable but not excellent values for other metrics.</p>
+<p>Some other model groups exceed the baseline in some way, but they
+have weaknesses that may undercut their usefulness in general:</p>
 
-<p><a href="#continued_1">[Skip to ROC Area Under Curve]</a></p>
+<ul>
+  <li>The <b>Decision Tree Classifier</b> models scored well vis-a-vis
+  precision on the test set, but were weak in other measures. Given
+  that we have aimed to maximize precision, these models are worth
+  considering.</li>
+
+  <li>Some <b>polynomial balanced Logistic Regression Classifiers with
+  limited feature inputs</b> have high test F1 and precision scores,
+  but low AUC and low test classification accuracy.</li>
+
+  <li>Some <b>NLP</b> models did well in the F1 and overall scores of
+  the test set; but because the NLP models represent only a loan
+  subset, with different default properties and frequencies, we cannot
+  directly compare these results to the baselines.</li>
+</ul>
+  
+<p><em>In summary, using AUC as our metric, the SVC and GBC models
+outperform the baseline model by about the same amount -- each with an
+AUC around 0.666, compared to 0.657 for the baseline model.</em> Both
+SVC and GBC models have reasonable but not excellent values for other
+metrics.</p>
+
+<p><a href="#continued_1">[Skip to <i>ROC Area Under Curve</i>]</a></p>
 
 <h4>Modelling Results</h4>
   
-<p style="margin-left:5%;font-family:Verdana,sans-serif;"><em> Red cells indicate results exceeding baseline.</em></p>
+<p class='model-note'>Red cells indicate results exceeding baseline.</p>
   
 <div class='summary_table'>
 <a></a><a></a><table><thead><tr><th>Model</th>
@@ -240,65 +286,135 @@
 <tr><th>Stack Tree balanced (mixed)</th><td>0.540</td><td>0.805</td><td>0.808</td><td>0.690</td><td>0.374</td><td class='better'>0.815</td><td>0.689</td></tr>
 </tbody></table>
 </div>
-<p><a href="#continued_2">[Skip to Test Classification Accuracy]</a></p>
 
-  <a name='continued_1' />
+<a name='continued_1' />
+<p><a href="#continued_2">[Skip to <i>Test Classification Accuracy</i>]</a></p>
+
   
 <h4 style="margin-top: 3%;">ROC Area Under Curve</h4>
 
-<p style="margin-left:15%;font-family:Verdana,sans-serif;"><em> Red bars indicate results exceeding baseline.</em></p>
+<p class='model-note'>Red cells indicate results exceeding baseline.</p>
   
 <p><img src="images/score_auc.png"  style="width: 90%;"></p>
-<p><a href="#continued_3">[Skip to Test Precision]</a></p>
+<a name='continued_2' />
+<p><a href="#continued_3">[Skip to <i>Test Precision</i>]</a></p>
 
-  <a name='continued_2' />
-  
-  <br>
-  
 <h4 style="margin-top: 2%;">Test Classification Accuracy</h4>
 
-<p style="margin-left:15%;font-family:Verdana,sans-serif;"><em> Red bars indicate results exceeding baseline.</em></p>
+<p class='model-note'>Red cells indicate results exceeding baseline.</p>
   
 <p><img src="images/score_test_score.png" style="width: 90%;"></p>
-<p><a href="#continued_4">[Skip to Using Payback Ratio]</a></p>
+<a name='continued_3' />
+<p><a href="#continued_4">[Skip to <i>Using Payback Ratio</i>]</a></p>
 
-  <a name='continued_3' />
-  
-  <br>
   
 <h4 style="margin-top: 2%;">Test Precision</h4>
 
-<p style="margin-left:15%;font-family:Verdana,sans-serif;"><em> Red bars indicate results exceeding baseline.</em></p>
+<p class='model-note'>Red cells indicate results exceeding baseline.</p>
   
 <p><img src="images/score_test_prec.png" style="width: 90%;"></p>
 
 <a name='continued_4' />
 <h3 style="margin-top:2%;">Using &ldquo;Payback Ratio&rdquo; to transform classification into regression</h3>
 
-<p>The modelling outcome that we&rsquo;ve used thus far is a categorical one: a &ldquo;Fully Paid&rdquo; loan is assigned the label 1, and a loan that has defaulted is assigned the label 0. By replacing this outcome with a continuous &ldquo;payback ratio&rdquo; measure, we can investigate the use of regression techniques.</p>
+<p>The modelling outcome that we&rsquo;ve used thus far is a
+categorical one: a &ldquo;Fully Paid&rdquo; loan is assigned the label
+1, and a loan that has defaulted is assigned the label 0. By replacing
+this outcome with a continuous &ldquo;payback ratio&rdquo; measure, we
+can investigate the use of regression techniques.</p>
 
-<p>We define the payback ratio as follows: For any given loan, the amount that has been paid by the borrower is the sum of three data columns: &ldquo;total received principal&rdquo;, &ldquo;total received interest&rdquo;, and &ldquo;total received late fees&rdquo;. In addition, the amount that a borrower is expected to pay is the value in the &ldquo;installment&rdquo; column times the overall number of payments. We have previously filtered loans to 36-month terms earlier in this modeling pipeline. The ratio of &ldquo;actual payments&rdquo; / &ldquo;expected payments&rdquo; is the raw payback ratio. This ratio is compatible with category labels of 0 and 1: a loan that is paid as expected will result in &ldquo;1&rdquo; using both approaches, and a loan in which the borrower &ldquo;takes the money and runs&rdquo; will result in &ldquo;0&rdquo; with both approaches. </p>
+<p>We define the payback ratio as follows: For any given loan, the
+amount that has been paid by the borrower is the sum of three data
+columns: &ldquo;total received principal&rdquo;, &ldquo;total received
+interest&rdquo;, and &ldquo;total received late fees&rdquo;. In
+addition, the amount that a borrower is expected to pay is the value
+in the &ldquo;installment&rdquo; column times the overall number of
+payments. We have previously filtered loans to 36-month terms earlier
+in this modeling pipeline. The ratio of &ldquo;actual payments&rdquo;
+/ &ldquo;expected payments&rdquo; is the raw payback ratio. This ratio
+is compatible with category labels of 0 and 1: a loan that is paid as
+expected will result in &ldquo;1&rdquo; using both approaches, and a
+loan in which the borrower &ldquo;takes the money and runs&rdquo; will
+result in &ldquo;0&rdquo; with both approaches. </p>
 
-<p>We will need to make one further adjustment. If a loan is paid off early, then the &ldquo;actual payments&rdquo; will be less than the &ldquo;expected payments&rdquo; but the time value of money will make up the difference -- since the loan was repaid early, the money can be reinvested, and no loss is incurred by the investor. Consequently, for loans that are &ldquo;Fully Paid&rdquo; we take the payment ratio to be 1, and it is only for written-off loans that we compute the actual payment ratio.</p>
+<p>We will need to make one further adjustment. If a loan is paid off
+early, then the &ldquo;actual payments&rdquo; will be less than the
+&ldquo;expected payments&rdquo; but the time value of money will make
+up the difference -- since the loan was repaid early, the money can be
+reinvested, and no loss is incurred by the investor. Consequently, for
+loans that are &ldquo;Fully Paid&rdquo; we take the payment ratio to
+be 1, and it is only for written-off loans that we compute the actual
+payment ratio.</p>
 
-<p>Having defined our continuous outcome, we can now employ linear regression (with various basis functions) for modelling. Our first attempt is with cross-validated Ridge regression, which gives a test R<sup>2</sup> of 0.036 -- not an encouraging result. (This is nevertheless much better than the result from unregularized linear regression, which gives a test R<sup>2</sup> of only 0.006. Cross-validated Lasso gives a test R<sup>2</sup> of 0.014.)</p>
+<p>Having defined our continuous outcome, we can now employ linear
+regression (with various basis functions) for modelling. Our first
+attempt is with cross-validated Ridge regression, which gives a test
+R<sup>2</sup> of 0.036 -- not an encouraging result. (This is
+nevertheless much better than the result from unregularized linear
+regression, which gives a test R<sup>2</sup> of only 0.006.
+Cross-validated Lasso gives a test R<sup>2</sup> of 0.014.)</p>
 
-<p>We try again with cross-terms and, for the continuous predictors, polynomial terms up to ninth degree -- all of these give increasingly negative values for the test R<sup>2</sup>.</p>
+<p>We try again with cross-terms and, for the continuous predictors,
+polynomial terms up to ninth degree -- all of these give increasingly
+negative values for the test R<sup>2</sup>, and are therefore rejected.</p>
 
-<p>Finally, we try using a cutoff to transform our linear regression model back to a classification problem. This approach does not perform well, with an AUC of 0.536:</p>
+<p>Finally, we try using a cutoff to transform our linear regression
+model back to a classification problem. This approach does not perform
+well, with an AUC of 0.536:</p>
 
 <p><img src="images/image17.png" style="width: 40%;"></p>
 
 <h3>Modelling goals and success opportunities</h3>
 
-<p>In Part 2 of this report, we discussed the problem posed by the selection bias in this data. In particular, because the corpus includes only approved loans, we cannot assess whether our model correctly reduces the proportion of false negatives. Consequently, the only way to improve our classification rate is to reduce the proportion of false positives. If that task were easy, the existing LC models would have already eliminated these false positives from the Kaggle data set. Our models have unfortunately little to offer Lending Club as an organization.</p>
+<p>In Part 2 of this report, we discussed the problem posed by the
+selection bias in this data. In particular, because the corpus
+includes only approved loans, we cannot assess whether our model
+correctly reduces the proportion of false negatives. Consequently, the
+only way to improve our classification rate is to reduce the
+proportion of false positives. If that task were easy, the existing LC
+models would have already eliminated these false positives from the
+Kaggle data set. Our models have unfortunately little to offer Lending
+Club as an organization.</p>
 
-<p>On the other hand, there is a relevant principle to follow: &ldquo;I don&rsquo;t have to outrun the bear, I only have to outrun you&rdquo;. Nate Silver makes a similar observation in his book <em>The Signal and The Noise</em> (Penguin, 2015). So we can definitely offer value to the individual Lending Club member. Say that a member wishes to invest an arbitrary amount of money, with a maximum established for the risk placed on any one loan. We can choose one of our models and use it to rank all available loans in order of probability of being paid in full. We can then allocate the maximum per-loan amount (or the remaining to-be-funded balance) on the top-ranked loans until the member&rsquo;s resources are fully allocated. This triage approach would serve as a sort of intermediary or para-advisor between Lending Club and the individual investor, sorting out complexity, reducing uncertainty, and increasing confidence in the process.</p>
+<p>On the other hand, there is a relevant principle to follow:
+&ldquo;I don&rsquo;t have to outrun the bear, I only have to outrun
+you&rdquo;. Nate Silver makes a similar observation in his
+book <em>The Signal and The Noise</em> (Penguin, 2015). So we can
+definitely offer value to the individual Lending Club member. Say that
+a member wishes to invest an arbitrary amount of money, with a maximum
+established for the risk placed on any one loan. We can choose one of
+our models and use it to rank all available loans in order of
+probability of being paid in full. We can then allocate the maximum
+per-loan amount (or the remaining to-be-funded balance) on the
+top-ranked loans until the member&rsquo;s resources are fully
+allocated. This triage approach would serve as a sort of intermediary
+or para-advisor between Lending Club and the individual investor,
+sorting out complexity, reducing uncertainty, and increasing
+confidence in the process.</p>
 
 <h3>Future Research</h3>
 
-<p>Future research suggested by this work would proceed in two primary directions. Both of these directions are broadly investor-side. First, it would be useful to validate the benefit of priority ranking approved loans as a route to financial gain. This validation would likely lead to model refinements and perhaps tuning of the data science pipeline on the basis of investor feedback. Second, it would be highly useful to investigate the nature of unapproved loans with Lending Club. An external researcher might potentially obtain a large budget to deliberately fund loans with a high probability of default, in order to study their properties and to assess the model&rsquo;s true recall rate. By contrast, Lending Club itself might make data available for unfunded loans, sanitized with particular care. </p>
+<p>Future research suggested by this work would proceed in two primary
+directions. Both of these directions are broadly investor-side. First,
+it would be useful to validate the benefit of priority ranking
+approved loans as a route to financial gain. This validation would
+likely lead to model refinements and perhaps tuning of the data
+science pipeline on the basis of investor feedback. Second, it would
+be highly useful to investigate the nature of unapproved loans with
+Lending Club. An external researcher might potentially obtain a large
+budget to deliberately fund loans with a high probability of default,
+in order to study their properties and to assess the model&rsquo;s
+true recall rate. By contrast, Lending Club itself might make data
+available for unfunded loans, sanitized with particular care. </p>
 
-<p>More purely technical future research could be productive as well. For example, deep learning approaches (such as neural networks) could be investigated for their utility in extracting additional signal from the noisy LC data. As another example, additional external economic indicators could be examined, in case certain aspects of loan context would shed light on loan performance. In particular, deriving economic predictors from zip codes, analogous to our national economic indicators derived from loan issue date, could be a fruitful line of inquiry.</p>
+<p>More purely technical future research could be productive as well.
+For example, deep learning approaches (such as neural networks) could
+be investigated for their utility in extracting additional signal from
+the noisy LC data. As another example, additional external economic
+indicators could be examined, in case certain aspects of loan context
+would shed light on loan performance. In particular, deriving economic
+predictors from zip codes, analogous to our national economic
+indicators derived from loan issue date, could be a fruitful line of
+inquiry.</p>
 
 </body>

@@ -71,8 +71,20 @@ table tr:nth-of-type(odd) {
 
 td.better {
     background-color: #ffd0d0;
+    font-weight: bold
 }
 
 ul.toc {
     margin-bottom: 2%;
 }
+
+p.model-note {
+    margin-left: 5%;
+    font-family: Verdana,sans-serif;
+    font-style: italic;
+}
+
+a:visited {
+    color: blue;
+}
+

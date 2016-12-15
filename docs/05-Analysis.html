@@ -79,13 +79,13 @@ models.</p>
 
   <li>The <b>Gradient Booster Classifier</b> group of models are
   competitive in AUC for some hyperparameter values. With 100
-  estimators, the AUC range is 0.659--0.662; with 500 estimators, the
+  estimators, the AUC range is 0.659&ndash;0.662; with 500 estimators, the
   result is as high as 0.664. These results almost match those from
-  SVC -- it is possible that additional estimators could give GBC an
+  SVC &ndash; it is possible that additional estimators could give GBC an
   edge over SVC.</li>
 
-  <li>The <b>Balanced Cross-Validated Logistic Regression</b> model
-  -- which we had chosen as our baseline for the AUC, turns out to
+  <li>The <b>Balanced Cross-Validated Logistic Regression</b> model,
+  which we had chosen as our baseline for the AUC, turns out to
   be the model with the best precision on the test data set. Sometimes,
   the simplest model is the best.</li>
 </ul>
@@ -96,12 +96,13 @@ have weaknesses that may undercut their usefulness in general:</p>
 <ul>
   <li>The <b>Decision Tree Classifier</b> models scored well vis-a-vis
   precision on the test set, but were weak in other measures. Given
-  that we have aimed to maximize precision, these models are worth
-  considering.</li>
+  that other models (notably the Logistic Regression) have even better
+  precision, the DTCs as individual models are not strong.</li>
 
   <li>Some <b>polynomial balanced Logistic Regression Classifiers with
-  limited feature inputs</b> have high test F1 and precision scores,
-  but low AUC and low test classification accuracy.</li>
+  limited feature inputs</b> are nearly as good as the basic balanced
+  cross-validated Logistic Regression classifier when measured by precision,
+  but their F1 and overall classification scores do not recommend them.</li>
 
   <li>Some <b>NLP</b> models did well in the F1 and overall scores of
   the test set; but because the NLP models represent only a subset of
@@ -114,7 +115,7 @@ have weaknesses that may undercut their usefulness in general:</p>
 </ul>
   
 <p><em>In summary, using AUC as our metric, the SVC and GBC models
-outperform the baseline model by about the same amount -- each with an
+outperform the baseline model by about the same amount &ndash; each with an
 AUC around 0.666, compared to 0.657 for the baseline model.</em> Both
 SVC and GBC models have reasonable but not excellent values for other
 metrics. Precision is commonly better than the baseline, even without
@@ -190,7 +191,7 @@ result in &ldquo;0&rdquo; with both approaches. </p>
 <p>We will need to make one further adjustment. If a loan is paid off
 early, then the &ldquo;actual payments&rdquo; will be less than the
 &ldquo;expected payments&rdquo; but the time value of money will make
-up the difference -- since the loan was repaid early, the money can be
+up the difference &ndash; since the loan was repaid early, the money can be
 reinvested, and no loss is incurred by the investor. Consequently, for
 loans that are &ldquo;Fully Paid&rdquo; we take the payment ratio to
 be 1, and it is only for written-off loans that we compute the actual
@@ -199,13 +200,13 @@ payment ratio.</p>
 <p>Having defined our continuous outcome, we can now employ linear
 regression (with various basis functions) for modelling. Our first
 attempt is with cross-validated Ridge regression, which gives a test
-R<sup>2</sup> of 0.036 -- not an encouraging result. (This is
+R<sup>2</sup> of 0.036 &ndash; not an encouraging result. (This is
 nevertheless much better than the result from unregularized linear
 regression, which gives a test R<sup>2</sup> of only 0.006.
 Cross-validated Lasso gives a test R<sup>2</sup> of 0.014.)</p>
 
 <p>We try again with cross-terms and, for the continuous predictors,
-polynomial terms up to ninth degree -- all of these give increasingly
+polynomial terms up to ninth degree &ndash; all of these give increasingly
 negative values for the test R<sup>2</sup>, and are therefore rejected.</p>
 
 <p>Finally, we try using a cutoff to transform our linear regression

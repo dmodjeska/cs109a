@@ -18,6 +18,7 @@ Peer-to-peer loans issued by the Lending Club (LC) require investors to analyze 
 * Modelling_Framework.ipynb and modelling_framework.py: notebook and text forms of code to fit, score, and graph individual models
 * model_performance.py: render the final modelling results
 * Main.ipynb: model the loaded data using the modelling framework
+* emergency.py: A standalone python script to re-run everything in parallel at the last minute.
 
 ### Folders
 * docs: final project report in HTML format

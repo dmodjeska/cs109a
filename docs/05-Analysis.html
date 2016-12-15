@@ -94,15 +94,14 @@ models.</p>
 have weaknesses that may undercut their usefulness in general:</p>
 
 <ul>
-  <li>The <b>Decision Tree Classifier</b> models scored well vis-a-vis
-  precision on the test set, but were weak in other measures. Given
-  that other models (notably the Logistic Regression) have even better
-  precision, the DTCs as individual models are not strong.</li>
+  <li>The <b>Decision Tree Classifier</b> models scored well in precision on the test set, 
+    but they were weak in other measures. 
+    Given that other models (notably Logistic Regression) have even higher precision, 
+    the DTCs as individual models are not competitive overall.</li>
 
-  <li>Some <b>polynomial balanced Logistic Regression Classifiers with
-  limited feature inputs</b> are nearly as good as the basic balanced
-  cross-validated Logistic Regression classifier when measured by precision,
-  but their F1 and overall classification scores do not recommend them.</li>
+  <li>Some <b>polynomial balanced Logistic Regression Classifiers with limited feature inputs</b> 
+    are nearly as precise as the basic balanced cross-validated Logistic Regression classifier; 
+    but the polynomial models’  F1 and overall classification scores are not strong enough to recommend them.</li>
 
   <li>Some <b>NLP</b> models did well in the F1 and overall scores of
   the test set; but because the NLP models represent only a subset of

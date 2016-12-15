@@ -295,16 +295,16 @@ for learning_rate in (0.1,):
 
 # SVC core m
 execfile('emergency-head.py')
-logfile_name='model_performance_2m.txt'
+logfile_name='model_performance_2m1.txt'
         
-for gamma in (1/120, 1/110, 1/130):
-    for C in (1.0, 10.0, 100.0):
-        print C, gamma, datetime.datetime.now()
-        eval_model_all_years(lambda: SVC(class_weight='balanced',
-                                         probability=True,
-                                         C=C, gamma=gamma),
-                             model_group='SVC',
-                             model_name="SVC C=" + str(C) + " g=" + str(gamma))
+gamma = 1.0/120
+C=1.0
+print C, gamma, datetime.datetime.now()
+eval_model_all_years(lambda: SVC(class_weight='balanced',
+                                 probability=True,
+                                 C=C, gamma=gamma),
+                     model_group='SVC',
+                     model_name="SVC C=" + str(C) + " g=" + str(gamma))
 
 # SVC core n
 execfile('emergency-head.py')
@@ -444,7 +444,7 @@ eval_model_all_years(lambda: SVC(class_weight='balanced',
 '''
 h: gamma=0.0001, C=10^-2 (10:48-13:09)
    gamma=0.0001, C=10^0  (13:09-15:36)
-   gamma=0.0001, C=10^+2 (15:36-...)
+   gamma=0.0001, C=10^+2 (15:36-18:46) DONE
 
 i: gamma=0.5, C=10^-2 (10:52-13:47)
               C=10^0  (13:47-...)
@@ -474,7 +474,7 @@ n: gamma 1/110,  C=1
    gamma 1/110,  C=10
    gamma 1/110,  C=100
 
-o: gamma 1/130,  C=1
+o: gamma 1/130,  C=1  [19:17]
    gamma 1/130,  C=10
    gamma 1/130,  C=100
 

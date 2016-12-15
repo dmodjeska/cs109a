@@ -60,15 +60,17 @@ using the test data set.</p>
 </ul>
 
 <p>Note that in cases where we optimized model hyperparameters using a
-grid of values, all the values <!--only the optimal hyperparameters-->
-are represented in this report.</p>
+grid of values, only the hyperparameters that optimize at least one of
+our metrics are represented in this
+report. <a href='05a-Unfiltered.html'>The full report</a> contains all
+models.</p>
 
 <p>Certain groups of models stand out for performance:</p>
 
 <ul>
   <li>The <b>Support Vector Classifier</b> (with an RBF kernel) has
-  the highest AUC overall, at 0.666, for the best choices of the
-  hyperparameters <i>C</i>=1.0 and <i>gamma</i>=0<sup>+</sup>. This
+  the highest AUC overall, at 0.667, for the best choices of the
+  hyperparameters <i>C</i>=1.0 and <i>gamma</i>=0.01. This
   model group does not do particularly well with metrics other than
   AUC, however. SVC performance lets us improve precision with the
   lowest cost in recall; but based on F1 and accuracy scores in the

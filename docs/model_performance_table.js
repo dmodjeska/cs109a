@@ -139,6 +139,7 @@ document.write("<tr><th>SVC C=0.01 g=0.001</th><td>0.412</td><td>0.918</td><td>0
 document.write("<tr><th>SVC C=0.01 g=0.01</th><td>0.637</td><td>0.918</td><td>0.848</td><td>0.562</td></tr>")
 document.write("<tr><th>SVC C=0.01 g=0.1</th><td>0.635</td><td>0.918</td><td>0.848</td><td>0.641</td></tr>")
 document.write("<tr><th>SVC C=0.01 g=0.5</th><td>0.500</td><td>0.918</td><td>0.848</td><td>0.152</td></tr>")
+document.write("<tr><th>SVC C=1.0 g=0</th><td class='better'>0.666</td><td>0.918</td><td>0.848</td><td>0.609</td></tr>")
 document.write("<tr><th>SVC C=1.0 g=0.0001</th><td>0.640</td><td>0.918</td><td>0.848</td><td>0.552</td></tr>")
 document.write("<tr><th>SVC C=1.0 g=0.001</th><td>0.656</td><td>0.918</td><td>0.848</td><td>0.586</td></tr>")
 document.write("<tr><th>SVC C=100.0 g=0.0001</th><td class='better'>0.658</td><td>0.918</td><td class='better'>0.849</td><td>0.589</td></tr>")

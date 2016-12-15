@@ -1,50 +1,17 @@
-# Turns out we need to rerun everything at the last minute
-# Running it from the ipynb is not stable, is single-threaded, and is slower then running directly from the command line.
-# (Once the initial block has been copied-and-pasted into the Python interpreter,
-# you can run any of the CORE blocks -- so they can run in parallel just fine.)
-# Begin with all the necessary imports
+# Turns out we need to rerun everything at the last minute to compensate 
+# for a bug in how we were computing precision
 
-import itertools as it
-import matplotlib
-import matplotlib.cm as cmx
-import matplotlib.colors as colors
-import matplotlib.pyplot as plt
-import numpy as np
-import os.path as op
-import pandas as pd
-import re
-import scipy as sp
-import sklearn.preprocessing as Preprocessing
-import datetime
+# Running it from the ipynb is not stable, is single-threaded, and is
+# slower then running directly from the command line.
 
-from itertools import combinations
-from sklearn.cross_validation import KFold as kfold
-from sklearn.decomposition import TruncatedSVD as tSVD
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
-from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis as QDA
-from sklearn.dummy import DummyClassifier
-from sklearn.ensemble import GradientBoostingClassifier as GBC
-from sklearn.ensemble import RandomForestClassifier as RFC
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import LinearRegression as Lin_Reg
-from sklearn.linear_model import LogisticRegression as Log_Reg
-from sklearn.metrics import confusion_matrix
-from sklearn.metrics import f1_score
-from sklearn.neighbors import KNeighborsClassifier as KNN
-from sklearn.svm import SVC
-from sklearn.tree import DecisionTreeClassifier as DTC
-from scipy.io import mmread
-
-plt.style.use('ggplot') 
-
-skip_matrix = True  # save memory
-execfile('data_loading.py')
-execfile('modelling_framework.py')
-show_plots = False  # only save to disk, don't show onscreen, because we're running in batch mode
+# So we pulled out the key pieces. Each block can be copied-and-pasted
+# into one of several dozen instances of the Python interpreter (running
+# in the Anaconda virtual environment) to take advantage of multiple
+# cores on multiple computers.
 
 ### CORE 1
 
+execfile('emergency-head.py')
 logfile_name='model_performance_2a.txt'
 
 for learning_rate in (0.1, 0.01):
@@ -74,6 +41,7 @@ eval_model_all_years(lambda: GBC(n_estimators = 10, max_depth = 2, learning_rate
 
 ### CORE 2
 
+execfile('emergency-head.py')
 logfile_name='model_performance_2b.txt'
 
 from sklearn.ensemble import AdaBoostClassifier
@@ -85,6 +53,7 @@ for num_est, l_rate in ((50, 1.0), (100, 0.5), (200, 0.1), (1000, 0.01), (10000,
 
 ### CORE 3
 
+execfile('emergency-head.py')
 logfile_name='model_performance_2c.txt'
 for max_depth in range(2, 10):
   for max_features in ['sqrt']: # + list(np.arange(0.1, 0.91, 0.5)):
@@ -100,6 +69,7 @@ for max_depth in range(2, 10):
 
 ### CORE 4
 
+execfile('emergency-head.py')
 logfile_name='model_performance_2d.txt'
 for max_depth in range(4, 10):
     for poly_degree in range(2, 5):
@@ -113,6 +83,8 @@ for max_depth in range(4, 10):
                                  ' ' + str(max_depth) + '/200')      
 
 ### CORE 5
+
+execfile('emergency-head.py')
 
 class Stacking(object):
     
@@ -229,6 +201,7 @@ eval_model_all_years(lambda: Stacking(combiner, 'log_reg'), model_name = "Stack 
 
 # SVC
 
+execfile('emergency-head.py')
 logfile_name='model_performance_2f.txt'
 
 for gamma in (0.001, 0.01, 0.1):
@@ -241,6 +214,9 @@ for gamma in (0.001, 0.01, 0.1):
                              model_name="SVC C=" + str(C) + " g=" + str(gamma))
 
 
+# More SVC - core g
+
+execfile('emergency-head.py')
 logfile_name='model_performance_2g.txt'
 
 for gamma in (0.001, 0.01, 0.1):
@@ -252,6 +228,8 @@ for gamma in (0.001, 0.01, 0.1):
                              model_group='SVC',
                              model_name="SVC C=" + str(C) + " g=" + str(gamma))
 
+# SVC - core h
+execfile('emergency-head.py')
 logfile_name='model_performance_2h.txt'
         
 for gamma in (0.0001,):
@@ -263,6 +241,8 @@ for gamma in (0.0001,):
                              model_group='SVC',
                              model_name="SVC C=" + str(C) + " g=" + str(gamma))
         
+# SVC - core i
+execfile('emergency-head.py')
 logfile_name='model_performance_2i.txt'
         
 for gamma in (0.5,):
@@ -274,6 +254,8 @@ for gamma in (0.5,):
                              model_group='SVC',
                              model_name="SVC C=" + str(C) + " g=" + str(gamma))
 
+# SVC - core j
+execfile('emergency-head.py')
 logfile_name='model_performance_2j.txt'
         
 for gamma in (0.1,):
@@ -285,6 +267,8 @@ for gamma in (0.1,):
                              model_group='SVC',
                              model_name="SVC C=" + str(C) + " g=" + str(gamma))
 
+# SVC - core k
+execfile('emergency-head.py')
 logfile_name='model_performance_2k.txt'
         
 for gamma in (0.01,):
@@ -297,6 +281,9 @@ for gamma in (0.01,):
                              model_name="SVC C=" + str(C) + " g=" + str(gamma))
 
 
+# Expand hyperparam search on GBC
+# Core l
+execfile('emergency-head.py')
 logfile_name='model_performance_2l.txt'
 
 for learning_rate in (0.1,):
@@ -306,6 +293,8 @@ for learning_rate in (0.1,):
                                  model_group='GBC',
                                  model_name='GBC %d/%d/%f' % (n_est, max_depth, learning_rate,))
 
+# SVC core m
+execfile('emergency-head.py')
 logfile_name='model_performance_2m.txt'
         
 for gamma in (1/120, 1/110, 1/130):
@@ -317,6 +306,8 @@ for gamma in (1/120, 1/110, 1/130):
                              model_group='SVC',
                              model_name="SVC C=" + str(C) + " g=" + str(gamma))
 
+# SVC core n
+execfile('emergency-head.py')
 logfile_name='model_performance_2n.txt'
         
 for gamma in (1/110,):
@@ -328,6 +319,8 @@ for gamma in (1/110,):
                              model_group='SVC',
                              model_name="SVC C=" + str(C) + " g=" + str(gamma))
 
+# SVC Core o
+execfile('emergency-head.py')
 logfile_name='model_performance_2o.txt'
         
 for gamma in (1/130,):
@@ -339,6 +332,8 @@ for gamma in (1/130,):
                              model_group='SVC',
                              model_name="SVC C=" + str(C) + " g=" + str(gamma))
 
+# SVC Core p
+execfile('emergency-head.py')
 logfile_name='model_performance_2p.txt'
         
 for gamma in (10,):
@@ -350,6 +345,8 @@ for gamma in (10,):
                              model_group='SVC',
                              model_name="SVC C=" + str(C) + " g=" + str(gamma))
 
+# SVC core q
+execfile('emergency-head.py')
 logfile_name='model_performance_2q.txt'
         
 for gamma in (100,):
@@ -361,7 +358,8 @@ for gamma in (100,):
                              model_group='SVC',
                              model_name="SVC C=" + str(C) + " g=" + str(gamma))
         
-
+# SVC Core r
+execfile('emergency-head.py')
 logfile_name='model_performance_2r.txt'
         
 for gamma in (100,):
@@ -373,6 +371,8 @@ for gamma in (100,):
                              model_group='SVC',
                              model_name="SVC C=" + str(C) + " g=" + str(gamma))
         
+# SVC core s
+execfile('emergency-head.py')
 logfile_name='model_performance_2s.txt'
         
 for gamma in (.01,):
@@ -384,6 +384,8 @@ for gamma in (.01,):
                              model_group='SVC',
                              model_name="SVC C=" + str(C) + " g=" + str(gamma))
 
+# SVC core t
+execfile('emergency-head.py')
 logfile_name='model_performance_2t.txt'
         
 for gamma in (.01,):
@@ -396,6 +398,7 @@ for gamma in (.01,):
                              model_name="SVC C=" + str(C) + " g=" + str(gamma))
 
 
+# SVC core i got missed -- redo it here, broken into 3
 execfile('emergency-head.py')
 logfile_name='model_performance_2i.txt'
         
@@ -409,6 +412,7 @@ eval_model_all_years(lambda: SVC(class_weight='balanced',
                      model_name="SVC C=" + str(C) + " g=" + str(gamma))
 
 
+# SVC core i2
 execfile('emergency-head.py')
 logfile_name='model_performance_2i2.txt'
         
@@ -422,6 +426,7 @@ eval_model_all_years(lambda: SVC(class_weight='balanced',
                      model_name="SVC C=" + str(C) + " g=" + str(gamma))
 
 
+# SVC core i3
 execfile('emergency-head.py')
 logfile_name='model_performance_2i3.txt'
         
@@ -435,7 +440,7 @@ eval_model_all_years(lambda: SVC(class_weight='balanced',
                      model_name="SVC C=" + str(C) + " g=" + str(gamma))
 
 
-# Where are we with SVC?
+# Keep track of our status
 '''
 h: gamma=0.0001, C=10^-2 (10:48-13:09)
    gamma=0.0001, C=10^0  (13:09-15:36)

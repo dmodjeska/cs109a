@@ -8,7 +8,7 @@
 <br>
 
 ### Report
-* [Report with initial context, data collection, data exploration, data modeling, and data analysis](https://dmodjeska.github.io/cs109a/docs/)
+* [Report with initial context; data collection, exploration, and modeling; and modeling analysis](https://dmodjeska.github.io/cs109a/docs/)
 
 ### Description
 
